@@ -1,0 +1,168 @@
+/* ===== LUXURY WEDDING INVITATION ===== */
+@keyframes sparkle{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}}
+@keyframes petalFall{0%{transform:translateY(-10vh) rotate(0deg);opacity:0}10%{opacity:0.8}90%{opacity:0.8}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(212,175,55,0.2)}50%{box-shadow:0 0 40px rgba(212,175,55,0.4)}}
+@keyframes borderGlow{0%,100%{border-color:rgba(212,175,55,0.3)}50%{border-color:rgba(212,175,55,0.7)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+
+/* ===== INVITATION PAGE ===== */
+.inv-page{min-height:100vh;background:var(--dark);position:relative;overflow:hidden}
+.inv-page::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(212,175,55,0.04) 0%,transparent 60%);pointer-events:none}
+
+/* ===== SPARKLES ===== */
+.sparkle-container{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.sparkle{position:absolute;width:4px;height:4px;background:var(--gold);border-radius:50%;animation:sparkle 2s ease-in-out infinite}
+
+/* ===== FLOATING PETALS ===== */
+.petal-container{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.petal{position:absolute;top:-20px;width:12px;height:12px;background:radial-gradient(circle,rgba(212,175,55,0.6),rgba(212,175,55,0.1));border-radius:50% 0 50% 50%;animation:petalFall linear infinite;opacity:0}
+
+/* ===== HERO SECTION ===== */
+.inv-hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 24px;position:relative;z-index:1}
+.inv-hero-inner{max-width:600px;width:100%;animation:fadeInUp 1s ease}
+.inv-ornament{font-size:2rem;color:var(--gold);margin-bottom:16px;animation:glowPulse 3s ease-in-out infinite;display:inline-block}
+.inv-subtitle{font-family:var(--font-sans);font-size:0.75rem;color:var(--gold);text-transform:uppercase;letter-spacing:6px;margin-bottom:12px}
+.inv-names{font-family:var(--font-heading);font-size:clamp(2.5rem,7vw,4.5rem);color:var(--white);line-height:1.2;margin-bottom:8px}
+.inv-names .amp{font-family:var(--font-script);color:var(--gold);font-size:0.7em;margin:0 8px}
+.inv-tagline{font-family:var(--font-script);font-size:clamp(1.4rem,3vw,2.2rem);color:var(--gold);margin-bottom:24px}
+.inv-date-display{display:inline-flex;align-items:center;gap:16px;padding:16px 32px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);border-radius:60px;margin-bottom:24px;animation:borderGlow 3s ease-in-out infinite}
+.inv-date-display .day{font-family:var(--font-heading);font-size:2.5rem;color:var(--gold);line-height:1}
+.inv-date-display .month-year{text-align:left}
+.inv-date-display .month{font-family:var(--font-sans);font-size:0.85rem;color:var(--text);text-transform:uppercase;letter-spacing:2px}
+.inv-date-display .year{font-family:var(--font-sans);font-size:0.75rem;color:var(--text-light)}
+.inv-venue{color:var(--text-light);font-size:1rem;margin-bottom:8px}
+.inv-venue i{color:var(--gold);margin-right:6px}
+.inv-time{color:var(--text-light);font-size:0.9rem;margin-bottom:32px}
+.inv-time i{color:var(--gold);margin-right:6px}
+
+/* ===== COUNTDOWN ===== */
+.inv-countdown{display:flex;justify-content:center;gap:16px;margin-bottom:36px;flex-wrap:wrap}
+.inv-cd-box{text-align:center;min-width:70px}
+.inv-cd-num{font-family:var(--font-heading);font-size:2.2rem;color:var(--gold);line-height:1;display:block}
+.inv-cd-label{font-family:var(--font-sans);font-size:0.65rem;color:var(--text-light);text-transform:uppercase;letter-spacing:2px;margin-top:4px}
+
+/* ===== COUPLE PHOTO ===== */
+.inv-photo{width:140px;height:140px;border-radius:50%;margin:0 auto 24px;border:3px solid rgba(212,175,55,0.3);overflow:hidden;animation:glowPulse 3s ease-in-out infinite;background:linear-gradient(135deg,rgba(212,175,55,0.1),rgba(212,175,55,0.03));display:flex;align-items:center;justify-content:center}
+.inv-photo img{width:100%;height:100%;object-fit:cover}
+.inv-photo i{font-size:3rem;color:var(--gold);opacity:0.4}
+
+/* ===== ACTION BUTTONS ===== */
+.inv-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.inv-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:50px;font-family:var(--font-sans);font-size:0.85rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;text-decoration:none;transition:all 0.4s;cursor:pointer;border:none}
+.inv-btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--dark)}
+.inv-btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(212,175,55,0.3)}
+.inv-btn-outline{background:transparent;border:1px solid rgba(212,175,55,0.3);color:var(--gold)}
+.inv-btn-outline:hover{background:rgba(212,175,55,0.08);border-color:var(--gold)}
+
+/* ===== SHARE SECTION ===== */
+.inv-share{padding:60px 24px;text-align:center;position:relative;z-index:1}
+.inv-share h2{font-family:var(--font-heading);font-size:1.8rem;color:var(--white);margin-bottom:8px}
+.inv-share .sub{color:var(--text-light);margin-bottom:32px;font-size:0.95rem}
+.share-grid{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:32px}
+.share-btn{display:flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;border:none;font-family:var(--font-sans);font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.3s;text-decoration:none}
+.share-btn:hover{transform:translateY(-2px)}
+.share-whatsapp{background:#25D366;color:#fff}
+.share-facebook{background:#1877F2;color:#fff}
+.share-twitter{background:#1DA1F2;color:#fff}
+.share-telegram{background:#0088cc;color:#fff}
+.share-email{background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.3);color:var(--gold)}
+.share-copy{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--text)}
+.share-copy.copied{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.3);color:#22c55e}
+
+/* ===== QR CODE ===== */
+.inv-qr{padding:40px 24px;text-align:center;position:relative;z-index:1}
+.inv-qr-box{display:inline-block;padding:24px;background:rgba(255,255,255,0.95);border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.3);margin-bottom:16px}
+.inv-qr-box canvas,.inv-qr-box img{display:block}
+.inv-qr p{color:var(--text-light);font-size:0.85rem;margin-bottom:16px}
+.inv-qr-btns{display:flex;gap:10px;justify-content:center}
+
+/* ===== DOWNLOAD SECTION ===== */
+.inv-download{padding:40px 24px;text-align:center;position:relative;z-index:1}
+.inv-download h3{font-family:var(--font-heading);color:var(--white);font-size:1.3rem;margin-bottom:16px}
+.inv-dl-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ===== TEMPLATES ===== */
+.inv-templates{padding:60px 24px;position:relative;z-index:1}
+.inv-templates h2{font-family:var(--font-heading);font-size:1.8rem;color:var(--white);text-align:center;margin-bottom:8px}
+.inv-templates .sub{color:var(--text-light);text-align:center;margin-bottom:32px;font-size:0.95rem}
+.template-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;max-width:1200px;margin:0 auto}
+.template-card{border:2px solid rgba(212,175,55,0.1);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all 0.4s;position:relative}
+.template-card:hover{border-color:rgba(212,175,55,0.3);transform:translateY(-4px)}
+.template-card.active{border-color:var(--gold);box-shadow:0 0 30px rgba(212,175,55,0.2)}
+.template-card.active::after{content:'Selected';position:absolute;top:12px;right:12px;background:var(--gold);color:var(--dark);font-size:0.7rem;font-weight:700;padding:4px 12px;border-radius:50px;z-index:2}
+.template-preview{height:180px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.template-preview .ornament{font-size:2rem;opacity:0.8}
+.template-preview .names{font-family:var(--font-heading);font-size:1.2rem;color:#fff;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,0.5);position:absolute;bottom:20px;left:0;right:0}
+.template-info{padding:14px 16px;text-align:center}
+.template-info .name{font-size:0.92rem;font-weight:600;color:var(--text)}
+.template-info .desc{font-size:0.78rem;color:var(--text-light);margin-top:2px}
+
+/* Template Themes */
+.tpl-royal-gold .template-preview{background:linear-gradient(135deg,#0B0F19,#1a1a2e)}
+.tpl-royal-gold .ornament{color:#D4AF37}
+.tpl-rose-gold .template-preview{background:linear-gradient(135deg,#1A0F0A,#2D1A12)}
+.tpl-rose-gold .ornament{color:#E8A87C}
+.tpl-floral .template-preview{background:linear-gradient(135deg,#0A1A0F,#1a2e1a)}
+.tpl-floral .ornament{color:#90EE90}
+.tpl-midnight .template-preview{background:linear-gradient(135deg,#0A0A0A,#1a1a2e)}
+.tpl-midnight .ornament{color:#C0C0FF}
+.tpl-minimalist .template-preview{background:linear-gradient(135deg,#f8f8f8,#e8e8e8)}
+.tpl-minimalist .ornament{color:#333}
+.tpl-minimalist .names{color:#333;text-shadow:none}
+.tpl-emerald .template-preview{background:linear-gradient(135deg,#0A1A0F,#0d2818)}
+.tpl-emerald .ornament{color:#50C878}
+.tpl-classic-white .template-preview{background:linear-gradient(135deg,#FFFEF7,#F5F0E8)}
+.tpl-classic-white .ornament{color:#B8860B}
+.tpl-classic-white .names{color:#333;text-shadow:none}
+.tpl-african .template-preview{background:linear-gradient(135deg,#1A0E05,#2D1A0D)}
+.tpl-african .ornament{color:#D4892E}
+
+/* ===== GUEST MANAGER (DASHBOARD) ===== */
+.inv-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.inv-stat{background:rgba(255,255,255,0.02);border:1px solid rgba(212,175,55,0.08);border-radius:12px;padding:16px;text-align:center;transition:var(--transition)}
+.inv-stat:hover{border-color:rgba(212,175,55,0.15)}
+.inv-stat .num{font-size:2rem;font-weight:700;color:var(--gold);line-height:1}
+.inv-stat .label{font-size:0.72rem;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+.inv-stat.sent .num{color:var(--info)}
+.inv-stat.confirmed .num{color:var(--success)}
+.inv-stat.declined .num{color:var(--error)}
+.inv-stat.pending .num{color:var(--warning)}
+
+/* ===== REMINDER CARDS ===== */
+.reminder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:20px}
+.reminder-card{background:rgba(255,255,255,0.02);border:1px solid rgba(212,175,55,0.08);border-radius:var(--radius);padding:20px;transition:var(--transition)}
+.reminder-card:hover{border-color:rgba(212,175,55,0.15)}
+.reminder-card h4{color:var(--text);font-family:var(--font-heading);margin-bottom:6px}
+.reminder-card p{color:var(--text-light);font-size:0.85rem;margin-bottom:12px}
+.reminder-card .actions{display:flex;gap:6px;flex-wrap:wrap}
+.reminder-btn{padding:6px 14px;border-radius:50px;border:1px solid rgba(212,175,55,0.2);background:rgba(255,255,255,0.04);color:var(--text-light);font-size:0.78rem;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:4px}
+.reminder-btn:hover{background:rgba(212,175,55,0.1);color:var(--gold);border-color:var(--gold)}
+.reminder-btn i{font-size:0.75rem}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .inv-hero{padding:80px 16px 40px}
+  .inv-names{font-size:clamp(2rem,8vw,3rem)}
+  .inv-countdown{gap:10px}
+  .inv-cd-num{font-size:1.8rem}
+  .inv-cd-box{min-width:60px}
+  .inv-date-display{padding:12px 24px;gap:12px}
+  .inv-date-display .day{font-size:2rem}
+  .share-grid{gap:8px}
+  .share-btn{padding:10px 16px;font-size:0.8rem}
+  .template-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .inv-qr-box{padding:16px}
+}
+@media(max-width:480px){
+  .template-grid{grid-template-columns:1fr}
+  .inv-actions{flex-direction:column;align-items:center}
+  .inv-btn{width:100%;max-width:280px;justify-content:center}
+}
+
+/* ===== REDUCED MOTION ===== */
+@media(prefers-reduced-motion:reduce){
+  .sparkle,.petal,.inv-ornament,.inv-photo,.inv-date-display{animation:none!important}
+  .inv-hero-inner{animation:none!important;opacity:1}
+}
