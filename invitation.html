@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="You're cordially invited to our wedding celebration">
+<meta name="theme-color" content="#0B0F19">
+<title>Wedding Invitation - Forever &amp; Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/invitation.css">
+<style>:root{--gold:#D4AF37;--dark:#0B0F19;--text:#E8E0D0;--text-light:#A09888;--font-heading:'Playfair Display',serif;--font-body:'Poppins',sans-serif;--font-sans:'Poppins',sans-serif;--font-script:'Great Vibes',cursive}</style>
+</head>
+<body class="inv-page">
+
+<!-- Sparkles & Petals -->
+<div class="sparkle-container"></div>
+<div class="petal-container"></div>
+
+<!-- ===== HERO INVITATION ===== -->
+<section class="inv-hero">
+  <div class="inv-hero-inner">
+    <div class="inv-ornament">💍</div>
+    <div class="inv-subtitle">Together With Their Families</div>
+    <h1 class="inv-names" id="invNames">Groom <span class="amp">&</span> Bride</h1>
+    <div class="inv-tagline" id="invTagline">A Love Written By God</div>
+
+    <div class="inv-photo" id="invPhoto"><i class="fas fa-heart"></i></div>
+
+    <div class="inv-date-display">
+      <div id="invDate"><span class="day">01</span><div class="month-year"><div class="month">January</div><div class="year">2025</div></div></div>
+    </div>
+
+    <div class="inv-venue" id="invVenue"><i class="fas fa-location-dot"></i> Wedding Venue</div>
+    <div class="inv-time" id="invTime"><i class="fas fa-clock"></i> Time TBD</div>
+
+    <div class="inv-countdown">
+      <div class="inv-cd-box"><span class="inv-cd-num" id="cdDays">00</span><div class="inv-cd-label">Days</div></div>
+      <div class="inv-cd-box"><span class="inv-cd-num" id="cdHours">00</span><div class="inv-cd-label">Hours</div></div>
+      <div class="inv-cd-box"><span class="inv-cd-num" id="cdMinutes">00</span><div class="inv-cd-label">Minutes</div></div>
+      <div class="inv-cd-box"><span class="inv-cd-num" id="cdSeconds">00</span><div class="inv-cd-label">Seconds</div></div>
+    </div>
+
+    <div class="inv-actions">
+      <a href="rsvp.html" class="inv-btn inv-btn-gold"><i class="fas fa-heart"></i> RSVP Now</a>
+      <a href="wedding-details.html#map" class="inv-btn inv-btn-outline"><i class="fas fa-map-location-dot"></i> Get Directions</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHARE INVITATION ===== -->
+<section class="inv-share">
+  <div class="container">
+    <h2>Share the Joy</h2>
+    <p class="sub">Spread the word and invite your loved ones</p>
+    <div class="share-grid">
+      <button class="share-btn share-whatsapp" onclick="InvApp.shareWhatsApp()" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+      <button class="share-btn share-facebook" onclick="InvApp.shareFacebook()" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+      <button class="share-btn share-twitter" onclick="InvApp.shareTwitter()" aria-label="Share on X"><i class="fab fa-x-twitter"></i> X</button>
+      <button class="share-btn share-telegram" onclick="InvApp.shareTelegram()" aria-label="Share on Telegram"><i class="fab fa-telegram"></i> Telegram</button>
+      <button class="share-btn share-email" onclick="InvApp.shareEmail()" aria-label="Share via Email"><i class="fas fa-envelope"></i> Email</button>
+      <button class="share-btn share-copy" onclick="InvApp.copyLink()" aria-label="Copy invitation link"><i class="fas fa-link"></i> Copy Link</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== QR CODE ===== -->
+<section class="inv-qr">
+  <div class="container">
+    <h2 style="font-family:var(--font-heading);color:var(--white);font-size:1.6rem;margin-bottom:8px">Scan to View Invitation</h2>
+    <p style="color:var(--text-light);margin-bottom:20px;font-size:0.9rem">Point your phone camera at the QR code</p>
+    <div class="inv-qr-box" id="qrBox"></div>
+    <div class="inv-qr-btns">
+      <button class="inv-btn inv-btn-outline" onclick="InvApp.downloadQR()" style="padding:10px 24px;font-size:0.8rem"><i class="fas fa-download"></i> Download QR</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DOWNLOAD INVITATION ===== -->
+<section class="inv-download">
+  <div class="container">
+    <h3>Save Your Invitation</h3>
+    <div class="inv-dl-btns">
+      <button class="inv-btn inv-btn-outline" onclick="InvApp.downloadInvitation('png')" style="padding:10px 24px;font-size:0.8rem"><i class="fas fa-image"></i> Download PNG</button>
+      <button class="inv-btn inv-btn-outline" onclick="InvApp.downloadInvitation('pdf')" style="padding:10px 24px;font-size:0.8rem"><i class="fas fa-file-pdf"></i> Download PDF</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TEMPLATES ===== -->
+<section class="inv-templates" id="templates">
+  <div class="container">
+    <h2>Choose Your Template</h2>
+    <p class="sub">Select a beautiful design for your invitation</p>
+    <div class="template-grid" id="templateGrid"></div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer style="background:rgba(6,10,20,0.95);border-top:1px solid rgba(212,175,55,0.08);padding:40px 24px;text-align:center;position:relative;z-index:1">
+  <div class="container">
+    <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);margin-bottom:8px">Forever & Always</div>
+    <p style="color:var(--text-light);font-size:0.85rem;margin-bottom:16px">Made with <i class="fas fa-heart" style="color:var(--gold);font-size:0.75rem"></i> for our special day</p>
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+      <a href="index.html" style="color:var(--text-light);font-size:0.82rem">Home</a>
+      <a href="our-story.html" style="color:var(--text-light);font-size:0.82rem">Our Story</a>
+      <a href="wedding-details.html" style="color:var(--text-light);font-size:0.82rem">Details</a>
+      <a href="rsvp.html" style="color:var(--text-light);font-size:0.82rem">RSVP</a>
+      <a href="gallery.html" style="color:var(--text-light);font-size:0.82rem">Gallery</a>
+      <a href="music.html" style="color:var(--text-light);font-size:0.82rem">Music</a>
+      <a href="gift-registry.html" style="color:var(--text-light);font-size:0.82rem">Gifts</a>
+      <a href="invitation.html" style="color:var(--gold);font-size:0.82rem;font-weight:600">Invitation</a>
+      <a href="faq.html" style="color:var(--text-light);font-size:0.82rem">FAQ</a>
+      <a href="contact.html" style="color:var(--text-light);font-size:0.82rem">Contact</a>
+    </div>
+    <p style="color:var(--text-muted);font-size:0.75rem">&copy; <script>document.write(new Date().getFullYear())</script> Forever & Always</p>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script src="js/invitation.js"></script>
+</body>
+</html>

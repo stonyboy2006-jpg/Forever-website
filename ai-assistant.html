@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
+<meta name="theme-color" content="#0B0F19">
+<title id="pageTitle">AI Concierge - Forever &amp; Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/ai-concierge.css">
+<style>
+:root{--gold:#D4AF37;--gold-light:#F7E7CE;--gold-dark:#B8962E;--gold-glow:rgba(212,175,55,0.3);--cream:#FFF8F5;--blush:#F5E6E0;--rose:#E8C4C0;--dark:#0B0F19;--dark-soft:#111827;--dark-card:rgba(255,255,255,0.03);--text:#E8E0D0;--text-light:#A09888;--text-muted:#8A8278;--white:#FFFFFF;--shadow:0 10px 40px rgba(0,0,0,0.3);--shadow-hover:0 20px 60px rgba(0,0,0,0.4);--radius:16px;--radius-sm:8px;--radius-lg:24px;--font-heading:'Playfair Display',Georgia,serif;--font-body:'Poppins',sans-serif;--font-sans:'Poppins',sans-serif;--font-script:'Great Vibes',cursive;--transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);--nav-height:72px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);background:var(--dark);color:var(--text);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+</style>
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation menu">
+  <i class="fas fa-bars icon-menu"></i><i class="fas fa-times icon-close"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar-nav" id="sidebarNav" role="navigation" aria-label="Main navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"><i class="fas fa-ring"></i></div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">Forever &amp; Always</div>
+        <div class="sidebar-brand-sub">Wedding Menu</div>
+      </div>
+    </div>
+    <button class="sidebar-close" aria-label="Close menu"><i class="fas fa-arrow-left"></i></button>
+  </div>
+  <nav class="sidebar-links">
+    <div class="sidebar-section-label">Main</div>
+    <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i> Home</a>
+    <a href="our-story.html" class="sidebar-link"><i class="fas fa-heart"></i> Our Story</a>
+    <a href="wedding-details.html" class="sidebar-link"><i class="fas fa-info-circle"></i> Wedding Details</a>
+    <a href="wedding-party.html" class="sidebar-link"><i class="fas fa-user-friends"></i> Wedding Party</a>
+    <a href="events.html" class="sidebar-link"><i class="fas fa-calendar-alt"></i> Events</a>
+    <div class="sidebar-section-label">Media</div>
+    <a href="gallery.html" class="sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+    <a href="timeline.html" class="sidebar-link"><i class="fas fa-clock"></i> Timeline</a>
+    <a href="story.html" class="sidebar-link"><i class="fas fa-book-open"></i> Love Story</a>
+    <div class="sidebar-section-label">Guests</div>
+    <a href="rsvp.html" class="sidebar-link"><i class="fas fa-envelope"></i> RSVP</a>
+    <a href="gift-registry.html" class="sidebar-link"><i class="fas fa-gift"></i> Gift Registry</a>
+    <a href="music.html" class="sidebar-link"><i class="fas fa-music"></i> Wedding Music</a>
+    <a href="invitation.html" class="sidebar-link"><i class="fas fa-paper-plane"></i> Invitation</a>
+    <a href="memories.html" class="sidebar-link"><i class="fas fa-camera-retro"></i> Memories</a>
+    <a href="planner.html" class="sidebar-link"><i class="fas fa-clipboard-list"></i> Planner</a>
+    <a href="profile.html" class="sidebar-link"><i class="fas fa-user-circle"></i> My Profile</a>
+    <a href="faq.html" class="sidebar-link"><i class="fas fa-question-circle"></i> FAQ</a>
+    <div class="sidebar-section-label">More</div>
+    <a href="ai-assistant.html" class="sidebar-link active"><i class="fas fa-robot"></i> AI Assistant</a>
+    <a href="contact.html" class="sidebar-link"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="developer.html" class="sidebar-link"><i class="fas fa-code"></i> Developer</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-links" id="authUserMenu">
+      <a href="setup.html" class="sidebar-link"><i class="fas fa-rocket"></i> Get Started</a>
+      <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    </div>
+    <script>renderUserMenu('authUserMenu');</script>
+  </div>
+</aside>
+<div class="page-wrapper">
+<div class="ai-concierge-page">
+  <!-- Header -->
+  <header class="ai-header">
+    <a href="index.html" class="back-btn" aria-label="Back to Home"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    <div class="ai-header-info">
+      <h1>AI Wedding Concierge</h1>
+      <p>Ask me anything</p>
+    </div>
+    <div class="ai-header-actions">
+      <button class="ai-header-btn" id="aiVoiceToggleBtn" onclick="toggleVoice()" title="Toggle Voice Response" aria-label="Toggle voice output"><i class="fas fa-volume-up"></i></button>
+      <button class="ai-header-btn" onclick="clearConversation()" title="Clear Chat" aria-label="Clear conversation"><i class="fas fa-trash-alt"></i></button>
+    </div>
+  </header>
+
+  <!-- Chat -->
+  <div class="ai-chat-container">
+    <div class="ai-messages" id="aiMessages"></div>
+
+    <div class="ai-typing" id="aiTyping">
+      <div class="ai-typing-inner">
+        <div class="ai-typing-dots"><span></span><span></span><span></span></div>
+        <span class="ai-typing-text">AI is thinking...</span>
+      </div>
+    </div>
+
+    <div class="ai-suggested" id="aiSuggested">
+      <div class="ai-suggested-label">Suggested Questions</div>
+      <div class="ai-suggested-qs" id="aiSuggestedQs"></div>
+    </div>
+
+    <div class="ai-input-area">
+      <div class="ai-input-wrap">
+        <textarea class="ai-input" id="aiInput" rows="1" placeholder="Type your message here..." maxlength="1000" onkeydown="handleKeyDown(event)"></textarea>
+        <button class="ai-input-btn mic" id="aiMicBtn" onclick="toggleMic()" aria-label="Voice input"><i class="fas fa-microphone"></i></button>
+        <button class="ai-input-btn send" id="aiSendBtn" onclick="sendMessage()" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/ai-concierge.js"></script>
+<script>
+let voiceEnabled = true;
+
+document.addEventListener('DOMContentLoaded', function() {
+  AIConcierge.init();
+  AIConcierge.onVoiceResult = function(text) {
+    document.getElementById('aiInput').value = text;
+    sendMessage();
+  };
+  AIConcierge.onVoiceEnd = function() {
+    const micBtn = document.getElementById('aiMicBtn');
+    micBtn.classList.remove('listening');
+    micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+  };
+
+  addWelcomeMessage();
+  renderSuggestedQs();
+  loadHistory();
+
+  // Auto-resize textarea
+  const input = document.getElementById('aiInput');
+  input.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+});
+
+function addWelcomeMessage() {
+  const container = document.getElementById('aiMessages');
+  const msg = document.createElement('div');
+  msg.className = 'ai-msg ai';
+  msg.innerHTML = '<div class="ai-msg-avatar"><i class="fas fa-robot"></i></div><div class="ai-msg-bubble">' + AIConcierge.getWelcomeMessage() + '</div>';
+  container.appendChild(msg);
+  scrollToBottom();
+}
+
+function renderSuggestedQs() {
+  const container = document.getElementById('aiSuggestedQs');
+  const qs = AIConcierge.getSuggestedQuestions();
+  container.innerHTML = qs.map(q => '<span class="ai-suggested-chip" onclick="askSuggested(\'' + q.replace(/'/g, "\\'") + '\')">' + q + '</span>').join('');
+}
+
+function askSuggested(text) {
+  document.getElementById('aiInput').value = text;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('aiInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  addMessage(text, 'user');
+  showTyping(true);
+
+  const result = await AIConcierge.processMessage(text);
+
+  showTyping(false);
+  addMessage(result.text, 'ai');
+
+  if (voiceEnabled && result.text.length < 500) {
+    AIConcierge.speak(result.text.replace(/\*+/g, '').replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim());
+  }
+}
+
+function addMessage(text, role) {
+  const container = document.getElementById('aiMessages');
+  const msg = document.createElement('div');
+  msg.className = 'ai-msg ' + role;
+
+  const avatar = role === 'ai'
+    ? '<div class="ai-msg-avatar"><i class="fas fa-robot"></i></div>'
+    : '<div class="ai-msg-avatar"><i class="fas fa-user"></i></div>';
+
+  const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  msg.innerHTML = avatar + '<div class="ai-msg-bubble">' + formatMsg(text) + '<div class="ai-msg-time">' + time + '</div></div>';
+
+  container.appendChild(msg);
+  scrollToBottom();
+}
+
+function formatMsg(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\n/g, '<br>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+function showTyping(show) {
+  document.getElementById('aiTyping').classList.toggle('show', show);
+  scrollToBottom();
+}
+
+function scrollToBottom() {
+  const container = document.getElementById('aiMessages');
+  setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
+}
+
+function handleKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function toggleMic() {
+  const btn = document.getElementById('aiMicBtn');
+  if (AIConcierge.isListening) {
+    AIConcierge.stopVoiceInput();
+    btn.classList.remove('listening');
+    btn.innerHTML = '<i class="fas fa-microphone"></i>';
+  } else {
+    const started = AIConcierge.startVoiceInput();
+    if (started) {
+      btn.classList.add('listening');
+      btn.innerHTML = '<i class="fas fa-circle" style="color:#ff4444;"></i>';
+    } else {
+      alert('Voice input is not supported in this browser. Please try Chrome or Edge.');
+    }
+  }
+}
+
+function toggleVoice() {
+  voiceEnabled = !voiceEnabled;
+  const btn = document.getElementById('aiVoiceToggleBtn');
+  if (voiceEnabled) {
+    btn.classList.remove('active');
+    btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+  } else {
+    btn.classList.add('active');
+    btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+    AIConcierge.stopSpeaking();
+  }
+}
+
+function clearConversation() {
+  if (!confirm('Clear all conversation history?')) return;
+  AIConcierge.clearHistory();
+  document.getElementById('aiMessages').innerHTML = '';
+  addWelcomeMessage();
+}
+
+function loadHistory() {
+  const history = AIConcierge.conversationHistory;
+  if (history.length <= 1) return;
+  const container = document.getElementById('aiMessages');
+  container.innerHTML = '';
+  const welcome = AIConcierge.getWelcomeMessage();
+  const welMsg = document.createElement('div');
+  welMsg.className = 'ai-msg ai';
+  welMsg.innerHTML = '<div class="ai-msg-avatar"><i class="fas fa-robot"></i></div><div class="ai-msg-bubble">' + welcome + '</div>';
+  container.appendChild(welMsg);
+
+  history.forEach(h => {
+    if (h.role === 'user' || h.role === 'ai') {
+      const msg = document.createElement('div');
+      msg.className = 'ai-msg ' + h.role;
+      const avatar = h.role === 'ai'
+        ? '<div class="ai-msg-avatar"><i class="fas fa-robot"></i></div>'
+        : '<div class="ai-msg-avatar"><i class="fas fa-user"></i></div>';
+      const time = h.time ? new Date(h.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '';
+      msg.innerHTML = avatar + '<div class="ai-msg-bubble">' + formatMsg(h.text) + (time ? '<div class="ai-msg-time">' + time + '</div>' : '') + '</div>';
+      container.appendChild(msg);
+    }
+  });
+  scrollToBottom();
+}
+</script>
+<script src="js/notifications.js"></script>
+
+<script src="js/global.js"></script>
+<script src="js/nav.js"></script>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <div class="footer-divider"></div>
+      <a href="index.html">Home</a>
+      <a href="our-story.html">Our Story</a>
+      <a href="wedding-details.html">Wedding Details</a>
+      <a href="events.html">Events</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="rsvp.html">RSVP</a>
+    </div>
+    <div class="footer-col">
+      <h4>More Info</h4>
+      <div class="footer-divider"></div>
+      <a href="timeline.html">Timeline</a>
+      <a href="wedding-party.html">Wedding Party</a>
+      <a href="gift-registry.html">Gift Registry</a>
+      <a href="faq.html">FAQ</a>
+      <a href="ai-assistant.html">AI Assistant</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <div class="footer-divider"></div>
+      <p><i class="fab fa-whatsapp" style="color:var(--gold);margin-right:6px;"></i> 08025092458</p>
+      <p><i class="fas fa-phone" style="color:var(--gold);margin-right:6px;"></i> 07039557981</p>
+    </div>
+  </div>
+  <div class="developer">Designed &amp; Developed by <span class="dev-name">David Leelee Douglas / Stonyboy</span></div>
+  <div class="dev-contact" style="color:var(--text-light);font-size:0.8rem;margin-top:4px;"><i class="fab fa-whatsapp" style="color:var(--gold);"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> Contact: 07039557981</div>
+  <div class="copyright" style="color:var(--text-light);font-size:0.8rem;opacity:0.6;margin-top:8px;">&copy; 2026 Forever &amp; Always. All rights reserved.</div>
+</footer>
+<script src="js/website-title.js"></script>
+<script src="js/floating-panel.js"></script>
+</div><!-- /.page-wrapper -->
+<script src="js/auth.js"></script>
+<script src="js/sidebar.js"></script>
+</body>
+</html>

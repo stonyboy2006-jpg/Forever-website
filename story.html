@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
+<title id="pageTitle">Our Story - Forever &amp; Always</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase.js"></script>
+<style>
+.story-page{padding:100px 20px 60px;min-height:100vh;background:var(--cream);}
+.story-page .story-timeline{max-width:700px;margin:0 auto;position:relative;}
+.story-page .story-timeline::before{content:'';position:absolute;top:0;left:50%;width:2px;height:100%;background:linear-gradient(to bottom,var(--gold),var(--gold-light),var(--gold));transform:translateX(-50%);}
+.story-page .story-item{display:flex;align-items:flex-start;margin-bottom:50px;position:relative;}
+.story-page .story-item .story-date{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;padding:6px 18px;border-radius:50px;font-family:'Inter',sans-serif;font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;z-index:2;white-space:nowrap;}
+.story-page .story-item .story-content{width:45%;padding:30px;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);margin-top:40px;}
+.story-page .story-item:nth-child(odd) .story-content{margin-right:auto;}
+.story-page .story-item:nth-child(even) .story-content{margin-left:auto;}
+.story-page .story-content h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.3rem;margin-bottom:8px;}
+.story-page .story-content p{color:var(--text-light);line-height:1.8;}
+.story-page .story-img-placeholder{width:100%;height:200px;background:linear-gradient(135deg,var(--blush),var(--gold-light));border-radius:8px;margin-bottom:15px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;}
+/* Back button styling is in style.css */
+@media(max-width:768px){
+  .story-page .story-timeline::before{left:20px;}
+  .story-page .story-item,.story-page .story-item:nth-child(even){flex-direction:row;padding-left:50px;}
+  .story-page .story-item .story-date{left:20px;transform:translateX(0);}
+  .story-page .story-item .story-content{width:100%;margin:40px 0 0 0!important;padding:20px;}
+}
+</style>
+<link rel="stylesheet" href="css/ai-concierge.css">
+</head>
+<body>
+<a href="index.html" class="back-btn" aria-label="Back to Home"><i class="fas fa-arrow-left"></i> Back to Home</a>
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation menu">
+  <i class="fas fa-bars icon-menu"></i><i class="fas fa-times icon-close"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar-nav" id="sidebarNav" role="navigation" aria-label="Main navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"><i class="fas fa-ring"></i></div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">Forever &amp; Always</div>
+        <div class="sidebar-brand-sub">Wedding Menu</div>
+      </div>
+    </div>
+    <button class="sidebar-close" aria-label="Close menu"><i class="fas fa-arrow-left"></i></button>
+  </div>
+  <nav class="sidebar-links">
+    <div class="sidebar-section-label">Main</div>
+    <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i> Home</a>
+    <a href="our-story.html" class="sidebar-link"><i class="fas fa-heart"></i> Our Story</a>
+    <a href="wedding-details.html" class="sidebar-link"><i class="fas fa-info-circle"></i> Wedding Details</a>
+    <a href="wedding-party.html" class="sidebar-link"><i class="fas fa-user-friends"></i> Wedding Party</a>
+    <a href="events.html" class="sidebar-link"><i class="fas fa-calendar-alt"></i> Events</a>
+    <div class="sidebar-section-label">Media</div>
+    <a href="gallery.html" class="sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+    <a href="timeline.html" class="sidebar-link"><i class="fas fa-clock"></i> Timeline</a>
+    <a href="story.html" class="sidebar-link active"><i class="fas fa-book-open"></i> Love Story</a>
+    <div class="sidebar-section-label">Guests</div>
+    <a href="rsvp.html" class="sidebar-link"><i class="fas fa-envelope"></i> RSVP</a>
+    <a href="gift-registry.html" class="sidebar-link"><i class="fas fa-gift"></i> Gift Registry</a>
+    <a href="music.html" class="sidebar-link"><i class="fas fa-music"></i> Wedding Music</a>
+    <a href="invitation.html" class="sidebar-link"><i class="fas fa-paper-plane"></i> Invitation</a>
+    <a href="memories.html" class="sidebar-link"><i class="fas fa-camera-retro"></i> Memories</a>
+    <a href="planner.html" class="sidebar-link"><i class="fas fa-clipboard-list"></i> Planner</a>
+    <a href="profile.html" class="sidebar-link"><i class="fas fa-user-circle"></i> My Profile</a>
+    <a href="faq.html" class="sidebar-link"><i class="fas fa-question-circle"></i> FAQ</a>
+    <div class="sidebar-section-label">More</div>
+    <a href="ai-assistant.html" class="sidebar-link"><i class="fas fa-robot"></i> AI Assistant</a>
+    <a href="contact.html" class="sidebar-link"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="developer.html" class="sidebar-link"><i class="fas fa-code"></i> Developer</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-links" id="authUserMenu">
+      <a href="setup.html" class="sidebar-link"><i class="fas fa-rocket"></i> Get Started</a>
+      <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    </div>
+    <script>renderUserMenu('authUserMenu');</script>
+  </div>
+</aside>
+<div class="page-wrapper">
+<script>window.location.href='our-story.html';</script>
+<script src="js/global.js"></script>
+<script src="js/website-title.js"></script>
+<script src="js/floating-panel.js"></script>
+</div><!-- /.page-wrapper -->
+
+<script src="js/auth.js"></script>
+<script src="js/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Setup - Forever &amp; Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase.js"></script>
+<style>
+:root {
+  --gold: #D4AF37;
+  --gold-light: #be9c1d;
+  --gold-dark: #A8882E;
+  --emerald: #081C15;
+  --ivory: #F9F6F2;
+  --midnight: #102A43;
+  --white: #FFFFFF;
+  --text-light: #A09888;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Poppins', sans-serif;
+  --radius: 24px;
+  --radius-sm: 12px;
+  --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--emerald);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+h1,h2,h3,h4 { font-family: var(--font-heading); }
+a { text-decoration:none; color:inherit; }
+img { max-width:100%; display:block; }
+
+/* ===== CINEMATIC LUXURY BACKGROUND ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(212,175,55,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(212,175,55,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(16,42,67,0.3) 0%, transparent 70%),
+    radial-gradient(circle at 30% 70%, rgba(212,175,55,0.03) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Bokeh Lights */
+.bokeh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.bokeh span {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(212,175,55,0.12), transparent);
+  box-shadow: 0 0 40px rgba(212,175,55,0.04);
+  animation: bokehFloat 20s infinite alternate ease-in-out;
+}
+.bokeh span:nth-child(1) { width:120px;height:120px;top:5%;left:10%;animation-delay:0s;animation-duration:25s; }
+.bokeh span:nth-child(2) { width:80px;height:80px;top:15%;right:20%;animation-delay:-3s;animation-duration:20s; }
+.bokeh span:nth-child(3) { width:60px;height:60px;top:40%;left:5%;animation-delay:-7s;animation-duration:22s; }
+.bokeh span:nth-child(4) { width:100px;height:100px;top:60%;right:10%;animation-delay:-5s;animation-duration:28s; }
+.bokeh span:nth-child(5) { width:70px;height:70px;top:75%;left:15%;animation-delay:-11s;animation-duration:18s; }
+.bokeh span:nth-child(6) { width:140px;height:140px;top:25%;left:50%;animation-delay:-2s;animation-duration:30s; }
+.bokeh span:nth-child(7) { width:50px;height:50px;top:85%;right:30%;animation-delay:-8s;animation-duration:16s; }
+.bokeh span:nth-child(8) { width:90px;height:90px;top:50%;left:75%;animation-delay:-13s;animation-duration:24s; }
+@keyframes bokehFloat {
+  0% { transform: translate(0,0) scale(1); opacity:0.3; }
+  33% { transform: translate(30px,-20px) scale(1.1); opacity:0.5; }
+  66% { transform: translate(-20px,10px) scale(0.9); opacity:0.4; }
+  100% { transform: translate(15px,-30px) scale(1.05); opacity:0.6; }
+}
+
+/* Floating Petals */
+.petals {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.petal {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(ellipse at 30% 30%, rgba(212,175,55,0.25), rgba(212,175,55,0.05));
+  border-radius: 50% 0 50% 0;
+  opacity: 0;
+  animation: petalFall linear infinite;
+}
+.petal:nth-child(1) { left:10%; width:16px;height:14px; animation-duration:14s; animation-delay:0s; }
+.petal:nth-child(2) { left:30%; width:22px;height:18px; animation-duration:18s; animation-delay:-4s; }
+.petal:nth-child(3) { left:50%; width:14px;height:12px; animation-duration:16s; animation-delay:-8s; }
+.petal:nth-child(4) { left:70%; width:18px;height:16px; animation-duration:20s; animation-delay:-2s; }
+.petal:nth-child(5) { left:85%; width:12px;height:10px; animation-duration:15s; animation-delay:-6s; }
+.petal:nth-child(6) { left:20%; width:20px;height:16px; animation-duration:22s; animation-delay:-10s; }
+.petal:nth-child(7) { left:65%; width:15px;height:13px; animation-duration:17s; animation-delay:-12s; }
+.petal:nth-child(8) { left:90%; width:18px;height:15px; animation-duration:19s; animation-delay:-3s; }
+@keyframes petalFall {
+  0% { transform: translateY(-30px) rotate(0deg) scale(0); opacity:0; }
+  10% { opacity:0.6; }
+  90% { opacity:0.3; }
+  100% { transform: translateY(100vh) rotate(360deg) scale(1); opacity:0; }
+}
+
+/* Golden Sparkles */
+.sparkles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--gold), 0 0 12px rgba(212,175,55,0.3);
+  animation: sparkleFloat 3s infinite alternate;
+}
+.sparkle:nth-child(1) { top:20%;left:15%;animation-delay:0s; }
+.sparkle:nth-child(2) { top:35%;right:25%;animation-delay:-0.5s; }
+.sparkle:nth-child(3) { top:55%;left:40%;animation-delay:-1s; }
+.sparkle:nth-child(4) { top:70%;right:15%;animation-delay:-1.5s; }
+.sparkle:nth-child(5) { top:15%;left:70%;animation-delay:-2s; }
+.sparkle:nth-child(6) { top:80%;left:25%;animation-delay:-2.5s; }
+@keyframes sparkleFloat {
+  0% { opacity:0; transform: scale(0) translateY(0); }
+  50% { opacity:0.8; transform: scale(1) translateY(-8px); }
+  100% { opacity:0.2; transform: scale(0.5) translateY(-15px); }
+}
+
+/* ===== BACK BUTTON ===== */
+/* Back button styling is in style.css */
+
+/* ===== LUXURY STICKY HEADER ===== */
+.setup-header {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+  background: rgba(8,28,21,0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(212,175,55,0.08);
+  padding: 16px 0;
+}
+.setup-header-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.setup-header-logo {
+  display: flex; align-items: center; gap: 10px;
+}
+.setup-header-logo .icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  color: var(--emerald); font-size: 1rem;
+}
+.setup-header-logo h1 {
+  font-family: var(--font-heading); font-size: 1.15rem; color: var(--gold);
+  font-weight: 600; letter-spacing: 0.5px;
+}
+.setup-header-right {
+  display: flex; align-items: center; gap: 16px;
+}
+.step-badge {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 16px 6px 12px;
+  background: rgba(212,175,55,0.08);
+  border: 1px solid rgba(212,175,55,0.12);
+  border-radius: 50px;
+  font-family: var(--font-body); font-size: 0.75rem; color: var(--gold);
+  font-weight: 500; letter-spacing: 0.5px;
+}
+.step-badge .num { font-weight: 600; font-size: 0.85rem; }
+
+/* Progress Bar */
+.progress-bar-wrap {
+  position: fixed; top: 76px; left: 0; width: 100%; height: 3px;
+  background: rgba(255,255,255,0.04); z-index: 999;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  background-size: 200% 100%;
+  animation: progressShimmer 3s ease infinite;
+  transition: width 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+  width: 0%;
+  position: relative;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 12px rgba(212,175,55,0.6);
+}
+@keyframes progressShimmer {
+  0% { background-position: 0% 0; }
+  50% { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
+}
+
+/* ===== MAIN LAYOUT ===== */
+.setup-main {
+  padding-top: 100px; min-height: 100vh;
+  display: flex; align-items: flex-start; justify-content: center;
+  position: relative; z-index: 1;
+}
+.setup-container {
+  width: 100%; max-width: 740px; margin: 0 auto;
+  padding: 40px 24px 120px;
+}
+
+/* ===== STEPS ===== */
+.setup-step { display: none; }
+.setup-step.active { display: block; }
+
+/* ===== STEP HEADER ===== */
+.step-header {
+  text-align: center; margin-bottom: 36px;
+}
+/* Circular Step Indicator */
+.circular-step {
+  width: 68px; height: 68px; margin: 0 auto 20px;
+  position: relative; display: flex; align-items: center; justify-content: center;
+}
+.circular-step svg {
+  width: 100%; height: 100%; transform: rotate(-90deg);
+  position: absolute; top: 0; left: 0;
+}
+.circular-step svg circle {
+  fill: none; stroke-width: 3;
+}
+.circular-step .bg-circle { stroke: rgba(212,175,55,0.08); }
+.circular-step .progress-circle {
+  stroke: url(#goldGrad);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.circular-step .step-number-inner {
+  font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700;
+  color: var(--gold); z-index: 1;
+}
+.circular-step::before {
+  content: '';
+  position: absolute; inset: -3px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(212,175,55,0.08), transparent);
+  animation: circleGlow 3s ease-in-out infinite alternate;
+}
+@keyframes circleGlow {
+  0% { opacity:0.3; transform: scale(1); }
+  100% { opacity:0.8; transform: scale(1.05); }
+}
+.step-header h2 {
+  font-family: var(--font-heading); font-size: 2rem; color: var(--gold);
+  margin-bottom: 8px; line-height: 1.3;
+}
+.step-header p {
+  color: var(--text-light); font-size: 0.95rem; font-family: var(--font-body);
+  font-weight: 300; letter-spacing: 0.3px;
+}
+
+/* ===== GLASSMORPHISM CARD ===== */
+.setup-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212,175,55,0.12);
+  border-radius: var(--radius);
+  padding: 44px;
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.3),
+    0 0 0 1px rgba(212,175,55,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  position: relative;
+  overflow: hidden;
+}
+.setup-card::before {
+  content: '';
+  position: absolute; top: -2px; left: -2px; right: -2px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+  opacity: 0.5;
+}
+/* Decorative floral corners */
+.setup-card::after {
+  content: '\f6fc';
+  font-family: 'Font Awesome 6 Free'; font-weight: 900;
+  position: absolute; top: 12px; right: 16px;
+  font-size: 1.6rem; color: rgba(212,175,55,0.08);
+  transform: rotate(45deg);
+}
+.setup-card .corner-floral {
+  position: absolute; bottom: 12px; left: 16px;
+  font-size: 1.6rem; color: rgba(212,175,55,0.06);
+  font-family: 'Font Awesome 6 Free'; font-weight: 900;
+  transform: rotate(-135deg);
+}
+
+/* ===== FORM FIELDS ===== */
+.form-group { margin-bottom: 22px; }
+.form-group label {
+  display: block; font-size: 0.7rem; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--text-light);
+  margin-bottom: 8px; font-weight: 500; font-family: var(--font-body);
+}
+.input-wrap {
+  position: relative;
+}
+.input-wrap .input-icon {
+  position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+  color: var(--gold); font-size: 1rem; opacity: 0.7;
+  transition: var(--transition); pointer-events: none;
+}
+.input-wrap textarea ~ .input-icon { top: 22px; transform: none; }
+.input-wrap:focus-within .input-icon { opacity: 1; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 16px 20px 16px 48px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,175,55,0.12);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.95rem;
+  color: var(--text); transition: var(--transition);
+  outline: none;
+}
+.form-group textarea { min-height: 110px; resize: vertical; padding-top: 18px; }
+.form-group select {
+  cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath fill='%23D4AF37' d='M7 9L0 0h14z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 18px center;
+  padding-right: 44px;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(212,175,55,0.08), 0 0 0 1px rgba(212,175,55,0.15);
+  background: rgba(255,255,255,0.05);
+}
+.form-group input::placeholder, .form-group textarea::placeholder {
+  color: var(--text-light); opacity: 0.4;
+}
+.form-group .help-text {
+  font-size: 0.75rem; color: var(--text-light); margin-top: 5px; font-style: italic;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* Color Picker */
+.color-input-wrap { display: flex; align-items: center; gap: 14px; }
+.color-input-wrap input[type="color"] {
+  width: 52px; height: 52px; padding: 3px;
+  border: 1px solid rgba(212,175,55,0.15); border-radius: var(--radius-sm);
+  cursor: pointer; background: rgba(255,255,255,0.03);
+}
+.color-input-wrap .color-label {
+  font-family: var(--font-body); font-size: 0.85rem; color: var(--text-light);
+}
+
+/* ===== CHECKBOX ===== */
+.form-check { margin-bottom: 18px; }
+.form-check label {
+  display: flex; align-items: center; gap: 12px; cursor: pointer;
+  font-family: var(--font-body); font-size: 0.95rem; color: var(--text);
+}
+.form-check input[type="checkbox"] {
+  width: 20px; height: 20px; accent-color: var(--gold);
+  border-radius: 4px; cursor: pointer;
+}
+
+/* ===== NAVIGATION BUTTONS ===== */
+.setup-nav { display: flex; justify-content: space-between; margin-top: 32px; gap: 16px; }
+.setup-nav .btn {
+  padding: 15px 36px; border-radius: 50px; font-family: var(--font-body);
+  font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 2px; border: none; cursor: pointer;
+  transition: var(--transition); display: inline-flex; align-items: center; gap: 10px;
+  position: relative; overflow: hidden;
+}
+.setup-nav .btn-prev {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(212,175,55,0.1);
+  color: var(--text-light);
+}
+.setup-nav .btn-prev:hover {
+  background: rgba(212,175,55,0.08);
+  border-color: rgba(212,175,55,0.2);
+  color: var(--gold);
+  transform: translateY(-1px);
+}
+.setup-nav .btn-next {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--emerald); box-shadow: 0 4px 20px rgba(212,175,55,0.25);
+}
+.setup-nav .btn-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(212,175,55,0.35);
+}
+.setup-nav .btn-next:disabled {
+  opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none;
+}
+/* Ripple effect */
+.setup-nav .btn::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: 50px;
+  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.setup-nav .btn:hover::after { opacity: 1; }
+
+.setup-nav .btn-publish {
+  background: linear-gradient(135deg, var(--gold), #D4AF37);
+  color: var(--emerald); box-shadow: 0 4px 20px rgba(212,175,55,0.25);
+}
+.setup-nav .btn-publish:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(212,175,55,0.35);
+}
+
+.setup-nav .btn-center { justify-content: center; }
+
+/* ===== NAME MISSING MESSAGE ===== */
+#nameMissingMsg {
+  padding: 14px 18px;
+  background: rgba(212,175,55,0.06);
+  border: 1px solid rgba(212,175,55,0.12);
+  border-radius: var(--radius-sm);
+  color: var(--gold); font-size: 0.85rem; text-align: center;
+  display: none; margin-top: 6px;
+}
+
+/* ===== TAGS INPUT ===== */
+.tags-wrap {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 12px; border: 1px solid rgba(212,175,55,0.12);
+  border-radius: var(--radius-sm); background: rgba(255,255,255,0.03);
+  min-height: 54px;
+}
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 16px; background: rgba(212,175,55,0.12);
+  color: var(--gold); border-radius: 50px; font-size: 0.8rem;
+  border: 1px solid rgba(212,175,55,0.1);
+}
+.tag .remove-tag { cursor: pointer; font-size: 0.75rem; opacity: 0.6; }
+.tag .remove-tag:hover { opacity: 1; }
+.tags-input {
+  border: none; background: none; outline: none;
+  font-family: var(--font-body); font-size: 0.9rem; flex: 1;
+  min-width: 120px; padding: 6px 0;
+  color: var(--text);
+}
+
+/* ===== UPLOAD AREA ===== */
+.upload-area {
+  border: 1px dashed rgba(212,175,55,0.15);
+  border-radius: var(--radius-sm); padding: 36px 20px;
+  text-align: center; cursor: pointer; transition: var(--transition);
+  background: rgba(255,255,255,0.02); margin-bottom: 16px;
+}
+.upload-area:hover {
+  border-color: rgba(212,175,55,0.3);
+  background: rgba(212,175,55,0.03);
+}
+.upload-area.dragover {
+  border-color: var(--gold);
+  background: rgba(212,175,55,0.06);
+  box-shadow: 0 0 20px rgba(212,175,55,0.06);
+}
+.upload-area i { font-size: 2rem; color: var(--gold); margin-bottom: 8px; opacity: 0.8; }
+.upload-area p { color: var(--text-light); font-size: 0.85rem; }
+.upload-area input { display: none; }
+
+.photo-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px,1fr));
+  gap: 10px; margin-top: 12px;
+}
+.photo-preview-item {
+  position: relative; aspect-ratio: 1;
+  border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid rgba(212,175,55,0.08);
+}
+.photo-preview-item img { width:100%; height:100%; object-fit:cover; }
+.photo-preview-item .remove-photo {
+  position: absolute; top:3px; right:3px; width:24px; height:24px;
+  border-radius:50%; background:rgba(231,76,60,0.85); color:#fff;
+  border:none; cursor:pointer; font-size:0.7rem;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ===== EVENTS ===== */
+.event-entry {
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-sm); padding: 22px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(212,175,55,0.06);
+}
+.event-entry-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 14px;
+}
+.event-entry-header span {
+  font-weight: 600; color: var(--gold);
+  font-family: var(--font-heading); font-size: 0.95rem;
+}
+
+/* ===== SOCIAL GRID ===== */
+.social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.social-input-wrap {
+  display: flex; align-items: center; gap: 12px;
+}
+.social-input-wrap .social-icon {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 1.1rem; flex-shrink: 0;
+}
+.social-input-wrap input { flex: 1; padding-left: 18px; }
+
+/* ===== THEME GRID ===== */
+.theme-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 18px; }
+.theme-option {
+  padding: 18px 12px; text-align: center;
+  border: 1px solid rgba(212,175,55,0.08);
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: var(--transition); background: rgba(255,255,255,0.02);
+}
+.theme-option:hover {
+  border-color: rgba(212,175,55,0.2);
+  background: rgba(212,175,55,0.04);
+  transform: translateY(-1px);
+}
+.theme-option.selected {
+  border-color: var(--gold);
+  background: rgba(212,175,55,0.06);
+  box-shadow: 0 0 15px rgba(212,175,55,0.06);
+}
+.theme-option i { font-size: 1.3rem; color: var(--gold); margin-bottom: 6px; display: block; }
+.theme-option span { font-size: 0.8rem; color: var(--text); }
+
+/* ===== PREVIEW ===== */
+.preview-section {
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius); overflow: hidden;
+  border: 1px solid rgba(212,175,55,0.06);
+}
+.preview-hero {
+  background: linear-gradient(135deg, rgba(8,28,21,0.95), rgba(16,42,67,0.9));
+  padding: 50px 36px; text-align: center;
+}
+.preview-hero .names {
+  font-family: var(--font-heading); font-size: 2.2rem; color: var(--gold);
+}
+.preview-hero .and {
+  color: var(--gold-light); font-size: 1.1rem; font-style: italic; margin: 4px 0;
+}
+.preview-hero .date {
+  color: var(--gold-light); font-size: 0.9rem;
+  letter-spacing: 2px; text-transform: uppercase; margin-top: 10px;
+}
+.preview-details { padding: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.preview-detail {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(212,175,55,0.04);
+}
+.preview-detail i { color: var(--gold); width: 18px; }
+
+/* ===== SUCCESS OVERLAY ===== */
+.success-overlay {
+  position: fixed; inset: 0;
+  background: rgba(8,28,21,0.92);
+  backdrop-filter: blur(16px);
+  z-index: 10000;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.success-overlay.active { display: flex; }
+.success-box {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212,175,55,0.12);
+  border-radius: var(--radius);
+  padding: 50px 40px; text-align: center;
+  max-width: 520px; width: 100%;
+  animation: fadeUp 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.success-box .icon { font-size: 3.5rem; color: #27ae60; margin-bottom: 16px; }
+.success-box h2 {
+  font-family: var(--font-heading); color: var(--gold);
+  font-size: 1.8rem; margin-bottom: 10px;
+}
+.success-box p { color: var(--text-light); margin-bottom: 22px; font-size: 0.9rem; }
+.success-box .btn-view {
+  display: inline-block; padding: 14px 40px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--emerald); border-radius: 50px;
+  font-family: var(--font-body); font-size: 0.85rem;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+  transition: var(--transition); border: none; cursor: pointer;
+}
+.success-box .btn-view:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(212,175,55,0.3); }
+
+/* ===== DIVIDER ===== */
+.luxury-divider {
+  display: flex; align-items: center; gap: 14px; margin: 28px 0;
+}
+.luxury-divider::before, .luxury-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.15), transparent);
+}
+.luxury-divider i { color: rgba(212,175,55,0.2); font-size: 0.7rem; }
+
+/* ===== SECURITY NOTICE ===== */
+.security-notice {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 18px; margin-top: 24px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(212,175,55,0.06);
+  border-radius: var(--radius-sm);
+  color: var(--text-light); font-size: 0.75rem;
+  font-family: var(--font-body);
+}
+.security-notice i { color: var(--gold); font-size: 0.85rem; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.setup-step.active .setup-card {
+  animation: fadeUp 0.5s cubic-bezier(0.25,0.46,0.45,0.94) both;
+}
+.setup-step.active .step-header {
+  animation: fadeUp 0.4s cubic-bezier(0.25,0.46,0.45,0.94) both;
+}
+
+/* ===== reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .setup-container { padding: 24px 16px 100px; }
+  .setup-card { padding: 28px 20px; border-radius: 20px; }
+  .step-header h2 { font-size: 1.5rem; }
+  .step-header p { font-size: 0.85rem; }
+  .setup-header-inner { padding: 0 16px; }
+  .setup-header-logo h1 { font-size: 0.95rem; }
+  .step-badge { font-size: 0.65rem; padding: 4px 12px 4px 10px; }
+  .step-badge .num { font-size: 0.75rem; }
+  .form-row, .form-row-3 { grid-template-columns: 1fr; }
+  .social-grid { grid-template-columns: 1fr; }
+  .theme-grid { grid-template-columns: repeat(2,1fr); }
+  .preview-details { grid-template-columns: 1fr; }
+  .setup-nav .btn { padding: 13px 24px; font-size: 0.7rem; }
+  .circular-step { width: 56px; height: 56px; }
+  .circular-step .step-number-inner { font-size: 1.1rem; }
+  .progress-bar-wrap { top: 70px; }
+  .security-notice { font-size: 0.7rem; padding: 12px 14px; }
+  .preview-hero { padding: 36px 20px; }
+  .preview-hero .names { font-size: 1.6rem; }
+  .preview-details { padding: 18px; }
+  .event-entry { padding: 16px; }
+  .upload-area { padding: 24px 16px; }
+}
+
+@media (max-width: 480px) {
+  .setup-card { padding: 24px 16px; }
+  .step-header h2 { font-size: 1.3rem; }
+  .setup-header-logo h1 { font-size: 0.8rem; }
+  .setup-header-logo .icon { width: 32px; height: 32px; font-size: 0.85rem; }
+  .setup-nav { flex-direction: column; }
+  .setup-nav .btn { width: 100%; justify-content: center; }
+  .setup-header-right .step-badge span:not(.num) { display: none; }
+}
+</style>
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/ai-concierge.css">
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation menu">
+  <i class="fas fa-bars icon-menu"></i><i class="fas fa-times icon-close"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar-nav" id="sidebarNav" role="navigation" aria-label="Main navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"><i class="fas fa-ring"></i></div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">Forever &amp; Always</div>
+        <div class="sidebar-brand-sub">Wedding Menu</div>
+      </div>
+    </div>
+    <button class="sidebar-close" aria-label="Close menu"><i class="fas fa-arrow-left"></i></button>
+  </div>
+  <nav class="sidebar-links">
+    <div class="sidebar-section-label">Main</div>
+    <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i> Home</a>
+    <a href="our-story.html" class="sidebar-link"><i class="fas fa-heart"></i> Our Story</a>
+    <a href="wedding-details.html" class="sidebar-link"><i class="fas fa-info-circle"></i> Wedding Details</a>
+    <a href="wedding-party.html" class="sidebar-link"><i class="fas fa-user-friends"></i> Wedding Party</a>
+    <a href="events.html" class="sidebar-link"><i class="fas fa-calendar-alt"></i> Events</a>
+    <div class="sidebar-section-label">Media</div>
+    <a href="gallery.html" class="sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+    <a href="timeline.html" class="sidebar-link"><i class="fas fa-clock"></i> Timeline</a>
+    <a href="story.html" class="sidebar-link"><i class="fas fa-book-open"></i> Love Story</a>
+    <div class="sidebar-section-label">Guests</div>
+    <a href="rsvp.html" class="sidebar-link"><i class="fas fa-envelope"></i> RSVP</a>
+    <a href="gift-registry.html" class="sidebar-link"><i class="fas fa-gift"></i> Gift Registry</a>
+    <a href="music.html" class="sidebar-link"><i class="fas fa-music"></i> Wedding Music</a>
+    <a href="invitation.html" class="sidebar-link"><i class="fas fa-paper-plane"></i> Invitation</a>
+    <a href="memories.html" class="sidebar-link"><i class="fas fa-camera-retro"></i> Memories</a>
+    <a href="planner.html" class="sidebar-link"><i class="fas fa-clipboard-list"></i> Planner</a>
+    <a href="profile.html" class="sidebar-link"><i class="fas fa-user-circle"></i> My Profile</a>
+    <a href="faq.html" class="sidebar-link"><i class="fas fa-question-circle"></i> FAQ</a>
+    <div class="sidebar-section-label">More</div>
+    <a href="ai-assistant.html" class="sidebar-link"><i class="fas fa-robot"></i> AI Assistant</a>
+    <a href="contact.html" class="sidebar-link"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="developer.html" class="sidebar-link"><i class="fas fa-code"></i> Developer</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-links" id="authUserMenu">
+      <a href="setup.html" class="sidebar-link"><i class="fas fa-rocket"></i> Get Started</a>
+      <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    </div>
+    <script>renderUserMenu('authUserMenu');</script>
+  </div>
+</aside>
+<div class="page-wrapper">
+
+<!-- Decorative Backgrounds -->
+<div class="bokeh">
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+</div>
+<div class="petals">
+  <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+  <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+</div>
+<div class="sparkles">
+  <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+  <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+</div>
+
+<!-- SVG Gradient Defs -->
+<svg style="position:absolute;width:0;height:0;">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#E8D48B"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<a href="index.html" class="back-btn" aria-label="Back to Home"><i class="fas fa-arrow-left"></i> Back to Home</a>
+
+<!-- ===== LUXURY HEADER ===== -->
+<header class="setup-header">
+  <div class="setup-header-inner">
+    <div class="setup-header-logo">
+      <div class="icon"><i class="fas fa-ring"></i></div>
+      <h1>Wedding Setup</h1>
+    </div>
+    <div class="setup-header-right">
+      <div class="step-badge">
+        <span class="num" id="currentStepNum">1</span>
+        <span>/ 12</span>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="progress-bar-wrap">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<main class="setup-main">
+<div class="setup-container">
+
+<!-- STEP 1: Welcome -->
+<div class="setup-step active" id="step1">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">1</span>
+    </div>
+    <h2>Welcome to Your Wedding Website Setup</h2>
+    <p>Let's begin creating a beautiful wedding experience for you and your guests.</p>
+  </div>
+  <div class="setup-card">
+    <i class="fas fa-seedling corner-floral"></i>
+    <div class="form-group">
+      <label>Groom Full Name</label>
+      <div class="input-wrap">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" id="sGroom" placeholder="e.g. David Smith" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Bride Full Name</label>
+      <div class="input-wrap">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" id="sBride" placeholder="e.g. Sarah Johnson" required>
+      </div>
+    </div>
+    <div id="nameMissingMsg">Please complete your profile information.</div>
+  </div>
+  <div class="setup-nav">
+    <div></div>
+    <button class="btn btn-next" onclick="nextStep(1)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 2: Wedding Details -->
+<div class="setup-step" id="step2">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">2</span>
+    </div>
+    <h2>Wedding Details</h2>
+    <p>Tell us about your special day</p>
+  </div>
+  <div id="step2MissingMsg" class="step-error-msg" style="display:none;color:#ef4444;font-size:0.85rem;margin-bottom:12px;padding:10px 16px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:10px;text-align:center"></div>
+  <div class="setup-card">
+    <i class="fas fa-ring corner-floral"></i>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Wedding Date</label>
+        <div class="input-wrap">
+          <i class="fas fa-calendar-alt input-icon"></i>
+          <input type="date" id="sDate">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Wedding Time</label>
+        <div class="input-wrap">
+          <i class="fas fa-clock input-icon"></i>
+          <input type="time" id="sTime">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Wedding Theme Color</label>
+      <div class="color-input-wrap">
+        <input type="color" id="sThemeColor" value="#D4AF37">
+        <span class="color-label" id="sThemeColorText">Gold (#D4AF37)</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Wedding Motto / Tagline</label>
+      <div class="input-wrap">
+        <i class="fas fa-quote-right input-icon"></i>
+        <input type="text" id="sMotto" placeholder="e.g. Two hearts, one love">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Dress Code</label>
+      <div class="input-wrap">
+        <i class="fas fa-tshirt input-icon"></i>
+        <input type="text" id="sDressCode" placeholder="e.g. Black Tie Optional">
+      </div>
+    </div>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(2)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 3: Location -->
+<div class="setup-step" id="step3">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">3</span>
+    </div>
+    <h2>Location Information</h2>
+    <p>Where will the celebration take place?</p>
+  </div>
+  <div id="step3MissingMsg" class="step-error-msg" style="display:none;color:#ef4444;font-size:0.85rem;margin-bottom:12px;padding:10px 16px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:10px;text-align:center"></div>
+  <div class="setup-card">
+    <i class="fas fa-map-pin corner-floral"></i>
+    <div class="form-group">
+      <label>Country</label>
+      <div class="input-wrap">
+        <i class="fas fa-globe input-icon"></i>
+        <select id="sCountry"></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>State / Province</label>
+        <div class="input-wrap">
+          <i class="fas fa-map input-icon"></i>
+          <input type="text" id="sState" placeholder="e.g. California">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <div class="input-wrap">
+          <i class="fas fa-city input-icon"></i>
+          <input type="text" id="sCity" placeholder="e.g. Beverly Hills">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Venue Name</label>
+      <div class="input-wrap">
+        <i class="fas fa-building input-icon"></i>
+        <input type="text" id="sVenue" placeholder="e.g. The Grand Ballroom">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Wedding Address</label>
+      <div class="input-wrap">
+        <i class="fas fa-location-dot input-icon"></i>
+        <input type="text" id="sAddress" placeholder="123 Love Lane">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Postal Code <span style="font-weight:400;opacity:0.6;">(Optional)</span></label>
+      <div class="input-wrap">
+        <i class="fas fa-envelope input-icon"></i>
+        <input type="text" id="sPostal" placeholder="90210">
+      </div>
+    </div>
+    <div id="locationPreview" style="margin-top:8px;"></div>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(3)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(3)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 4: Couple Info -->
+<div class="setup-step" id="step4">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">4</span>
+    </div>
+    <h2>Couple Information</h2>
+    <p>Share your stories and bios</p>
+  </div>
+  <div class="setup-card">
+    <i class="fas fa-heart corner-floral"></i>
+    <div class="form-group">
+      <label>Groom Biography</label>
+      <div class="input-wrap">
+        <i class="fas fa-user input-icon"></i>
+        <textarea id="sGroomBio" placeholder="Tell us about the groom..." style="min-height:100px;"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Bride Biography</label>
+      <div class="input-wrap">
+        <i class="fas fa-user input-icon"></i>
+        <textarea id="sBrideBio" placeholder="Tell us about the bride..." style="min-height:100px;"></textarea>
+      </div>
+    </div>
+    <div class="luxury-divider"><i class="fas fa-heart"></i></div>
+    <div class="form-group">
+      <label>Love Story Title</label>
+      <div class="input-wrap">
+        <i class="fas fa-bookmark input-icon"></i>
+        <input type="text" id="sStoryTitle" placeholder="e.g. How We Met">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Love Story</label>
+      <div class="input-wrap">
+        <i class="fas fa-feather-alt input-icon"></i>
+        <textarea id="sStoryText" placeholder="Share the beautiful story of how you met, fell in love, and decided to spend forever together..." style="min-height:150px;"></textarea>
+      </div>
+    </div>
+
+    <div class="luxury-divider"><i class="fas fa-wand-magic-sparkles"></i></div>
+
+    <div class="ai-story-generator" style="background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(139,92,246,0.06));border:1px solid rgba(212,175,55,0.15);border-radius:14px;padding:20px;margin-top:8px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <i class="fas fa-wand-magic-sparkles" style="color:#D4AF37;font-size:1.1rem"></i>
+        <h3 style="margin:0;font-family:'Playfair Display',serif;font-size:1.05rem;color:#E8E0D0">AI Love Story Generator</h3>
+      </div>
+      <p style="margin:0 0 14px;font-size:0.82rem;color:rgba(232,224,208,0.6);line-height:1.5">Generate a beautiful love story from your details. Choose a style, then edit it before saving.</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <label style="font-size:0.8rem;color:rgba(232,224,208,0.7);margin-bottom:6px;display:block">Story Style</label>
+          <select id="aiStoryStyle" style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(212,175,55,0.15);background:rgba(255,255,255,0.05);color:#E8E0D0;font-family:'Poppins',sans-serif;font-size:0.85rem;outline:none">
+            <option value="classic-romance">Classic Romance — Timeless, poetic prose</option>
+            <option value="modern-love">Modern Love Story — Contemporary, heartfelt</option>
+            <option value="fairytale">Fairytale Romance — Once upon a time magic</option>
+            <option value="christian">Christian Wedding — Faith-centered, spiritual</option>
+            <option value="traditional">Traditional Wedding — Culturally rich, elegant</option>
+            <option value="elegant-luxury">Elegant Luxury — Sophisticated, refined</option>
+            <option value="funny-romantic">Funny & Romantic — Witty, joyful, warm</option>
+            <option value="short-version">Short & Sweet — Concise, impactful</option>
+            <option value="long-version">Long & Detailed — Epic, immersive narrative</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button type="button" class="btn btn-next" id="aiGenerateStoryBtn" onclick="generateAIStory()" style="flex:1;min-width:140px;justify-content:center">
+            <i class="fas fa-wand-magic-sparkles"></i> Generate Story
+          </button>
+          <button type="button" class="btn btn-prev" id="aiRegenerateBtn" onclick="generateAIStory()" style="flex:1;min-width:140px;justify-content:center;display:none">
+            <i class="fas fa-rotate"></i> Regenerate
+          </button>
+        </div>
+      </div>
+
+      <div id="aiStoryResult" style="display:none;margin-top:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <label style="font-size:0.8rem;color:rgba(232,224,208,0.7)">Generated Story (edit before saving)</label>
+          <span id="aiStoryWordCount" style="font-size:0.72rem;color:rgba(232,224,208,0.4)">0 words</span>
+        </div>
+        <textarea id="aiStoryDraft" style="width:100%;min-height:180px;padding:14px;border-radius:10px;border:1px solid rgba(212,175,55,0.2);background:rgba(255,255,255,0.03);color:#E8E0D0;font-family:'Poppins',sans-serif;font-size:0.85rem;line-height:1.7;resize:vertical;outline:none"></textarea>
+        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+          <button type="button" class="btn btn-next" onclick="applyAIStory()" style="flex:1;min-width:120px;justify-content:center">
+            <i class="fas fa-check"></i> Use This Story
+          </button>
+          <button type="button" class="btn btn-prev" onclick="clearAIStory()" style="flex:1;min-width:120px;justify-content:center">
+            <i class="fas fa-xmark"></i> Discard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(4)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(4)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 5: Photo Upload -->
+<div class="setup-step" id="step5">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">5</span>
+    </div>
+    <h2>Photo Upload</h2>
+    <p>Upload your photos — drag & drop, or click to browse</p>
+  </div>
+  <div class="setup-card">
+    <i class="fas fa-camera corner-floral"></i>
+    <div class="form-group">
+      <label>Groom Photo</label>
+      <div class="upload-area" id="groomPhotoArea">
+        <i class="fas fa-user"></i>
+        <p>Upload Groom Photo</p>
+        <input type="file" accept="image/*" id="groomPhotoInput">
+      </div>
+      <div class="photo-preview" id="groomPhotoPreview"></div>
+    </div>
+    <div class="form-group">
+      <label>Bride Photo</label>
+      <div class="upload-area" id="bridePhotoArea">
+        <i class="fas fa-user"></i>
+        <p>Upload Bride Photo</p>
+        <input type="file" accept="image/*" id="bridePhotoInput">
+      </div>
+      <div class="photo-preview" id="bridePhotoPreview"></div>
+    </div>
+    <div class="form-group">
+      <label>Cover / Hero Photo</label>
+      <div class="upload-area" id="coverPhotoArea">
+        <i class="fas fa-image"></i>
+        <p>Upload Cover Photo (Background)</p>
+        <input type="file" accept="image/*" id="coverPhotoInput">
+      </div>
+      <div class="photo-preview" id="coverPhotoPreview"></div>
+    </div>
+    <div class="form-group">
+      <label>Gallery Photos <span style="font-weight:400;opacity:0.6;">(Unlimited)</span></label>
+      <div class="upload-area" id="galleryPhotoArea">
+        <i class="fas fa-images"></i>
+        <p>Click or drag & drop to upload gallery photos</p>
+        <input type="file" accept="image/*" multiple id="galleryPhotoInput">
+      </div>
+      <div class="photo-preview" id="galleryPhotoPreview"></div>
+    </div>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(5)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(5)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 6: Event Schedule -->
+<div class="setup-step" id="step6">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">6</span>
+    </div>
+    <h2>Event Schedule</h2>
+    <p>Add events for your wedding celebrations</p>
+  </div>
+  <div class="setup-card">
+    <i class="fas fa-calendar-check corner-floral"></i>
+    <div id="eventsContainer"></div>
+    <button class="btn btn-next" onclick="addEvent()" style="width:100%;justify-content:center;margin-bottom:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(212,175,55,0.08);color:var(--text-light);">
+      <i class="fas fa-plus"></i> Add Event
+    </button>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(6)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(6)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 7: RSVP Setup -->
+<div class="setup-step" id="step7">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">7</span>
+    </div>
+    <h2>RSVP Setup</h2>
+    <p>Configure how guests respond</p>
+  </div>
+  <div class="setup-card">
+    <i class="fas fa-envelope-open-text corner-floral"></i>
+    <div class="form-check">
+      <label>
+        <input type="checkbox" id="sMealPref" checked>
+        <span>Enable Meal Preference</span>
+      </label>
+    </div>
+    <div class="form-group">
+      <label>Custom Questions <span style="font-weight:400;opacity:0.6;">(one per line)</span></label>
+      <div class="input-wrap">
+        <i class="fas fa-question-circle input-icon"></i>
+        <textarea id="sCustomQs" placeholder="e.g.&#10;Any dietary restrictions?&#10;Song request?&#10;Will you need accommodation?" style="min-height:100px;"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(7)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(7)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 8: Social Media -->
+<div class="setup-step" id="step8">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">8</span>
+    </div>
+    <h2>Social Media Setup</h2>
+    <p>Add your social media links</p>
+  </div>
+  <div class="setup-card">
+    <i class="fas fa-share-alt corner-floral"></i>
+    <div class="social-grid">
+      <div class="social-input-wrap">
+        <div class="social-icon" style="background:#25D366;"><i class="fab fa-whatsapp"></i></div>
+        <div class="input-wrap" style="flex:1;"><input type="text" id="sWhatsapp" placeholder="WhatsApp link or number" style="padding-left:16px;"></div>
+      </div>
+      <div class="social-input-wrap">
+        <div class="social-icon" style="background:#1877F2;"><i class="fab fa-facebook-f"></i></div>
+        <div class="input-wrap" style="flex:1;"><input type="text" id="sFacebook" placeholder="Facebook URL" style="padding-left:16px;"></div>
+      </div>
+      <div class="social-input-wrap">
+        <div class="social-icon" style="background:linear-gradient(135deg,#833AB4,#FD1D1D,#F77737);"><i class="fab fa-instagram"></i></div>
+        <div class="input-wrap" style="flex:1;"><input type="text" id="sInstagram" placeholder="Instagram URL" style="padding-left:16px;"></div>
+      </div>
+      <div class="social-input-wrap">
+        <div class="social-icon" style="background:#000;"><i class="fab fa-tiktok"></i></div>
+        <div class="input-wrap" style="flex:1;"><input type="text" id="sTiktok" placeholder="TikTok URL" style="padding-left:16px;"></div>
+      </div>
+      <div class="social-input-wrap">
+        <div class="social-icon" style="background:#1DA1F2;"><i class="fab fa-x-twitter"></i></div>
+        <div class="input-wrap" style="flex:1;"><input type="text" id="sTwitter" placeholder="X (Twitter) URL" style="padding-left:16px;"></div>
+      </div>
+      <div class="social-input-wrap">
+        <div class="social-icon" style="background:#0088CC;"><i class="fab fa-telegram-plane"></i></div>
+        <div class="input-wrap" style="flex:1;"><input type="text" id="sTelegram" placeholder="Telegram URL" style="padding-left:16px;"></div>
+      </div>
+      <div class="social-input-wrap">
+        <div class="social-icon" style="background:#FF0000;"><i class="fab fa-youtube"></i></div>
+        <div class="input-wrap" style="flex:1;"><input type="text" id="sYoutube" placeholder="YouTube URL" style="padding-left:16px;"></div>
+      </div>
+      <div class="social-input-wrap">
+        <div class="social-icon" style="background:#006AFF;"><i class="fab fa-facebook-messenger"></i></div>
+        <div class="input-wrap" style="flex:1;"><input type="text" id="sMessenger" placeholder="Messenger URL" style="padding-left:16px;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(8)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(8)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 9: Gift Setup -->
+<div class="setup-step" id="step9">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">9</span>
+    </div>
+    <h2>Wedding Gift Setup</h2>
+    <p>Optional — let guests know your gift preferences</p>
+  </div>
+  <div class="setup-card">
+    <i class="fas fa-gift corner-floral"></i>
+    <h3 style="font-family:var(--font-heading);color:var(--gold);font-size:1rem;margin-bottom:14px;">Bank Transfer Details <span style="font-weight:300;opacity:0.6;font-size:0.8rem;">(Optional)</span></h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Bank Name</label>
+        <div class="input-wrap">
+          <i class="fas fa-university input-icon"></i>
+          <input type="text" id="sBankName" placeholder="e.g. Chase Bank">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Account Name</label>
+        <div class="input-wrap">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" id="sBankAccount" placeholder="e.g. David &amp; Sarah">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Account Number</label>
+      <div class="input-wrap">
+        <i class="fas fa-hashtag input-icon"></i>
+        <input type="text" id="sBankNumber" placeholder="1234567890">
+      </div>
+    </div>
+    <div class="luxury-divider"><i class="fas fa-gift"></i></div>
+    <h3 style="font-family:var(--font-heading);color:var(--gold);font-size:1rem;margin-bottom:14px;">Gift Links <span style="font-weight:300;opacity:0.6;font-size:0.8rem;">(Optional)</span></h3>
+    <div class="form-group">
+      <label>Gift Registry Link</label>
+      <div class="input-wrap">
+        <i class="fas fa-link input-icon"></i>
+        <input type="url" id="sRegistryLink" placeholder="https://example.com/registry">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>PayPal Link</label>
+        <div class="input-wrap">
+          <i class="fab fa-paypal input-icon"></i>
+          <input type="url" id="sPaypal" placeholder="https://paypal.me/...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>CashApp Link</label>
+        <div class="input-wrap">
+          <i class="fab fa-cash-app input-icon"></i>
+          <input type="url" id="sCashapp" placeholder="https://cash.app/...">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(9)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(9)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 10: Customization -->
+<div class="setup-step" id="step10">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">10</span>
+    </div>
+    <h2>Website Customization</h2>
+    <p>Make it yours with these style options</p>
+  </div>
+  <div class="setup-card">
+    <i class="fas fa-palette corner-floral"></i>
+    <div class="form-group">
+      <label>Theme Style</label>
+      <div class="theme-grid">
+        <div class="theme-option selected" data-theme="classic" onclick="selectTheme(this,'themeStyle')">
+          <i class="fas fa-crown"></i> <span>Classic</span>
+        </div>
+        <div class="theme-option" data-theme="modern" onclick="selectTheme(this,'themeStyle')">
+          <i class="fas fa-leaf"></i> <span>Modern</span>
+        </div>
+        <div class="theme-option" data-theme="romantic" onclick="selectTheme(this,'themeStyle')">
+          <i class="fas fa-heart"></i> <span>Romantic</span>
+        </div>
+        <div class="theme-option" data-theme="minimal" onclick="selectTheme(this,'themeStyle')">
+          <i class="fas fa-circle"></i> <span>Minimal</span>
+        </div>
+        <div class="theme-option" data-theme="vintage" onclick="selectTheme(this,'themeStyle')">
+          <i class="fas fa-feather"></i> <span>Vintage</span>
+        </div>
+        <div class="theme-option" data-theme="tropical" onclick="selectTheme(this,'themeStyle')">
+          <i class="fas fa-palm-tree"></i> <span>Tropical</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Font Style</label>
+      <div class="theme-grid">
+        <div class="theme-option selected" data-font="playfair" onclick="selectTheme(this,'fontStyle')">
+          <span style="font-family:'Playfair Display',serif;font-size:1.1rem;">Aa</span> <span>Elegant</span>
+        </div>
+        <div class="theme-option" data-font="modern" onclick="selectTheme(this,'fontStyle')">
+          <span style="font-family:'Inter',sans-serif;font-size:1.1rem;">Aa</span> <span>Modern</span>
+        </div>
+        <div class="theme-option" data-font="classic" onclick="selectTheme(this,'fontStyle')">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;">Aa</span> <span>Classic</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Default Mode</label>
+      <div class="theme-grid">
+        <div class="theme-option selected" data-mode="light" onclick="selectTheme(this,'modeStyle')">
+          <i class="fas fa-sun"></i> <span>Light Mode</span>
+        </div>
+        <div class="theme-option" data-mode="dark" onclick="selectTheme(this,'modeStyle')">
+          <i class="fas fa-moon"></i> <span>Dark Mode</span>
+        </div>
+        <div class="theme-option" data-mode="auto" onclick="selectTheme(this,'modeStyle')">
+          <i class="fas fa-desktop"></i> <span>Auto</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(10)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(10)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 11: Music -->
+<div class="setup-step" id="step11">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">11</span>
+    </div>
+    <h2>Wedding Music</h2>
+    <p>Set the mood with your wedding song</p>
+  </div>
+  <div class="setup-card">
+    <i class="fas fa-music corner-floral"></i>
+    <div class="upload-area" id="musicUploadArea">
+      <i class="fas fa-music"></i>
+      <p>Upload Wedding Song (MP3)</p>
+      <input type="file" accept="audio/*" id="musicFileInput">
+    </div>
+    <div id="musicPreview" style="display:none;margin-top:12px;">
+      <div style="display:flex;align-items:center;gap:14px;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid rgba(212,175,55,0.06);">
+        <i class="fas fa-music" style="color:var(--gold);font-size:1.3rem;"></i>
+        <div style="flex:1;">
+          <div style="font-weight:500;font-size:0.85rem;color:var(--text);" id="musicFileName">song.mp3</div>
+          <audio controls style="width:100%;margin-top:6px;" id="musicPreviewAudio"></audio>
+        </div>
+        <button onclick="removeMusic()" style="background:none;border:none;color:#e74c3c;cursor:pointer;font-size:1rem;opacity:0.7;" aria-label="Remove music"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+    <div class="form-group" style="margin-top:18px;">
+      <label>Or paste a music URL</label>
+      <div class="input-wrap">
+        <i class="fas fa-link input-icon"></i>
+        <input type="url" id="sMusicUrl" placeholder="https://example.com/wedding-song.mp3">
+      </div>
+    </div>
+  </div>
+  <div class="setup-nav">
+    <button class="btn btn-prev" onclick="prevStep(11)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn btn-next" onclick="nextStep(11)">Next Step <i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 12: Preview & Publish -->
+<div class="setup-step" id="step12">
+  <div class="step-header">
+    <div class="circular-step">
+      <svg viewBox="0 0 68 68">
+        <circle class="bg-circle" cx="34" cy="34" r="30"/>
+        <circle class="progress-circle" cx="34" cy="34" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <span class="step-number-inner">12</span>
+    </div>
+    <h2>Preview &amp; Complete</h2>
+    <p>Review everything before saving</p>
+  </div>
+  <div id="previewContent"></div>
+  <div class="setup-nav" style="flex-direction:column;gap:12px;">
+    <div style="display:flex;gap:14px;width:100%;">
+      <button class="btn btn-prev" onclick="prevStep(12)" style="flex:1;justify-content:center;"><i class="fas fa-arrow-left"></i> Edit</button>
+      <button class="btn btn-publish" onclick="completeSetup()" style="flex:2;justify-content:center;"><i class="fas fa-check"></i> Save &amp; Complete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Security Notice -->
+<div class="security-notice">
+  <i class="fas fa-shield-alt"></i>
+  <span>Your wedding information is securely saved and visible only according to your privacy settings.</span>
+</div>
+
+</div>
+</main>
+
+<!-- ===== SUCCESS OVERLAY ===== -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <div class="icon"><i class="fas fa-check-circle"></i></div>
+    <h2>Congratulations <span id="congratsNames">Groom &amp; Bride</span>!</h2>
+    <p>Your wedding website has been successfully created.</p>
+    <div id="welcomePreview" style="background:rgba(255,255,255,0.02);border:1px solid rgba(212,175,55,0.08);border-radius:16px;padding:24px;margin:20px 0;">
+      <div style="display:flex;justify-content:center;gap:20px;margin-bottom:14px;flex-wrap:wrap;" id="welcomePhotos"></div>
+      <div style="font-family:var(--font-heading);font-size:1.3rem;color:var(--gold);" id="welcomeNames">Groom ❤️ Bride</div>
+      <div id="welcomeCountdown" style="display:flex;justify-content:center;gap:14px;margin:12px 0;">
+        <div><div style="font-size:1.3rem;font-weight:700;color:var(--gold);" id="wd">00</div><div style="font-size:0.65rem;text-transform:uppercase;color:var(--text-light);">Days</div></div>
+        <div><div style="font-size:1.3rem;font-weight:700;color:var(--gold);" id="wh">00</div><div style="font-size:0.65rem;text-transform:uppercase;color:var(--text-light);">Hours</div></div>
+        <div><div style="font-size:1.3rem;font-weight:700;color:var(--gold);" id="wm">00</div><div style="font-size:0.65rem;text-transform:uppercase;color:var(--text-light);">Mins</div></div>
+        <div><div style="font-size:1.3rem;font-weight:700;color:var(--gold);" id="ws">00</div><div style="font-size:0.65rem;text-transform:uppercase;color:var(--text-light);">Secs</div></div>
+      </div>
+    </div>
+    <button class="btn-view" onclick="viewWebsite()"><i class="fas fa-external-link-alt"></i> Enter Wedding Website</button>
+    <br><br>
+    <button class="btn-view" style="background:rgba(255,255,255,0.06);border:1px solid rgba(212,175,55,0.1);color:var(--text);" onclick="window.location.href='index.html'"><i class="fas fa-home"></i> Go to Website</button>
+  </div>
+</div>
+
+<script>
+// ============ DATA STORE ============
+const COUNTRIES = ["Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cabo Verde","Cambodia","Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Ivory Coast","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
+const DEFAULT_EVENTS = [
+  { name:'Wedding Ceremony', date:'', time:'', venue:'', desc:'' },
+  { name:'Reception', date:'', time:'', venue:'', desc:'' },
+  { name:'After Party', date:'', time:'', venue:'', desc:'' }
+];
+
+let setupData = {
+  groom:'', bride:'', date:'', time:'', themeColor:'#D4AF37', motto:'', dressCode:'',
+  country:'', state:'', city:'', venue:'', address:'', postal:'',
+  groomBio:'', brideBio:'', storyTitle:'', storyText:'',
+  groomPhoto:'', bridePhoto:'', coverPhoto:'', gallery:[],
+  events: JSON.parse(JSON.stringify(DEFAULT_EVENTS)),
+  rsvpMeal: true, rsvpCustom: '',
+  whatsapp:'', facebook:'', instagram:'', tiktok:'', twitter:'', telegram:'', youtube:'', messenger:'',
+  bankName:'', bankAccount:'', bankNumber:'', registryLink:'', paypal:'', cashapp:'',
+  themeStyle:'classic', fontStyle:'playfair', modeStyle:'light',
+  musicUrl:'', musicData:''
+};
+
+let currentStep = 1;
+let musicFileData = '';
+
+// ============ INIT ============
+document.addEventListener('DOMContentLoaded', () => {
+  loadCountries();
+  initUploadAreas();
+  renderEvents();
+  updatePreview();
+  updateCircularProgress();
+  // Prefill bride/groom names from signup or existing data
+  var g = document.getElementById('sGroom');
+  var b = document.getElementById('sBride');
+  var savedGroom = localStorage.getItem('wedding_groom');
+  var savedBride = localStorage.getItem('wedding_bride');
+  if (!savedGroom || !savedBride) {
+    var wd = localStorage.getItem('weddingData');
+    if (wd) {
+      try { var d = JSON.parse(wd); if (!savedGroom) savedGroom = d.groomName || ''; if (!savedBride) savedBride = d.brideName || ''; } catch(e){}
+    }
+  }
+  if (savedGroom) g.value = savedGroom;
+  if (savedBride) b.value = savedBride;
+});
+
+function loadCountries() {
+  const sel = document.getElementById('sCountry');
+  sel.innerHTML = '<option value="">Select a country</option>';
+  COUNTRIES.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    if (c === 'United States') opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+// ============ CIRCULAR PROGRESS ============
+function updateCircularProgress() {
+  document.querySelectorAll('.circular-step').forEach(el => {
+    const circle = el.querySelector('.progress-circle');
+    if (!circle) return;
+    const radius = 30;
+    const circumference = 2 * Math.PI * radius;
+    const progress = (currentStep - 1) / 12;
+    const offset = circumference * (1 - progress);
+    circle.style.strokeDasharray = circumference;
+    circle.style.strokeDashoffset = offset;
+  });
+}
+
+// ============ NAVIGATION ============
+function nextStep(step) {
+  if (!validateStep(step)) return;
+  saveStepData(step);
+  document.querySelectorAll('.setup-step').forEach(s => s.classList.remove('active'));
+  currentStep = step + 1;
+  document.getElementById('step' + currentStep).classList.add('active');
+  document.getElementById('currentStepNum').textContent = currentStep;
+  document.getElementById('progressFill').style.width = ((currentStep - 1) / 12 * 100) + '%';
+  updateCircularProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (currentStep === 12) updatePreview();
+}
+
+function prevStep(step) {
+  saveStepData(step);
+  document.querySelectorAll('.setup-step').forEach(s => s.classList.remove('active'));
+  currentStep = step - 1;
+  document.getElementById('step' + currentStep).classList.add('active');
+  document.getElementById('currentStepNum').textContent = currentStep;
+  document.getElementById('progressFill').style.width = ((currentStep - 1) / 12 * 100) + '%';
+  updateCircularProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validateStep(step) {
+  // Hide all error messages first
+  document.querySelectorAll('.step-error-msg').forEach(function(el){el.style.display='none';});
+
+  if (step === 1) {
+    var sG = document.getElementById('sGroom').value.trim();
+    var sB = document.getElementById('sBride').value.trim();
+    if (!sG || !sB) {
+      var msgEl = document.getElementById('nameMissingMsg');
+      if (msgEl) msgEl.style.display = 'block';
+      return false;
+    }
+    var msgEl = document.getElementById('nameMissingMsg');
+    if (msgEl) msgEl.style.display = 'none';
+  }
+  if (step === 2) {
+    var missing = [];
+    if (!document.getElementById('sDate').value) missing.push('Wedding Date');
+    if (!document.getElementById('sTime').value) missing.push('Wedding Time');
+    if (missing.length) {
+      var el = document.getElementById('step2MissingMsg');
+      if (el) { el.textContent = 'Please complete: ' + missing.join(', '); el.style.display = 'block'; }
+      return false;
+    }
+  }
+  if (step === 3) {
+    var missing = [];
+    if (!document.getElementById('sVenue').value.trim()) missing.push('Venue Name');
+    if (!document.getElementById('sAddress').value.trim()) missing.push('Venue Address');
+    if (!document.getElementById('sCountry').value) missing.push('Country');
+    if (!document.getElementById('sState').value.trim()) missing.push('State/Province');
+    if (!document.getElementById('sCity').value.trim()) missing.push('City');
+    if (missing.length) {
+      var el = document.getElementById('step3MissingMsg');
+      if (el) { el.textContent = 'Please complete: ' + missing.join(', '); el.style.display = 'block'; }
+      return false;
+    }
+  }
+  return true;
+}
+
+function saveStepData(step) {
+  switch(step) {
+    case 1:
+      setupData.groom = document.getElementById('sGroom').value.trim();
+      setupData.bride = document.getElementById('sBride').value.trim();
+      localStorage.setItem('wedding_groom', setupData.groom);
+      localStorage.setItem('wedding_bride', setupData.bride);
+      break;
+    case 2:
+      setupData.date = document.getElementById('sDate').value;
+      setupData.time = document.getElementById('sTime').value;
+      setupData.themeColor = document.getElementById('sThemeColor').value;
+      setupData.motto = document.getElementById('sMotto').value.trim();
+      setupData.dressCode = document.getElementById('sDressCode').value.trim();
+      break;
+    case 3:
+      setupData.country = document.getElementById('sCountry').value;
+      setupData.state = document.getElementById('sState').value.trim();
+      setupData.city = document.getElementById('sCity').value.trim();
+      setupData.venue = document.getElementById('sVenue').value.trim();
+      setupData.address = document.getElementById('sAddress').value.trim();
+      setupData.postal = document.getElementById('sPostal').value.trim();
+      break;
+    case 4:
+      setupData.groomBio = document.getElementById('sGroomBio').value.trim();
+      setupData.brideBio = document.getElementById('sBrideBio').value.trim();
+      setupData.storyTitle = document.getElementById('sStoryTitle').value.trim();
+      setupData.storyText = document.getElementById('sStoryText').value.trim();
+      break;
+    case 7:
+      setupData.rsvpMeal = document.getElementById('sMealPref').checked;
+      setupData.rsvpCustom = document.getElementById('sCustomQs').value;
+      break;
+    case 8:
+      setupData.whatsapp = document.getElementById('sWhatsapp').value.trim();
+      setupData.facebook = document.getElementById('sFacebook').value.trim();
+      setupData.instagram = document.getElementById('sInstagram').value.trim();
+      setupData.tiktok = document.getElementById('sTiktok').value.trim();
+      setupData.twitter = document.getElementById('sTwitter').value.trim();
+      setupData.telegram = document.getElementById('sTelegram').value.trim();
+      setupData.youtube = document.getElementById('sYoutube').value.trim();
+      setupData.messenger = document.getElementById('sMessenger').value.trim();
+      break;
+    case 9:
+      setupData.bankName = document.getElementById('sBankName').value.trim();
+      setupData.bankAccount = document.getElementById('sBankAccount').value.trim();
+      setupData.bankNumber = document.getElementById('sBankNumber').value.trim();
+      setupData.registryLink = document.getElementById('sRegistryLink').value.trim();
+      setupData.paypal = document.getElementById('sPaypal').value.trim();
+      setupData.cashapp = document.getElementById('sCashapp').value.trim();
+      break;
+    case 10:
+      setupData.themeStyle = document.querySelector('#step10 .theme-option.selected[data-theme]')?.dataset.theme || 'classic';
+      setupData.fontStyle = document.querySelector('#step10 .theme-option.selected[data-font]')?.dataset.font || 'playfair';
+      setupData.modeStyle = document.querySelector('#step10 .theme-option.selected[data-mode]')?.dataset.mode || 'light';
+      break;
+    case 11:
+      setupData.musicUrl = document.getElementById('sMusicUrl').value.trim();
+      break;
+  }
+}
+
+// ============ STEP 3 - LOCATION PREVIEW ============
+document.getElementById('sCountry').addEventListener('change', updateLocationPreview);
+document.getElementById('sState').addEventListener('input', updateLocationPreview);
+document.getElementById('sCity').addEventListener('input', updateLocationPreview);
+document.getElementById('sVenue').addEventListener('input', updateLocationPreview);
+document.getElementById('sAddress').addEventListener('input', updateLocationPreview);
+
+function updateLocationPreview() {
+  const venue = document.getElementById('sVenue').value.trim();
+  const addr = document.getElementById('sAddress').value.trim();
+  const city = document.getElementById('sCity').value.trim();
+  const state = document.getElementById('sState').value.trim();
+  const country = document.getElementById('sCountry').value;
+  const container = document.getElementById('locationPreview');
+  if (!venue && !addr) { container.innerHTML = ''; return; }
+  const q = encodeURIComponent(`${venue} ${addr} ${city} ${state} ${country}`.trim());
+  container.innerHTML = `
+    <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:8px;"><i class="fas fa-map-pin" style="color:var(--gold);"></i> Location Preview:</p>
+    <div style="border-radius:12px;overflow:hidden;height:180px;border:1px solid rgba(212,175,55,0.06);">
+      <iframe src="https://www.google.com/maps?q=${q}&output=embed" width="100%" height="100%" style="border:0;" loading="lazy"></iframe>
+    </div>`;
+}
+
+// ============ STEP 5 - PHOTO UPLOAD ============
+function initUploadAreas() {
+  setupUploadArea('groomPhotoArea', 'groomPhotoInput', 'groomPhotoPreview', (data) => { setupData.groomPhoto = data; });
+  setupUploadArea('bridePhotoArea', 'bridePhotoInput', 'bridePhotoPreview', (data) => { setupData.bridePhoto = data; });
+  setupUploadArea('coverPhotoArea', 'coverPhotoInput', 'coverPhotoPreview', (data) => { setupData.coverPhoto = data; });
+  setupUploadArea('galleryPhotoArea', 'galleryPhotoInput', 'galleryPhotoPreview', (data) => { setupData.gallery.push(data); }, true);
+}
+
+function setupUploadArea(areaId, inputId, previewId, callback, isMultiple=false) {
+  const area = document.getElementById(areaId);
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
+  area.addEventListener('click', () => input.click());
+  input.addEventListener('change', (e) => handleFiles(e.target.files, preview, callback, isMultiple));
+  area.addEventListener('dragover', (e) => { e.preventDefault(); area.classList.add('dragover'); });
+  area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+  area.addEventListener('drop', (e) => {
+    e.preventDefault(); area.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files, preview, callback, isMultiple);
+  });
+}
+
+function handleFiles(files, preview, callback, isMultiple) {
+  if (!files.length) return;
+  for (const file of files) {
+    if (!file.type.startsWith('image/')) continue;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = e.target.result;
+      if (isMultiple) {
+        callback(data);
+        addPreviewItem(preview, data, null);
+      } else {
+        preview.innerHTML = '';
+        callback(data);
+        addPreviewItem(preview, data, () => { setupData.groomPhoto = ''; });
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function addPreviewItem(container, src, removeCb) {
+  const div = document.createElement('div');
+  div.className = 'photo-preview-item';
+  div.innerHTML = `<img src="${src}" alt="Photo">${removeCb !== null ? '<button class="remove-photo">&times;</button>' : ''}`;
+  if (removeCb !== null) {
+    div.querySelector('.remove-photo').onclick = function() { div.remove(); removeCb(); };
+  }
+  container.appendChild(div);
+}
+
+// ============ STEP 6 - EVENTS ============
+function renderEvents() {
+  const container = document.getElementById('eventsContainer');
+  container.innerHTML = setupData.events.map((ev, i) => `
+    <div class="event-entry">
+      <div class="event-entry-header">
+        <span><i class="fas fa-calendar-day"></i> Event ${i+1}</span>
+        <button class="remove-photo" onclick="removeEvent(${i})" style="position:static;background:#e74c3c;">&times;</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Event Name</label>
+          <div class="input-wrap"><i class="fas fa-tag input-icon"></i><input type="text" class="ev-name" value="${ev.name}" placeholder="Wedding Ceremony"></div>
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <div class="input-wrap"><i class="fas fa-calendar-alt input-icon"></i><input type="date" class="ev-date" value="${ev.date}"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Time</label>
+          <div class="input-wrap"><i class="fas fa-clock input-icon"></i><input type="time" class="ev-time" value="${ev.time}"></div>
+        </div>
+        <div class="form-group">
+          <label>Venue</label>
+          <div class="input-wrap"><i class="fas fa-building input-icon"></i><input type="text" class="ev-venue" value="${ev.venue}" placeholder="Venue name"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <div class="input-wrap"><i class="fas fa-align-left input-icon"></i><input type="text" class="ev-desc" value="${ev.desc}" placeholder="Event description"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addEvent() {
+  const entries = document.querySelectorAll('.event-entry');
+  entries.forEach((el, i) => {
+    if (setupData.events[i]) {
+      setupData.events[i].name = el.querySelector('.ev-name').value;
+      setupData.events[i].date = el.querySelector('.ev-date').value;
+      setupData.events[i].time = el.querySelector('.ev-time').value;
+      setupData.events[i].venue = el.querySelector('.ev-venue').value;
+      setupData.events[i].desc = el.querySelector('.ev-desc').value;
+    }
+  });
+  setupData.events.push({ name:'', date:'', time:'', venue:'', desc:'' });
+  renderEvents();
+}
+
+function removeEvent(index) {
+  setupData.events.splice(index, 1);
+  if (!setupData.events.length) setupData.events.push({ name:'', date:'', time:'', venue:'', desc:'' });
+  renderEvents();
+}
+
+// ============ STEP 10 - THEME SELECTION ============
+function selectTheme(el, group) {
+  const parent = el.parentElement;
+  parent.querySelectorAll('.theme-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ============ AI LOVE STORY GENERATOR ============
+var aiStoryTemplates = {
+  'classic-romance': {
+    opener: function(g,b){ return 'In a world where love stories are whispered through the ages, '+g+' and '+b+' discovered something truly extraordinary—a connection that transcended time and touched the very depths of their souls.'; },
+    middle: function(g,b,t){ return 'Their journey began with a glance that spoke volumes, evolved through whispered conversations under starlit skies, and blossomed into a love so pure it seemed to have been written by the heavens themselves.\n\n'+(t?t+' — ':'')+'Every moment they shared was a chapter in a story that poets would envy, a tale of two hearts beating as one, finding in each other the missing piece they never knew they needed.\n\nThrough laughter and tears, through quiet mornings and dancing nights, their love grew deeper and more radiant with each passing day. They learned that true love is not just found—it is built, nurtured, and cherished.'; },
+    closer: function(g,b){ return g+' and '+b+' now stand on the threshold of forever, ready to write the most beautiful chapter of their love story together. Their wedding day is not just a celebration of love found, but of a lifetime of love yet to come.'; }
+  },
+  'modern-love': {
+    opener: function(g,b){ return 'Some love stories begin with a spark—'+g+' and '+b+'\'s began with a DM that turned into late-night calls that turned into a love neither of them saw coming.'; },
+    middle: function(g,b,t){ return 'In a world of swipes and algorithms, they found something real. A connection that started with shared memes and inside jokes evolved into the kind of love you can\'t fake.\n\n'+(t?t+' — ':'')+'They built their relationship on honesty, laughter, and an unwavering commitment to choosing each other every single day. From coffee dates to road trips, from apartment hunting to dreaming of forever, every step forward felt like coming home.\n\nThey proved that modern love isn\'t about perfection—it\'s about showing up, being vulnerable, and building something beautiful together.'; },
+    closer: function(g,b){ return g+' and '+b+' are proof that when it\'s real, it\'s worth every awkward first date, every butterflies-in-the-stomach moment, and every leap of faith. Now they\'re ready for the ultimate upgrade: forever.'; }
+  },
+  'fairytale': {
+    opener: function(g,b){ return 'Once upon a time, in a world where wishes come true and dreams bloom like enchanted flowers, there lived two souls destined to find each other: '+g+' and '+b+'.'; },
+    middle: function(g,b,t){ return 'Their story unfolded like pages from the most magical storybook ever written. Where '+g+' walked, light followed. Where '+b+' smiled, flowers bloomed. And when they finally met, the universe itself seemed to hold its breath.\n\n'+(t?t+' — ':'')+'Their adventure together has been nothing short of magical—filled with moonlit walks, whispered promises, and moments so perfect they could only be crafted by destiny.\n\nLike all great love stories, theirs has had its challenges, but each obstacle only strengthened the magic between them, proving that their love was written in the stars.'; },
+    closer: function(g,b){ return 'And now, '+g+' and '+b+' prepare to write their \'happily ever after\'—not as an ending, but as the beautiful beginning of forever. The castle awaits, the bells will ring, and their fairytale will come to life.'; }
+  },
+  'christian': {
+    opener: function(g,b){ return '"And now these three remain: faith, hope, and love. But the greatest of these is love." — 1 Corinthians 13:13\n\n'+g+' and '+b+'\'s love story is a testament to God\'s perfect plan, a beautiful journey guided by faith and sealed by divine providence.'; },
+    middle: function(g,b,t){ return 'Their paths crossed in ways only God could orchestrate—a chance meeting, a shared prayer, a growing conviction that they were meant to walk this journey together.\n\n'+(t?t+' — ':'')+'Through prayer and devotion, they built a foundation not on sand, but on the unshakeable rock of faith. Every date was an opportunity to grow closer not just to each other, but to God.\n\nThey discovered that a Christ-centered relationship isn\'t about being perfect—it\'s about surrendering your love to the One who is love itself, and letting Him write your story.'; },
+    closer: function(g,b){ return 'As '+g+' and '+b+' join their lives in holy matrimony, they do so with grateful hearts, knowing that their love is a reflection of God\'s love for His children. May their home be filled with faith, hope, and an abundance of love.'; }
+  },
+  'traditional': {
+    opener: function(g,b){ return 'In the rich tapestry of tradition, where love is honored as the most sacred of bonds, '+g+' and '+b+' come together to celebrate a union that honors their heritage, their families, and the timeless customs that have guided lovers for generations.'; },
+    middle: function(g,b,t){ return 'Their courtship honored the traditions that came before them—respectful, intentional, and deeply meaningful. Every gesture carried weight, every promise was made with the solemnity it deserved.\n\n'+(t?t+' — ':'')+'Families came together, blessings were exchanged, and two lineages prepared to become one. Their love story is woven with the threads of cultural richness, respect for elders, and the beautiful customs that make their union uniquely theirs.\n\nIn honoring tradition, they discovered that some things are timeless—the warmth of community, the strength of family bonds, and the sacred nature of a love that is publicly declared and deeply cherished.'; },
+    closer: function(g,b){ return g+' and '+b+' invite you to witness the joining of two hearts, two families, and two traditions in a celebration that honors the past while embracing the future. Their love story continues, carried forward by the blessings of those who came before.'; }
+  },
+  'elegant-luxury': {
+    opener: function(g,b){ return 'In the realm of extraordinary love stories, where elegance meets devotion and sophistication dances with passion, '+g+' and '+b+' have crafted a romance as refined as fine champagne and as enduring as diamonds.'; },
+    middle: function(g,b,t){ return 'Their love is a masterpiece of deliberate choices—champagne toasts under crystal chandeliers, handwritten letters on embossed stationery, stolen glances across candlelit rooms.\n\n'+(t?t+' — ':'')+'Every detail of their relationship has been curated with intention, from the way they dress to the way they speak about each other. Their love doesn\'t shout—it whispers, with the quiet confidence of something truly exceptional.\n\nIn a world of ordinary, they chose extraordinary. In a world of fleeting, they chose forever. Their love is not just felt—it is experienced, savored, and celebrated with the reverence it deserves.'; },
+    closer: function(g,b){ return g+' and '+b+' now invite you to witness the most exquisite event of the season: their wedding day. An affair of timeless elegance, where every detail has been thoughtfully curated to reflect the extraordinary love they share.'; }
+  },
+  'funny-romantic': {
+    opener: function(g,b){ return 'Warning: This love story contains excessive amounts of laughter, terrible puns, and a love so strong it survived debates about whose turn it was to do the dishes.\n\n'+g+' and '+b+' proved that the best relationships are built on two things: deep, abiding love and the ability to make each other snort-laugh in public.'; },
+    middle: function(g,b,t){ return 'Their first date involved a spilled drink, a broken shoe, and the realization that they had both swiped right on each other\'s terrible photos. It was love at first awkward.\n\n'+(t?t+' — ':'')+'They discovered that love isn\'t always candlelit dinners and roses—sometimes it\'s sharing fries at 2 AM, arguing about the thermostat, and realizing that your person is the one who laughs at your worst jokes.\n\nThrough every adventure (including that one trip where they got hopelessly lost), every inside joke, and every moment of \'I can\'t believe we\'re doing this,\' they found something rare: a love that feels like coming home and like the best adventure all at once.'; },
+    closer: function(g,b){ return g+' and '+b+' are finally tying the knot, which means they\'ll have to come up with new arguments now that \'are we getting married?\' is off the table. Here\'s to a lifetime of love, laughter, and someone who always saves the last bite for you.'; }
+  },
+  'short-version': {
+    opener: function(g,b){ return g+' and '+b+' — two hearts, one incredible love story.'; },
+    middle: function(g,b,t){ return 'They met. They fell in love. They knew.\n\n'+(t?t+' — ':'')+'What started as a chance encounter became the greatest adventure of their lives. Through every high and every low, they chose each other—again and again.\n\nNow, they\'re ready to choose each other for forever.'; },
+    closer: function(g,b){ return 'Their wedding day: the beginning of everything.'; }
+  },
+  'long-version': {
+    opener: function(g,b){ return 'Every great love story has a beginning that seems ordinary in hindsight but extraordinary in the moment it unfolds. For '+g+' and '+b+', that moment arrived like all great things do—unexpectedly, beautifully, and at precisely the right time.'; },
+    middle: function(g,b,t){ return 'Their early days were filled with the nervous excitement of new love—late-night conversations that stretched until dawn, the courage it took to say \'I like you,\' and the butterflies that came with every text notification.\n\n'+(t?t+' — ':'')+'As weeks turned to months and months turned to years, their love deepened in ways they never imagined. They learned each other\'s languages—the spoken ones and the unspoken ones. They discovered that love is not a destination but a journey, one best traveled hand in hand.\n\nThey navigated challenges that tested their bond—distance, doubt, and the everyday pressures of life. But through it all, they held on to each other and to the belief that their love was worth fighting for.\n\nThey celebrated milestones together: the first trip, the first holiday, the first time one of them said \'I love you\' and meant it with every fiber of their being. They built traditions, created memories, and woven their lives together into a beautiful tapestry of shared experiences.\n\nTheir love grew not just between them, but around them. Friends and family saw it—a light in their eyes, a spring in their step, a happiness that was infectious. They became not just two people in love, but a testament to what love can be when two souls commit to growing together.\n\nAnd through it all, through every season of their relationship, one truth remained constant: they were better together than apart, stronger as a team than as individuals, and more in love with each passing day.'; },
+    closer: function(g,b){ return 'Now, as '+g+' and '+b+' stand before their loved ones, they do so with the knowledge that their love story is far from over. In fact, the most beautiful chapters are yet to be written. Their wedding day is not an ending—it is a promise. A promise of more laughter, more adventures, more challenges overcome, and more love than either of them ever thought possible.\n\nHere\'s to '+g+' and '+b+' — to a love that inspires, a bond that endures, and a future as bright as the love that brought them here.'; }
+  }
+};
+
+function generateAIStory() {
+  var groomVal = setupData.groom || document.getElementById('sGroom').value.trim();
+  var brideVal = setupData.bride || document.getElementById('sBride').value.trim();
+  var dateVal = setupData.date || document.getElementById('sDate').value;
+  var timeVal = setupData.time || document.getElementById('sTime').value;
+  var venueVal = setupData.venue || document.getElementById('sVenue').value.trim();
+  var styleKey = document.getElementById('aiStoryStyle').value;
+  var style = aiStoryTemplates[styleKey];
+  if (!style) { showToast('Invalid story style selected', 'error'); return; }
+
+  var details = [];
+  if (dateVal) {
+    try {
+      var d = new Date(dateVal);
+      details.push('on ' + d.toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}));
+    } catch(e){}
+  }
+  if (timeVal) details.push('at ' + timeVal);
+  if (venueVal) details.push('in ' + venueVal);
+  var contextLine = details.length ? ' They\'re celebrating their union ' + details.join(' ') + '.' : '';
+
+  var story = style.opener(groomVal, brideVal);
+  story += '\n\n' + style.middle(groomVal, brideVal, contextLine);
+  story += '\n\n' + style.closer(groomVal, brideVal);
+
+  document.getElementById('aiStoryDraft').value = story;
+  document.getElementById('aiStoryResult').style.display = 'block';
+  document.getElementById('aiRegenerateBtn').style.display = 'flex';
+  var wc = story.trim().split(/\s+/).length;
+  document.getElementById('aiStoryWordCount').textContent = wc + ' words';
+  showToast('Love story generated! Review and edit before saving.', 'success');
+}
+
+document.getElementById('aiStoryDraft').addEventListener('input', function(){
+  var wc = this.value.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('aiStoryWordCount').textContent = wc + ' words';
+});
+
+function applyAIStory() {
+  var story = document.getElementById('aiStoryDraft').value.trim();
+  if (!story) { showToast('Please generate a story first', 'error'); return; }
+  var title = document.getElementById('sStoryTitle').value.trim();
+  if (!title) {
+    var styleName = document.getElementById('aiStoryStyle').selectedOptions[0].text.split('—')[0].trim();
+    document.getElementById('sStoryTitle').value = 'Our ' + styleName + ' Story';
+  }
+  document.getElementById('sStoryText').value = story;
+  setupData.storyText = story;
+  showToast('Story saved! You can continue editing the text above.', 'success');
+  clearAIStory();
+}
+
+function clearAIStory() {
+  document.getElementById('aiStoryDraft').value = '';
+  document.getElementById('aiStoryResult').style.display = 'none';
+}
+
+// ============ STEP 11 - MUSIC ============
+document.getElementById('musicUploadArea').addEventListener('click', () => document.getElementById('musicFileInput').click());
+document.getElementById('musicFileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    musicFileData = ev.target.result;
+    document.getElementById('musicPreview').style.display = 'block';
+    document.getElementById('musicFileName').textContent = file.name;
+    document.getElementById('musicPreviewAudio').src = musicFileData;
+  };
+  reader.readAsDataURL(file);
+});
+
+function removeMusic() {
+  musicFileData = '';
+  document.getElementById('musicPreview').style.display = 'none';
+  document.getElementById('musicFileInput').value = '';
+}
+
+// ============ STEP 12 - PREVIEW ============
+function updatePreview() {
+  saveStepData(currentStep);
+  const d = setupData;
+  const dateStr = d.date ? new Date(d.date).toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) : 'Date TBD';
+  const timeStr = d.time ? formatTime(d.time) : 'Time TBD';
+  document.getElementById('previewContent').innerHTML = `
+    <div class="preview-section">
+      <div class="preview-hero">
+        ${d.coverPhoto ? `<img src="${d.coverPhoto}" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:20px;">` : ''}
+        <div style="display:flex;justify-content:center;gap:30px;margin-bottom:20px;flex-wrap:wrap;">
+          ${d.groomPhoto ? `<img src="${d.groomPhoto}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid ${d.themeColor};">` : '<div style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--gold);border:3px solid '+d.themeColor+';"><i class="fas fa-user"></i></div>'}
+          ${d.bridePhoto ? `<img src="${d.bridePhoto}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid ${d.themeColor};">` : '<div style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--gold);border:3px solid '+d.themeColor+';"><i class="fas fa-user"></i></div>'}
+        </div>
+        <div class="names">${d.groom || 'Groom'} <span class="and">&amp;</span> ${d.bride || 'Bride'}</div>
+        ${d.motto ? `<p style="color:var(--gold-light);font-style:italic;margin-top:8px;">&ldquo;${d.motto}&rdquo;</p>` : ''}
+        <div class="date">${dateStr} at ${timeStr}</div>
+        <div style="margin-top:15px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+          <span style="padding:6px 16px;background:${d.themeColor};color:#fff;border-radius:50px;font-size:0.75rem;font-weight:500;">${d.dressCode || 'Formal'}</span>
+        </div>
+      </div>
+      <div class="preview-details">
+        <div class="preview-detail"><i class="fas fa-map-marker-alt"></i><span><strong>Venue:</strong> ${d.venue || 'Venue TBD'}</span></div>
+        <div class="preview-detail"><i class="fas fa-map-pin"></i><span><strong>Address:</strong> ${d.address || 'Address TBD'}, ${d.city || ''}, ${d.state || ''}, ${d.country || ''}</span></div>
+        ${d.events && d.events.length ? d.events.filter(e=>e.name).map(e => `
+          <div class="preview-detail"><i class="fas fa-calendar-check"></i><span><strong>${e.name}:</strong> ${e.date||'TBD'} at ${e.time||'TBD'}</span></div>
+        `).join('') : ''}
+        ${d.bankName ? `<div class="preview-detail"><i class="fas fa-university"></i><span><strong>Bank:</strong> ${d.bankName} - ${d.bankAccount}</span></div>` : ''}
+      </div>
+    </div>`;
+}
+
+// ============ SAVE DRAFT & PREVIEW ============
+function saveDraftAndPreview() {
+  saveStepData(currentStep);
+  const btn = document.querySelector('.btn-publish');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  btn.disabled = true;
+
+  const weddingInfo = {
+    groomName: setupData.groom,
+    brideName: setupData.bride,
+    weddingDate: setupData.date,
+    weddingTime: setupData.time,
+    themeColor: setupData.themeColor,
+    motto: setupData.motto,
+    dressCode: setupData.dressCode,
+    country: setupData.country,
+    state: setupData.state,
+    city: setupData.city,
+    venue: setupData.venue,
+    address: setupData.address,
+    postalCode: setupData.postal,
+    groomBio: setupData.groomBio,
+    brideBio: setupData.brideBio,
+    weddingStory: setupData.storyText,
+    storyTitle: setupData.storyTitle,
+    groomPhoto: setupData.groomPhoto,
+    bridePhoto: setupData.bridePhoto,
+    coverPhoto: setupData.coverPhoto,
+    musicUrl: setupData.musicUrl || musicFileData,
+    bankName: setupData.bankName,
+    bankAccount: setupData.bankAccount,
+    bankNumber: setupData.bankNumber,
+    registryLink: setupData.registryLink,
+    paypal: setupData.paypal,
+    cashapp: setupData.cashapp,
+    rsvpMeal: setupData.rsvpMeal,
+    rsvpCustom: setupData.rsvpCustom,
+    events: setupData.events,
+    gallery: setupData.gallery,
+    socialLinks: { whatsapp:setupData.whatsapp, facebook:setupData.facebook, instagram:setupData.instagram, tiktok:setupData.tiktok, twitter:setupData.twitter, telegram:setupData.telegram, youtube:setupData.youtube, messenger:setupData.messenger },
+    groomBio: setupData.groomBio,
+    brideBio: setupData.brideBio
+  };
+
+  fbSetDoc('weddingInfo', 'main', weddingInfo).then(function(){
+    localStorage.setItem('wedding_groom', setupData.groom || '');
+    localStorage.setItem('wedding_bride', setupData.bride || '');
+    localStorage.setItem('_preview_redirect', '1');
+    window.location.href = 'preview.html';
+  }).catch(function(){
+    localStorage.setItem('wedding_groom', setupData.groom || '');
+    localStorage.setItem('wedding_bride', setupData.bride || '');
+    var wd = JSON.parse(localStorage.getItem('weddingData') || '{}');
+    Object.assign(wd, weddingInfo);
+    localStorage.setItem('weddingData', JSON.stringify(wd));
+    localStorage.setItem('_preview_redirect', '1');
+    window.location.href = 'preview.html';
+  });
+}
+
+// ============ COMPLETE SETUP ============
+async function completeSetup() {
+  saveStepData(currentStep);
+  const btn = document.querySelector('.btn-publish');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  btn.disabled = true;
+
+  const entries = document.querySelectorAll('.event-entry');
+  entries.forEach((el, i) => {
+    if (setupData.events[i]) {
+      setupData.events[i].name = el.querySelector('.ev-name').value || setupData.events[i].name;
+      setupData.events[i].date = el.querySelector('.ev-date').value || setupData.events[i].date;
+      setupData.events[i].time = el.querySelector('.ev-time').value || setupData.events[i].time;
+      setupData.events[i].venue = el.querySelector('.ev-venue').value || setupData.events[i].venue;
+      setupData.events[i].desc = el.querySelector('.ev-desc').value || setupData.events[i].desc;
+    }
+  });
+
+  const weddingInfo = {
+    groomName: setupData.groom,
+    brideName: setupData.bride,
+    weddingDate: setupData.date,
+    weddingTime: setupData.time,
+    themeColor: setupData.themeColor,
+    motto: setupData.motto,
+    dressCode: setupData.dressCode,
+    country: setupData.country,
+    state: setupData.state,
+    city: setupData.city,
+    venue: setupData.venue,
+    address: setupData.address,
+    postalCode: setupData.postal,
+    groomBio: setupData.groomBio,
+    brideBio: setupData.brideBio,
+    weddingStory: setupData.storyText,
+    storyTitle: setupData.storyTitle,
+    groomPhoto: setupData.groomPhoto,
+    bridePhoto: setupData.bridePhoto,
+    coverPhoto: setupData.coverPhoto,
+    musicUrl: setupData.musicUrl || musicFileData,
+    bankName: setupData.bankName,
+    bankAccount: setupData.bankAccount,
+    bankNumber: setupData.bankNumber,
+    registryLink: setupData.registryLink,
+    paypal: setupData.paypal,
+    cashapp: setupData.cashapp,
+    rsvpMeal: setupData.rsvpMeal,
+    rsvpCustom: setupData.rsvpCustom,
+    events: setupData.events,
+    gallery: setupData.gallery,
+    socialLinks: { whatsapp:setupData.whatsapp, facebook:setupData.facebook, instagram:setupData.instagram, tiktok:setupData.tiktok, twitter:setupData.twitter, telegram:setupData.telegram, youtube:setupData.youtube, messenger:setupData.messenger }
+  };
+  await fbSetDoc('weddingInfo', 'main', weddingInfo);
+  localStorage.setItem('wedding_groom', setupData.groom || '');
+  localStorage.setItem('wedding_bride', setupData.bride || '');
+
+  for (const ev of setupData.events) {
+    if (ev.name) await fbAddDoc('events', { eventName: ev.name, eventDate: ev.date, eventTime: ev.time, eventVenue: ev.venue, description: ev.desc });
+  }
+
+  for (const img of setupData.gallery) {
+    await fbAddDoc('gallery', { imageUrl: img, uploadDate: new Date().toISOString() });
+  }
+
+  await fbSetDoc('socialLinks', 'main', {
+    whatsapp: setupData.whatsapp,
+    facebook: setupData.facebook,
+    instagram: setupData.instagram,
+    tiktok: setupData.tiktok,
+    twitter: setupData.twitter,
+    telegram: setupData.telegram,
+    youtube: setupData.youtube,
+    messenger: setupData.messenger
+  });
+
+  const localData = {
+    groomName: setupData.groom,
+    brideName: setupData.bride,
+    weddingDate: setupData.date,
+    weddingTime: setupData.time,
+    themeColor: setupData.themeColor,
+    motto: setupData.motto,
+    dressCode: setupData.dressCode,
+    country: setupData.country,
+    state: setupData.state,
+    city: setupData.city,
+    venue: setupData.venue,
+    address: setupData.address,
+    postalCode: setupData.postal,
+    groomBio: setupData.groomBio,
+    brideBio: setupData.brideBio,
+    weddingStory: setupData.storyText,
+    storyTitle: setupData.storyTitle,
+    groomPhoto: setupData.groomPhoto,
+    bridePhoto: setupData.bridePhoto,
+    coverPhoto: setupData.coverPhoto,
+    musicUrl: setupData.musicUrl || musicFileData,
+    musicData: musicFileData || setupData.musicData,
+    bankName: setupData.bankName,
+    bankAccount: setupData.bankAccount,
+    bankNumber: setupData.bankNumber,
+    registryLink: setupData.registryLink,
+    paypal: setupData.paypal,
+    cashapp: setupData.cashapp,
+    rsvpMeal: setupData.rsvpMeal,
+    rsvpCustom: setupData.rsvpCustom,
+    events: setupData.events,
+    gallery: setupData.gallery,
+    socialLinks: { whatsapp:setupData.whatsapp, facebook:setupData.facebook, instagram:setupData.instagram, tiktok:setupData.tiktok, twitter:setupData.twitter, telegram:setupData.telegram, youtube:setupData.youtube, messenger:setupData.messenger },
+    isPublished: false,
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+  localStorage.setItem('weddingData', JSON.stringify(localData));
+
+  btn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+
+  const g = setupData.groom || 'Groom';
+  const b = setupData.bride || 'Bride';
+  document.getElementById('congratsNames').textContent = `${g} & ${b}`;
+  document.getElementById('welcomeNames').textContent = `${g} \u2764 ${b}`;
+
+  const photosContainer = document.getElementById('welcomePhotos');
+  photosContainer.innerHTML = '';
+  if (setupData.groomPhoto) photosContainer.innerHTML += `<img src="${setupData.groomPhoto}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);">`;
+  if (setupData.bridePhoto) photosContainer.innerHTML += `<img src="${setupData.bridePhoto}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);">`;
+
+  function updateWelcomeCountdown() {
+    const target = new Date(setupData.date + 'T' + (setupData.time || '16:00'));
+    const diff = target - new Date();
+    if (diff <= 0) {
+      document.getElementById('wd').textContent = '00';
+      document.getElementById('wh').textContent = '00';
+      document.getElementById('wm').textContent = '00';
+      document.getElementById('ws').textContent = '00';
+      return;
+    }
+    document.getElementById('wd').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2,'0');
+    document.getElementById('wh').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2,'0');
+    document.getElementById('wm').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2,'0');
+    document.getElementById('ws').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2,'0');
+  }
+  updateWelcomeCountdown();
+  setInterval(updateWelcomeCountdown, 1000);
+
+  setTimeout(() => {
+    document.getElementById('successOverlay').classList.add('active');
+    localStorage.setItem('_setup_just_completed', '1');
+  }, 600);
+}
+
+function viewWebsite() {
+  localStorage.setItem('_setup_just_completed', '1');
+  window.location.href = 'index.html';
+}
+
+// ============ UTILITY ============
+function formatTime(time) {
+  if (!time) return '';
+  const [h, m] = time.split(':');
+  const hour = parseInt(h);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  return `${hour % 12 || 12}:${m} ${ampm}`;
+}
+
+document.getElementById('sThemeColor').addEventListener('input', function() {
+  document.getElementById('sThemeColorText').textContent = this.value;
+});
+</script>
+
+<!-- AI Concierge Widget -->
+
+<div class="ai-widget-window" id="aiWidgetWindow">
+  <div class="ai-widget-header"><div class="ai-widget-header-icon"><i class="fas fa-robot"></i></div><div class="ai-widget-header-info"><h4>AI Concierge</h4><p>Ask me anything</p></div><button class="ai-widget-close" onclick="toggleAIWidget()" aria-label="Close AI widget"><i class="fas fa-arrow-left"></i></button></div>
+  <div class="ai-widget-messages" id="aiWidgetMessages"></div>
+  <div class="ai-widget-typing" id="aiWidgetTyping"><div class="bubble"><div class="dots"><span></span><span></span><span></span></div></div></div>
+  <div class="ai-widget-qs" id="aiWidgetQs"></div>
+  <div class="ai-widget-input-area">
+    <input class="ai-widget-input" id="aiWidgetInput" placeholder="Ask a question..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendWidgetMsg();}">
+    <button class="ai-widget-send" onclick="sendWidgetMsg()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+<script src="js/ai-concierge.js"></script>
+<script>
+function toggleAIWidget(){document.getElementById('aiWidgetWindow').classList.toggle('open')}
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof AIConcierge==='undefined')return;
+  AIConcierge.init();
+  var c=document.getElementById('aiWidgetMessages');
+  if(c)c.innerHTML='<div class="ai-widget-msg ai"><div class="bubble">'+AIConcierge.getWelcomeMessage().replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')+'</div></div>';
+  var q=document.getElementById('aiWidgetQs');
+  if(q)q.innerHTML=AIConcierge.getSuggestedQuestions().map(function(qt){return '<span class="ai-widget-q" onclick="document.getElementById(\'aiWidgetInput\').value=\''+qt.replace(/'/g,"\\'")+'\';sendWidgetMsg();">'+qt+'</span>';}).join('');
+});
+function sendWidgetMsg(){var i=document.getElementById('aiWidgetInput'),t=i.value.trim();if(!t)return;i.value='';addWidgetMsg(t,'user');showWidgetTyping(true);AIConcierge.processMessage(t).then(function(r){showWidgetTyping(false);addWidgetMsg(r.text,'ai');});}
+function addWidgetMsg(text,role){var c=document.getElementById('aiWidgetMessages'),msg=document.createElement('div');msg.className='ai-widget-msg '+role;msg.innerHTML='<div class="bubble">'+text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')+'</div>';c.appendChild(msg);c.scrollTop=c.scrollHeight;}
+function showWidgetTyping(show){document.getElementById('aiWidgetTyping').classList.toggle('show',show)}
+</script>
+<script src="js/notifications.js"></script>
+
+<script src="js/website-title.js"></script>
+<script src="js/global.js"></script>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer" style="position:relative;z-index:1;border-top:1px solid rgba(212,175,55,0.06);">
+  <div class="footer-grid" style="padding:40px 24px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+    <div class="footer-col">
+      <h4 style="font-family:var(--font-heading);font-size:1.1rem;color:var(--gold);margin-bottom:12px;">Quick Links</h4>
+      <div style="width:40px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:14px;"></div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <a href="index.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">Home</a>
+        <a href="our-story.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">Our Story</a>
+        <a href="wedding-details.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">Wedding Details</a>
+        <a href="events.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">Events</a>
+        <a href="gallery.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">Gallery</a>
+        <a href="rsvp.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">RSVP</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4 style="font-family:var(--font-heading);font-size:1.1rem;color:var(--gold);margin-bottom:12px;">More Info</h4>
+      <div style="width:40px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:14px;"></div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <a href="timeline.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">Timeline</a>
+        <a href="wedding-party.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">Wedding Party</a>
+        <a href="gift-registry.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">Gift Registry</a>
+        <a href="faq.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">FAQ</a>
+        <a href="ai-assistant.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">AI Assistant</a>
+        <a href="contact.html" style="color:var(--text-light);font-size:0.85rem;transition:var(--transition);">Contact</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4 style="font-family:var(--font-heading);font-size:1.1rem;color:var(--gold);margin-bottom:12px;">Contact</h4>
+      <div style="width:40px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:14px;"></div>
+      <p style="color:var(--text-light);font-size:0.85rem;"><i class="fab fa-whatsapp" style="color:var(--gold);margin-right:8px;"></i> 08025092458</p>
+      <p style="color:var(--text-light);font-size:0.85rem;"><i class="fas fa-phone" style="color:var(--gold);margin-right:8px;"></i> 07039557981</p>
+    </div>
+  </div>
+  <div style="text-align:center;padding:20px 24px;border-top:1px solid rgba(212,175,55,0.04);">
+    <div class="footer-brand" id="footerBrand">Forever <span class="heart">&#10084;</span> Always</div>
+    <div style="color:var(--text-light);font-size:0.85rem;">Designed &amp; Developed by <span style="color:var(--gold);">David Leelee Douglas / Stonyboy</span></div>
+    <div style="color:var(--text-light);font-size:0.75rem;margin-top:4px;opacity:0.6;"><i class="fab fa-whatsapp" style="color:var(--gold);"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> Contact: 07039557981</div>
+    <div style="color:var(--text-light);font-size:0.75rem;opacity:0.5;margin-top:6px;">&copy; 2026 Forever &amp; Always. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="js/floating-panel.js"></script>
+</div><!-- /.page-wrapper -->
+<script src="js/auth.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/sidebar.js"></script>
+</body>
+</html>

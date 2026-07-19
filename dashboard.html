@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#0B0F19">
+  <title>Dashboard - Forever &amp; Always</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>:root{--gold:#D4AF37;--gold-light:black;--gold-dark:#B8962E;--dark:#0B0F19;--dark-soft:#111827;--text:#E8E0D0;--text-light:#A09888;--text-muted:#8A8278;--white:#FFFFFF;--success:#22c55e;--error:#ef4444;--warning:#f59e0b;--info:#3b82f6;--radius:16px;--radius-sm:8px;--radius-lg:24px;--font-heading:'Playfair Display',Georgia,serif;--font-body:'Poppins',sans-serif;--font-sans:'Poppins',sans-serif;--transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);--sidebar-width:260px}</style>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase.js"></script>
+</head>
+<body>
+<a href="index.html" class="back-btn" aria-label="Back to Home"><i class="fas fa-arrow-left"></i> Back to Home</a>
+<div class="dash-layout">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="dash-sidebar-header">
+    <div class="dash-sidebar-logo"><i class="fas fa-ring"></i></div>
+    <div><div class="dash-sidebar-title">Forever &amp; Always</div><div class="dash-sidebar-subtitle">Wedding Dashboard</div></div>
+  </div>
+  <nav class="dash-sidebar-nav">
+    <div class="dash-nav-section">Overview</div>
+    <button class="dash-nav-item active" data-section="overview"><i class="fas fa-th-large"></i> Dashboard</button>
+
+    <div class="dash-nav-section">Website</div>
+    <button class="dash-nav-item" data-section="wedding-info"><i class="fas fa-heart"></i> Wedding Details</button>
+    <button class="dash-nav-item" data-section="slideshow"><i class="fas fa-images"></i> Slideshow</button>
+    <button class="dash-nav-item" data-section="memories-mgr"><i class="fas fa-camera-retro"></i> Memories</button>
+    <button class="dash-nav-item" data-section="themes"><i class="fas fa-palette"></i> Themes</button>
+    <button class="dash-nav-item" data-section="gallery-mgr"><i class="fas fa-photo-film"></i> Gallery</button>
+    <button class="dash-nav-item" data-section="timeline-mgr"><i class="fas fa-clock"></i> Timeline</button>
+
+    <div class="dash-nav-section">Guests</div>
+    <button class="dash-nav-item" data-section="guests"><i class="fas fa-users"></i> Guest List <span class="badge" id="guestCount">0</span></button>
+    <button class="dash-nav-item" data-section="rsvp-mgr"><i class="fas fa-envelope-open"></i> RSVP <span class="badge" id="rsvpCount">0</span></button>
+    <button class="dash-nav-item" data-section="invitations"><i class="fas fa-paper-plane"></i> Invitations</button>
+
+    <div class="dash-nav-section">Tools</div>
+    <a href="planner.html" class="dash-nav-item"><i class="fas fa-clipboard-list"></i> Wedding Planner</a>
+    <button class="dash-nav-item" data-section="ai-settings"><i class="fas fa-robot"></i> AI Assistant</button>
+    <button class="dash-nav-item" data-section="social-links"><i class="fas fa-share-nodes"></i> Social Links</button>
+    <button class="dash-nav-item" data-section="analytics"><i class="fas fa-chart-line"></i> Analytics</button>
+
+    <div class="dash-nav-section">Account</div>
+    <button class="dash-nav-item" data-section="website-settings"><i class="fas fa-globe"></i> Website Settings</button>
+    <button class="dash-nav-item" data-section="backup"><i class="fas fa-cloud-arrow-down"></i> Backup & Restore</button>
+    <button class="dash-nav-item" data-section="settings"><i class="fas fa-cog"></i> Account Settings</button>
+  </nav>
+  <div class="dash-sidebar-footer">
+    <div id="authUserMenu"></div>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<div class="dash-main">
+  <div class="dash-topbar">
+    <div class="dash-topbar-left">
+      <button class="dash-hamburger" id="dashHamburger"><i class="fas fa-bars"></i></button>
+      <div class="dash-topbar-title" id="topbarTitle">Dashboard</div>
+    </div>
+    <div class="dash-topbar-right">
+      <button class="dash-topbar-btn" onclick="window.open('index.html','_blank')"><i class="fas fa-external-link-alt"></i> View Site</button>
+      <button class="dash-topbar-btn success" id="btnSaveDraft"><i class="fas fa-save"></i> Save Draft</button>
+      <button class="dash-topbar-btn primary" id="btnPublish"><i class="fas fa-rocket"></i> Publish</button>
+      <button class="dash-topbar-btn" id="btnUnpublish" style="display:none;background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);color:#ef4444" onclick="DashApp.unpublish()"><i class="fas fa-eye-slash"></i> Unpublish</button>
+    </div>
+  </div>
+
+  <div class="dash-content">
+
+<!-- ========== OVERVIEW ========== -->
+<div class="dash-section active" id="sec-overview">
+  <!-- Welcome Banner -->
+  <div class="dash-welcome" id="dashWelcome">
+    <div class="dash-welcome-avatar" id="welcomeAvatar" style="background:var(--gold);">?</div>
+    <div class="dash-welcome-text">
+      <h2 id="welcomeName">Welcome back!</h2>
+      <p id="welcomeSubtitle">Manage your wedding website from one place.</p>
+      <div class="countdown" id="welcomeCountdown"><i class="fas fa-clock"></i> <span id="countdownText">--</span></div>
+    </div>
+  </div>
+
+  <!-- Wedding Website Status -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:14px 20px;background:rgba(255,255,255,0.02);border:1px solid rgba(212,175,55,0.08);border-radius:12px;flex-wrap:wrap">
+    <div id="websiteStatusBadge" style="padding:6px 14px;border-radius:50px;font-size:0.78rem;font-weight:600;background:rgba(245,158,11,0.1);color:var(--warning)">Draft</div>
+    <span style="flex:1;font-size:0.88rem;color:var(--text-light)" id="websiteStatusText">Your website is in draft mode</span>
+    <button class="dash-btn dash-btn-gold" id="btnPublishWebsite" onclick="DashApp.publish()"><i class="fas fa-rocket"></i> Publish Website</button>
+  </div>
+  <!-- Share Row (shown after publish) -->
+  <div id="websiteShareRow" style="display:none;gap:10px;margin-bottom:20px;padding:12px 20px;background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.1);border-radius:12px;flex-wrap:wrap;align-items:center"></div>
+
+  <!-- Stats -->
+  <div class="dash-stats">
+    <div class="dash-stat"><div class="dash-stat-icon gold"><i class="fas fa-users"></i></div><div><div class="dash-stat-value" id="statGuests">0</div><div class="dash-stat-label">Guests</div></div></div>
+    <div class="dash-stat"><div class="dash-stat-icon green"><i class="fas fa-check-circle"></i></div><div><div class="dash-stat-value" id="statAccepted">0</div><div class="dash-stat-label">Accepted</div></div></div>
+    <div class="dash-stat"><div class="dash-stat-icon red"><i class="fas fa-times-circle"></i></div><div><div class="dash-stat-value" id="statDeclined">0</div><div class="dash-stat-label">Declined</div></div></div>
+    <div class="dash-stat"><div class="dash-stat-icon orange"><i class="fas fa-hourglass-half"></i></div><div><div class="dash-stat-value" id="statPending">0</div><div class="dash-stat-label">Pending</div></div></div>
+  </div>
+
+  <!-- Wedding Progress -->
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-chart-line" style="color:var(--gold);margin-right:8px"></i> Wedding Progress</div><span id="weddingProgressPct" style="color:var(--gold);font-weight:700;font-size:1.1rem">0%</span></div>
+    <div style="height:10px;background:rgba(255,255,255,0.06);border-radius:5px;overflow:hidden;margin-bottom:12px"><div id="weddingProgressFill" style="height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:5px;transition:width 1s ease;width:0"></div></div>
+    <div id="weddingProgressSteps" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+  </div>
+
+  <!-- Quick Actions Grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px">
+    <a href="setup.html" class="dash-action-card" style="text-decoration:none"><div class="dash-action-icon" style="background:rgba(212,175,55,0.1);color:var(--gold)"><i class="fas fa-rocket"></i></div><div class="dash-action-label">Wedding Setup</div></a>
+    <button class="dash-action-card" onclick="DashApp.navigate('wedding-info')" style="text-decoration:none"><div class="dash-action-icon" style="background:rgba(239,68,68,0.1);color:var(--error)"><i class="fas fa-heart"></i></div><div class="dash-action-label">Edit Details</div></button>
+    <button class="dash-action-card" onclick="DashApp.navigate('guests')" style="text-decoration:none"><div class="dash-action-icon" style="background:rgba(59,130,246,0.1);color:var(--info)"><i class="fas fa-users"></i></div><div class="dash-action-label">Manage Guests</div></button>
+    <button class="dash-action-card" onclick="DashApp.navigate('rsvp-mgr')" style="text-decoration:none"><div class="dash-action-icon" style="background:rgba(34,197,94,0.1);color:var(--success)"><i class="fas fa-envelope-open"></i></div><div class="dash-action-label">View RSVP</div></button>
+    <button class="dash-action-card" onclick="DashApp.navigate('gallery-mgr')" style="text-decoration:none"><div class="dash-action-icon" style="background:rgba(168,85,247,0.1);color:#a855f7"><i class="fas fa-images"></i></div><div class="dash-action-label">Gallery</div></button>
+    <button class="dash-action-card" onclick="DashApp.navigate('timeline-mgr')" style="text-decoration:none"><div class="dash-action-icon" style="background:rgba(245,158,11,0.1);color:var(--warning)"><i class="fas fa-clock"></i></div><div class="dash-action-label">Love Story</div></button>
+    <a href="planner.html" class="dash-action-card" style="text-decoration:none"><div class="dash-action-icon" style="background:rgba(34,197,94,0.1);color:var(--success)"><i class="fas fa-clipboard-list"></i></div><div class="dash-action-label">Planner</div></a>
+    <button class="dash-action-card" onclick="DashApp.navigate('website-settings')" style="text-decoration:none"><div class="dash-action-icon" style="background:rgba(212,175,55,0.1);color:var(--gold)"><i class="fas fa-cog"></i></div><div class="dash-action-label">Settings</div></button>
+  </div>
+
+  <!-- Bottom Grid -->
+  <div class="dash-grid-2">
+    <!-- Notifications Center -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <div class="dash-card-title"><i class="fas fa-bell" style="color:var(--gold);margin-right:8px"></i> Notifications</div>
+        <button class="dash-btn dash-btn-ghost" style="font-size:0.78rem;padding:6px 12px" onclick="DashApp.markAllNotifsRead()">Mark all read</button>
+      </div>
+      <div id="dashNotifList" style="max-height:300px;overflow-y:auto"></div>
+    </div>
+    <!-- Recent Activity -->
+    <div class="dash-card">
+      <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-history" style="color:var(--gold);margin-right:8px"></i> Recent Activity</div></div>
+      <div id="recentActivity" style="max-height:300px;overflow-y:auto"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== WEDDING INFO ========== -->
+<div class="dash-section" id="sec-wedding-info">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-heart" style="color:var(--gold);margin-right:8px"></i> Wedding Details</div></div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label">Groom Name</label><input class="dash-input" id="infoGroom" placeholder="Groom name"></div>
+      <div class="dash-form-group"><label class="dash-form-label">Bride Name</label><input class="dash-input" id="infoBride" placeholder="Bride name"></div>
+    </div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label">Wedding Date</label><input class="dash-input" id="infoDate" type="date"></div>
+      <div class="dash-form-group"><label class="dash-form-label">Wedding Time</label><input class="dash-input" id="infoTime" type="time"></div>
+    </div>
+    <div class="dash-form-group"><label class="dash-form-label">Venue</label><input class="dash-input" id="infoVenue" placeholder="Wedding venue name"></div>
+    <div class="dash-form-group"><label class="dash-form-label">Address</label><input class="dash-input" id="infoAddress" placeholder="Full address"></div>
+    <div class="dash-form-group"><label class="dash-form-label">Wedding Quote</label><input class="dash-input" id="infoQuote" placeholder="A Love Written By God"></div>
+    <div class="dash-form-group"><label class="dash-form-label">Love Story</label><textarea class="dash-input" id="infoStory" rows="4" placeholder="Tell your love story..."></textarea><div class="dash-form-hint">This can also be AI-generated from the AI Assistant settings.</div></div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="dash-btn dash-btn-gold" onclick="DashApp.saveWeddingInfo()"><i class="fas fa-save"></i> Save Changes</button>
+      <button class="dash-btn dash-btn-ghost" onclick="DashApp.loadWeddingInfo()"><i class="fas fa-undo"></i> Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDESHOW ========== -->
+<div class="dash-section" id="sec-slideshow">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header">
+      <div><div class="dash-card-title"><i class="fas fa-images" style="color:var(--gold);margin-right:8px"></i> Homepage Slideshow</div><div class="dash-card-subtitle">Manage the hero slideshow images. Drag to reorder.</div></div>
+      <label class="dash-btn dash-btn-gold" style="cursor:pointer"><i class="fas fa-plus"></i> Add Images<input type="file" id="slideUpload" accept="image/*" multiple hidden></label>
+    </div>
+    <div class="dash-form-row" style="margin-bottom:20px">
+      <div class="dash-form-group"><label class="dash-form-label">Transition Effect</label><select class="dash-select" id="slideTransition"><option value="fade">Fade</option><option value="ken-right">Ken Burns Right</option><option value="ken-left">Ken Burns Left</option><option value="ken-up">Ken Burns Up</option><option value="zoom">Zoom</option></select></div>
+      <div class="dash-form-group"><label class="dash-form-label">Speed (seconds)</label><input class="dash-input" id="slideSpeed" type="number" min="2" max="15" value="5"></div>
+    </div>
+    <div class="slide-list" id="slideList"></div>
+    <div style="margin-top:16px;display:flex;gap:10px">
+      <button class="dash-btn dash-btn-gold" onclick="DashApp.saveSlideshow()"><i class="fas fa-save"></i> Save Slideshow</button>
+      <button class="dash-btn dash-btn-outline" onclick="DashApp.previewSlideshow()"><i class="fas fa-eye"></i> Preview</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MEMORIES ========== -->
+<div class="dash-section" id="sec-memories-mgr">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header">
+      <div class="dash-card-title"><i class="fas fa-camera-retro" style="color:var(--gold);margin-right:8px"></i> Wedding Memories Manager</div>
+      <div style="display:flex;gap:8px">
+        <a href="memories.html" target="_blank" class="dash-btn dash-btn-outline"><i class="fas fa-eye"></i> View Memories Page</a>
+        <label class="dash-btn dash-btn-gold" style="cursor:pointer"><i class="fas fa-cloud-upload-alt"></i> Upload Media<input type="file" id="memMgrUpload" accept="image/*,video/*" multiple hidden onchange="MemMgr.handleUpload(event)"></label>
+      </div>
+    </div>
+    <div class="dash-tabs" style="margin-bottom:20px">
+      <button class="dash-tab active" onclick="MemMgr.filterTab('all',this)">All Media</button>
+      <button class="dash-tab" onclick="MemMgr.filterTab('photos',this)">Photos</button>
+      <button class="dash-tab" onclick="MemMgr.filterTab('videos',this)">Videos</button>
+      <button class="dash-tab" onclick="MemMgr.filterTab('pending',this)">Pending Approval</button>
+      <button class="dash-tab" onclick="MemMgr.filterTab('featured',this)">Featured Video</button>
+    </div>
+    <!-- Featured Video Settings -->
+    <div id="memFeaturedSettings" style="display:none;margin-bottom:24px">
+      <div class="dash-card" style="background:rgba(212,175,55,0.04)">
+        <div class="dash-card-title" style="margin-bottom:12px"><i class="fas fa-film" style="color:var(--gold);margin-right:6px"></i> Featured Wedding Film</div>
+        <div class="dash-form-row">
+          <div class="dash-form-group"><label class="dash-form-label">Video Title</label><input class="dash-input" id="memFeatTitle" placeholder="Our Wedding Highlights"></div>
+          <div class="dash-form-group"><label class="dash-form-label">Description</label><input class="dash-input" id="memFeatDesc" placeholder="Watch our special day"></div>
+        </div>
+        <div class="dash-form-group"><label class="dash-form-label">Video URL (YouTube, Vimeo, or MP4)</label><input class="dash-input" id="memFeatUrl" placeholder="https://youtube.com/watch?v=..."></div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="dash-btn dash-btn-gold" onclick="MemMgr.saveFeatured()"><i class="fas fa-save"></i> Save Featured Video</button>
+          <button class="dash-btn dash-btn-ghost" onclick="MemMgr.clearFeatured()"><i class="fas fa-trash"></i> Remove</button>
+        </div>
+      </div>
+    </div>
+    <!-- Media Grid -->
+    <div id="memMgrGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px"></div>
+    <!-- Guest Uploads -->
+    <div style="margin-top:24px">
+      <div class="dash-card-title" style="margin-bottom:12px"><i class="fas fa-users" style="color:var(--gold);margin-right:6px"></i> Guest Uploads</div>
+      <div id="memGuestUploads" style="color:var(--text-light);font-size:0.88rem">No guest uploads yet.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== THEMES ========== -->
+<div class="dash-section" id="sec-themes">
+  <div class="dash-card">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-palette" style="color:var(--gold);margin-right:8px"></i> Wedding Theme</div></div>
+    <p style="color:var(--text-light);font-size:0.88rem;margin-bottom:20px">Select a luxury theme for your wedding website. Changes apply instantly.</p>
+    <div class="theme-grid" id="themeGrid">
+      <div class="theme-card active" data-theme="classic-gold" onclick="DashApp.setTheme('classic-gold',this)">
+        <div class="theme-preview" style="background:linear-gradient(135deg,#0B0F19,#111827);border:1px solid rgba(212,175,55,0.2)"><div style="padding:12px;text-align:center"><div style="width:40px;height:3px;background:#D4AF37;margin:0 auto 6px;border-radius:2px"></div><div style="height:8px;width:60%;background:rgba(212,175,55,0.3);margin:0 auto;border-radius:4px"></div></div></div>
+        <div class="theme-card-name">Royal Gold</div><div class="theme-card-desc">Classic luxury gold</div>
+      </div>
+      <div class="theme-card" data-theme="dark-gold" onclick="DashApp.setTheme('dark-gold',this)">
+        <div class="theme-preview" style="background:linear-gradient(135deg,#0A0A0A,#1A1A1A);border:1px solid rgba(184,134,11,0.2)"><div style="padding:12px;text-align:center"><div style="width:40px;height:3px;background:#B8860B;margin:0 auto 6px;border-radius:2px"></div><div style="height:8px;width:60%;background:rgba(184,134,11,0.3);margin:0 auto;border-radius:4px"></div></div></div>
+        <div class="theme-card-name">Midnight Romance</div><div class="theme-card-desc">Deep dark elegance</div>
+      </div>
+      <div class="theme-card" data-theme="emerald-gold" onclick="DashApp.setTheme('emerald-gold',this)">
+        <div class="theme-preview" style="background:linear-gradient(135deg,#0A1A0F,#122D1A);border:1px solid rgba(201,168,76,0.2)"><div style="padding:12px;text-align:center"><div style="width:40px;height:3px;background:#C9A84C;margin:0 auto 6px;border-radius:2px"></div><div style="height:8px;width:60%;background:rgba(201,168,76,0.3);margin:0 auto;border-radius:4px"></div></div></div>
+        <div class="theme-card-name">Emerald Luxury</div><div class="theme-card-desc">Green & gold</div>
+      </div>
+      <div class="theme-card" data-theme="rose-gold" onclick="DashApp.setTheme('rose-gold',this)">
+        <div class="theme-preview" style="background:linear-gradient(135deg,#1A0F0A,#2D1A12);border:1px solid rgba(232,168,124,0.2)"><div style="padding:12px;text-align:center"><div style="width:40px;height:3px;background:#E8A87C;margin:0 auto 6px;border-radius:2px"></div><div style="height:8px;width:60%;background:rgba(232,168,124,0.3);margin:0 auto;border-radius:4px"></div></div></div>
+        <div class="theme-card-name">Rose Gold</div><div class="theme-card-desc">Romantic pink tones</div>
+      </div>
+      <div class="theme-card" data-theme="modern-black" onclick="DashApp.setTheme('modern-black',this)">
+        <div class="theme-preview" style="background:linear-gradient(135deg,#000,#111);border:1px solid rgba(255,255,255,0.1)"><div style="padding:12px;text-align:center"><div style="width:40px;height:3px;background:#fff;margin:0 auto 6px;border-radius:2px"></div><div style="height:8px;width:60%;background:rgba(255,255,255,0.2);margin:0 auto;border-radius:4px"></div></div></div>
+        <div class="theme-card-name">Modern Black</div><div class="theme-card-desc">Sleek monochrome</div>
+      </div>
+      <div class="theme-card" data-theme="african-wedding" onclick="DashApp.setTheme('african-wedding',this)">
+        <div class="theme-preview" style="background:linear-gradient(135deg,#1A0E05,#2D1A0D);border:1px solid rgba(212,137,46,0.2)"><div style="padding:12px;text-align:center"><div style="width:40px;height:3px;background:#D4892E;margin:0 auto 6px;border-radius:2px"></div><div style="height:8px;width:60%;background:rgba(212,137,46,0.3);margin:0 auto;border-radius:4px"></div></div></div>
+        <div class="theme-card-name">Floral Garden</div><div class="theme-card-desc">African-inspired warmth</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== GALLERY ========== -->
+<div class="dash-section" id="sec-gallery-mgr">
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div><div class="dash-card-title"><i class="fas fa-photo-film" style="color:var(--gold);margin-right:8px"></i> Gallery Manager</div><div class="dash-card-subtitle">Upload photos and videos, create albums, set cover images.</div></div>
+      <label class="dash-btn dash-btn-gold" style="cursor:pointer"><i class="fas fa-cloud-upload-alt"></i> Upload Media<input type="file" id="galleryUpload" accept="image/*,video/*" multiple hidden></label>
+    </div>
+    <div class="dash-tabs" id="albumTabs">
+      <button class="dash-tab active" data-album="all">All Media</button>
+      <button class="dash-tab" data-album="photos">Photos</button>
+      <button class="dash-tab" data-album="videos">Videos</button>
+      <button class="dash-tab" data-album="cover">Cover</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</div>
+
+<!-- ========== TIMELINE ========== -->
+<div class="dash-section" id="sec-timeline-mgr">
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div><div class="dash-card-title"><i class="fas fa-clock" style="color:var(--gold);margin-right:8px"></i> Wedding Day Timeline</div><div class="dash-card-subtitle">Schedule the events of your wedding day.</div></div>
+      <button class="dash-btn dash-btn-gold" onclick="DashApp.addTimelineEvent()"><i class="fas fa-plus"></i> Add Event</button>
+    </div>
+    <div class="slide-list" id="timelineList"></div>
+    <div style="margin-top:16px"><button class="dash-btn dash-btn-gold" onclick="DashApp.saveTimeline()"><i class="fas fa-save"></i> Save Timeline</button></div>
+  </div>
+</div>
+
+<!-- ========== GUESTS ========== -->
+<div class="dash-section" id="sec-guests">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header">
+      <div><div class="dash-card-title"><i class="fas fa-users" style="color:var(--gold);margin-right:8px"></i> Guest Manager</div></div>
+      <div style="display:flex;gap:8px">
+        <button class="dash-btn dash-btn-gold" onclick="DashApp.addGuest()"><i class="fas fa-plus"></i> Add Guest</button>
+        <label class="dash-btn dash-btn-outline" style="cursor:pointer"><i class="fas fa-file-import"></i> Import CSV<input type="file" id="guestImport" accept=".csv,.xlsx,.xls" hidden></label>
+        <button class="dash-btn dash-btn-outline" onclick="DashApp.exportGuests('csv')"><i class="fas fa-file-csv"></i> CSV</button>
+        <button class="dash-btn dash-btn-outline" onclick="DashApp.exportGuests('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
+      </div>
+    </div>
+    <div class="dash-search">
+      <input class="dash-input" id="guestSearch" placeholder="Search guests by name, email, or group..." oninput="DashApp.filterGuests()">
+      <select class="dash-select" id="guestFilter" style="max-width:180px" onchange="DashApp.filterGuests()"><option value="all">All Status</option><option value="accepted">Accepted</option><option value="declined">Declined</option><option value="pending">Pending</option></select>
+    </div>
+    <div class="dash-stats" style="margin-bottom:20px">
+      <div class="dash-stat"><div class="dash-stat-icon gold"><i class="fas fa-users"></i></div><div><div class="dash-stat-value" id="gTotal">0</div><div class="dash-stat-label">Total Guests</div></div></div>
+      <div class="dash-stat"><div class="dash-stat-icon green"><i class="fas fa-check"></i></div><div><div class="dash-stat-value" id="gAccepted">0</div><div class="dash-stat-label">Accepted</div></div></div>
+      <div class="dash-stat"><div class="dash-stat-icon red"><i class="fas fa-times"></i></div><div><div class="dash-stat-value" id="gDeclined">0</div><div class="dash-stat-label">Declined</div></div></div>
+      <div class="dash-stat"><div class="dash-stat-icon orange"><i class="fas fa-question"></i></div><div><div class="dash-stat-value" id="gPending">0</div><div class="dash-stat-label">Pending</div></div></div>
+    </div>
+    <div class="dash-table-wrap">
+      <table class="dash-table" id="guestTable">
+        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Group</th><th>RSVP</th><th>+1</th><th>Actions</th></tr></thead>
+        <tbody id="guestTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== RSVP ========== -->
+<div class="dash-section" id="sec-rsvp-mgr">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header">
+      <div class="dash-card-title"><i class="fas fa-envelope-open" style="color:var(--gold);margin-right:8px"></i> RSVP Management</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input type="text" id="rsvpSearch" placeholder="Search guests..." style="padding:8px 14px;border:1px solid rgba(212,175,55,0.15);border-radius:var(--radius-sm);background:rgba(255,255,255,0.05);color:var(--white);font-size:0.85rem;width:180px" oninput="DashApp.filterRSVP()">
+        <select id="rsvpFilter" style="padding:8px 14px;border:1px solid rgba(212,175,55,0.15);border-radius:var(--radius-sm);background:rgba(255,255,255,0.05);color:var(--white);font-size:0.85rem" onchange="DashApp.filterRSVP()">
+          <option value="all">All Responses</option>
+          <option value="accepted">Accepted</option>
+          <option value="declined">Declined</option>
+          <option value="pending">Pending</option>
+        </select>
+        <button class="dash-btn dash-btn-outline" onclick="DashApp.exportRSVP('csv')"><i class="fas fa-file-csv"></i> CSV</button>
+        <button class="dash-btn dash-btn-outline" onclick="DashApp.exportRSVP('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
+        <button class="dash-btn dash-btn-outline" onclick="DashApp.exportRSVP('excel')"><i class="fas fa-file-excel"></i> Excel</button>
+      </div>
+    </div>
+    <div class="dash-stats" style="margin-bottom:24px">
+      <div class="dash-stat"><div class="dash-stat-icon gold"><i class="fas fa-paper-plane"></i></div><div><div class="dash-stat-value" id="rTotal">0</div><div class="dash-stat-label">Total RSVPs</div></div></div>
+      <div class="dash-stat"><div class="dash-stat-icon green"><i class="fas fa-check-circle"></i></div><div><div class="dash-stat-value" id="rAccepted">0</div><div class="dash-stat-label">Accepted</div></div></div>
+      <div class="dash-stat"><div class="dash-stat-icon red"><i class="fas fa-times-circle"></i></div><div><div class="dash-stat-value" id="rDeclined">0</div><div class="dash-stat-label">Declined</div></div></div>
+      <div class="dash-stat"><div class="dash-stat-icon orange"><i class="fas fa-hourglass-half"></i></div><div><div class="dash-stat-value" id="rPending">0</div><div class="dash-stat-label">Pending/Maybe</div></div></div>
+      <div class="dash-stat"><div class="dash-stat-icon gold"><i class="fas fa-users"></i></div><div><div class="dash-stat-value" id="rGuests">0</div><div class="dash-stat-label">Total Guests</div></div></div>
+    </div>
+    <div class="dash-card-title" style="margin-bottom:12px">RSVP Responses</div>
+    <div class="dash-table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>Guest</th><th>Email</th><th>Status</th><th>Guests</th><th>Meal</th><th>Transport</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="rsvpTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== AI SETTINGS ========== -->
+<div class="dash-section" id="sec-ai-settings">
+  <div class="dash-card">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-robot" style="color:var(--gold);margin-right:8px"></i> AI Assistant Settings</div></div>
+    <p style="color:var(--text-light);font-size:0.88rem;margin-bottom:20px">Configure the AI assistant with your wedding details so it can answer guest questions accurately.</p>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label">Wedding Date</label><input class="dash-input" id="aiDate" type="date"></div>
+      <div class="dash-form-group"><label class="dash-form-label">Venue</label><input class="dash-input" id="aiVenue" placeholder="Venue name"></div>
+    </div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label">Dress Code</label><input class="dash-input" id="aiDress" placeholder="e.g. Black Tie Optional"></div>
+      <div class="dash-form-group"><label class="dash-form-label">Contact Info</label><input class="dash-input" id="aiContact" placeholder="Phone or email"></div>
+    </div>
+    <div class="dash-form-group"><label class="dash-form-label">Directions / Parking</label><textarea class="dash-input" id="aiDirections" rows="2" placeholder="Directions to the venue..."></textarea></div>
+    <div class="dash-form-group"><label class="dash-form-label">Gift Registry Info</label><textarea class="dash-input" id="aiGifts" rows="2" placeholder="Gift registry details..."></textarea></div>
+    <div class="dash-form-group"><label class="dash-form-label">FAQ (one per line)</label><textarea class="dash-input" id="aiFAQ" rows="4" placeholder="Q: Is there parking?&#10;A: Yes, free parking available&#10;Q: Can I bring a plus one?&#10;A: Yes, please indicate on RSVP"></textarea></div>
+    <button class="dash-btn dash-btn-gold" onclick="DashApp.saveAISettings()"><i class="fas fa-save"></i> Save AI Settings</button>
+  </div>
+</div>
+
+<!-- ========== SOCIAL LINKS ========== -->
+<div class="dash-section" id="sec-social-links">
+  <div class="dash-card">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-share-nodes" style="color:var(--gold);margin-right:8px"></i> Social Media Links</div></div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label"><i class="fab fa-instagram" style="margin-right:4px"></i> Instagram</label><input class="dash-input" id="linkInstagram" placeholder="https://instagram.com/..."></div>
+      <div class="dash-form-group"><label class="dash-form-label"><i class="fab fa-facebook" style="margin-right:4px"></i> Facebook</label><input class="dash-input" id="linkFacebook" placeholder="https://facebook.com/..."></div>
+    </div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label"><i class="fab fa-twitter" style="margin-right:4px"></i> Twitter / X</label><input class="dash-input" id="linkTwitter" placeholder="https://x.com/..."></div>
+      <div class="dash-form-group"><label class="dash-form-label"><i class="fab fa-tiktok" style="margin-right:4px"></i> TikTok</label><input class="dash-input" id="linkTiktok" placeholder="https://tiktok.com/..."></div>
+    </div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label"><i class="fab fa-youtube" style="margin-right:4px"></i> YouTube</label><input class="dash-input" id="linkYoutube" placeholder="https://youtube.com/..."></div>
+      <div class="dash-form-group"><label class="dash-form-label"><i class="fab fa-whatsapp" style="margin-right:4px"></i> WhatsApp</label><input class="dash-input" id="linkWhatsapp" placeholder="https://wa.me/..."></div>
+    </div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label"><i class="fab fa-telegram" style="margin-right:4px"></i> Telegram</label><input class="dash-input" id="linkTelegram" placeholder="https://t.me/..."></div>
+      <div class="dash-form-group"><label class="dash-form-label"><i class="fab fa-pinterest" style="margin-right:4px"></i> Pinterest</label><input class="dash-input" id="linkPinterest" placeholder="https://pinterest.com/..."></div>
+    </div>
+    <button class="dash-btn dash-btn-gold" onclick="DashApp.saveSocialLinks()"><i class="fas fa-save"></i> Save Links</button>
+  </div>
+</div>
+
+<!-- ========== ANALYTICS ========== -->
+<div class="dash-section" id="sec-analytics">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-chart-line" style="color:var(--gold);margin-right:8px"></i> Analytics</div></div>
+    <div class="dash-grid-2" style="margin-bottom:20px">
+      <div class="dash-stat"><div class="dash-stat-icon blue"><i class="fas fa-eye"></i></div><div><div class="dash-stat-value" id="aViews">0</div><div class="dash-stat-label">Page Views</div></div></div>
+      <div class="dash-stat"><div class="dash-stat-icon gold"><i class="fas fa-link"></i></div><div><div class="dash-stat-value" id="aClicks">0</div><div class="dash-stat-label">Invitation Clicks</div></div></div>
+    </div>
+    <div class="chart-container">
+      <div class="chart-bar-group" id="viewsChart"></div>
+      <div class="chart-labels" id="viewsLabels"></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px">
+      <button class="dash-btn dash-btn-outline" onclick="DashApp.downloadReport('pdf')"><i class="fas fa-file-pdf"></i> Download PDF</button>
+      <button class="dash-btn dash-btn-outline" onclick="DashApp.downloadReport('csv')"><i class="fas fa-file-csv"></i> Download CSV</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== INVITATIONS ========== -->
+<div class="dash-section" id="sec-invitations">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header">
+      <div class="dash-card-title"><i class="fas fa-paper-plane" style="color:var(--gold);margin-right:8px"></i> Guest Invitation Manager</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="dash-btn dash-btn-gold" onclick="InvDash.addGuest()"><i class="fas fa-plus"></i> Add Guest</button>
+        <button class="dash-btn dash-btn-outline" onclick="InvDash.exportGuests('csv')"><i class="fas fa-file-csv"></i> CSV</button>
+        <button class="dash-btn dash-btn-outline" onclick="InvDash.exportGuests('excel')"><i class="fas fa-file-excel"></i> Excel</button>
+        <button class="dash-btn dash-btn-outline" onclick="InvDash.exportGuests('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
+      </div>
+    </div>
+    <div class="inv-stats-grid" id="invStats"></div>
+    <div class="dash-search">
+      <input class="dash-input" id="invSearch" placeholder="Search guests..." oninput="InvDash.renderGuests()">
+      <select class="dash-select" id="invFilter" style="max-width:160px" onchange="InvDash.renderGuests()"><option value="all">All Guests</option><option value="invited">Invited</option><option value="not-invited">Not Invited</option><option value="accepted">Accepted</option><option value="declined">Declined</option><option value="pending">Pending</option></select>
+    </div>
+    <div class="dash-table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Invited</th><th>RSVP</th><th>Actions</th></tr></thead>
+        <tbody id="invGuestTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Reminder System -->
+  <div class="dash-card">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-bell" style="color:var(--gold);margin-right:8px"></i> Reminder System</div></div>
+    <p style="color:var(--text-light);font-size:0.88rem;margin-bottom:16px">Send reminders to guests via WhatsApp, Email, or SMS.</p>
+    <div class="reminder-grid">
+      <div class="reminder-card">
+        <h4><i class="fas fa-calendar-days" style="color:var(--gold);margin-right:6px"></i> 30 Days Notice</h4>
+        <p>Remind guests the wedding is in 30 days.</p>
+        <div class="actions">
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('30days','whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('30days','email')"><i class="fas fa-envelope"></i> Email</button>
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('30days','sms')"><i class="fas fa-comment-sms"></i> SMS</button>
+        </div>
+      </div>
+      <div class="reminder-card">
+        <h4><i class="fas fa-calendar-week" style="color:var(--gold);margin-right:6px"></i> 7 Days Notice</h4>
+        <p>Final reminder one week before the wedding.</p>
+        <div class="actions">
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('7days','whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('7days','email')"><i class="fas fa-envelope"></i> Email</button>
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('7days','sms')"><i class="fas fa-comment-sms"></i> SMS</button>
+        </div>
+      </div>
+      <div class="reminder-card">
+        <h4><i class="fas fa-calendar-star" style="color:var(--gold);margin-right:6px"></i> Day Before</h4>
+        <p>Excitement message the day before.</p>
+        <div class="actions">
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('tomorrow','whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('tomorrow','email')"><i class="fas fa-envelope"></i> Email</button>
+        </div>
+      </div>
+      <div class="reminder-card">
+        <h4><i class="fas fa-heart" style="color:var(--gold);margin-right:6px"></i> Thank You</h4>
+        <p>Send a thank-you message after the wedding.</p>
+        <div class="actions">
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('thankyou','whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+          <button class="reminder-btn" onclick="InvDash.sendBulkReminder('thankyou','email')"><i class="fas fa-envelope"></i> Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== WEBSITE SETTINGS ========== -->
+<div class="dash-section" id="sec-website-settings">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-globe" style="color:var(--gold);margin-right:8px"></i> Website Settings</div></div>
+    <p style="color:var(--text-light);font-size:0.88rem;margin-bottom:20px">Customize your website's appearance, branding, and public information.</p>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label">Website Name</label><input class="dash-input" id="wsSiteName" placeholder="Forever & Always"></div>
+      <div class="dash-form-group"><label class="dash-form-label">Browser Title</label><input class="dash-input" id="wsBrowserTitle" placeholder="John & Jane's Wedding"></div>
+    </div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label">Favicon URL</label><input class="dash-input" id="wsFavicon" placeholder="https://..."></div>
+      <div class="dash-form-group"><label class="dash-form-label">Logo URL</label><input class="dash-input" id="wsLogo" placeholder="https://..."></div>
+    </div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label">Primary Color</label><input class="dash-input" id="wsPrimaryColor" type="color" value="#D4AF37"></div>
+      <div class="dash-form-group"><label class="dash-form-label">Secondary Color</label><input class="dash-input" id="wsSecondaryColor" type="color" value="#0B0F19"></div>
+    </div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label">Font Style</label><select class="dash-select" id="wsFontStyle"><option value="modern">Modern (Poppins)</option><option value="elegant">Elegant (Cormorant Garamond)</option><option value="classic">Classic (Playfair Display)</option></select></div>
+      <div class="dash-form-group"><label class="dash-form-label">Hero Image URL</label><input class="dash-input" id="wsHeroImage" placeholder="https://..."></div>
+    </div>
+    <div class="dash-form-group"><label class="dash-form-label">Footer Text</label><input class="dash-input" id="wsFooterText" placeholder="Made with love for our special day"></div>
+    <div class="dash-form-row">
+      <div class="dash-form-group"><label class="dash-form-label">Contact Email</label><input class="dash-input" id="wsContactEmail" type="email" placeholder="wedding@example.com"></div>
+      <div class="dash-form-group"><label class="dash-form-label">Contact Phone</label><input class="dash-input" id="wsContactPhone" placeholder="+1 234 567 890"></div>
+    </div>
+    <div class="dash-form-group"><label class="dash-form-label">Meta Description</label><textarea class="dash-input" id="wsMetaDesc" rows="2" placeholder="Join us in celebrating the wedding of..."></textarea></div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="dash-btn dash-btn-gold" onclick="DashApp.saveWebsiteSettings()"><i class="fas fa-save"></i> Save Settings</button>
+      <button class="dash-btn dash-btn-outline" onclick="DashApp.loadWebsiteSettings()"><i class="fas fa-undo"></i> Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== BACKUP & RESTORE ========== -->
+<div class="dash-section" id="sec-backup">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-cloud-arrow-down" style="color:var(--gold);margin-right:8px"></i> Backup & Restore</div></div>
+    <p style="color:var(--text-light);font-size:0.88rem;margin-bottom:20px">Export your wedding data as a JSON file, import a backup, or reset to defaults.</p>
+    <div class="dash-grid-3" style="margin-bottom:24px">
+      <div class="dash-card" style="text-align:center;padding:32px 20px">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><i class="fas fa-download" style="font-size:1.5rem;color:var(--success)"></i></div>
+        <h3 style="color:var(--text);margin-bottom:8px;font-family:var(--font-heading)">Export Data</h3>
+        <p style="color:var(--text-light);font-size:0.85rem;margin-bottom:16px">Download all your wedding data as a JSON file.</p>
+        <button class="dash-btn dash-btn-success" onclick="DashApp.exportBackup()"><i class="fas fa-download"></i> Export JSON</button>
+      </div>
+      <div class="dash-card" style="text-align:center;padding:32px 20px">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><i class="fas fa-upload" style="font-size:1.5rem;color:var(--info)"></i></div>
+        <h3 style="color:var(--text);margin-bottom:8px;font-family:var(--font-heading)">Import Backup</h3>
+        <p style="color:var(--text-light);font-size:0.85rem;margin-bottom:16px">Restore wedding data from a previously exported file.</p>
+        <label class="dash-btn dash-btn-outline" style="cursor:pointer"><i class="fas fa-upload"></i> Import JSON<input type="file" id="backupImport" accept=".json" hidden onchange="DashApp.importBackup(event)"></label>
+      </div>
+      <div class="dash-card" style="text-align:center;padding:32px 20px">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><i class="fas fa-rotate-left" style="font-size:1.5rem;color:var(--error)"></i></div>
+        <h3 style="color:var(--text);margin-bottom:8px;font-family:var(--font-heading)">Reset to Default</h3>
+        <p style="color:var(--text-light);font-size:0.85rem;margin-bottom:16px">Clear all data and start fresh with demo content.</p>
+        <button class="dash-btn dash-btn-danger" onclick="DashApp.resetToDefault()"><i class="fas fa-rotate-left"></i> Reset All Data</button>
+      </div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-clock-rotate-left" style="color:var(--gold);margin-right:8px"></i> Backup History</div></div>
+      <div id="backupHistory" style="color:var(--text-light);font-size:0.88rem">No backups yet. Export your data to create a backup.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SETTINGS ========== -->
+<div class="dash-section" id="sec-settings">
+  <div class="dash-card" style="margin-bottom:20px">
+    <div class="dash-card-header"><div class="dash-card-title"><i class="fas fa-cog" style="color:var(--gold);margin-right:8px"></i> Account Settings</div></div>
+    <div class="dash-form-group"><label class="dash-form-label">Full Name</label><input class="dash-input" id="setFullName" placeholder="Your name"></div>
+    <div class="dash-form-group"><label class="dash-form-label">Email</label><input class="dash-input" id="setEmail" type="email" placeholder="Your email"></div>
+    <div class="dash-form-group"><label class="dash-form-label">Country</label><input class="dash-input" id="setCountry" placeholder="Your country"></div>
+    <button class="dash-btn dash-btn-gold" onclick="DashApp.saveProfile()"><i class="fas fa-save"></i> Save Profile</button>
+  </div>
+  <div class="dash-card">
+    <div class="dash-card-header"><div class="dash-card-title" style="color:var(--error)">Danger Zone</div></div>
+    <p style="color:var(--text-light);font-size:0.88rem;margin-bottom:16px">Permanently delete your account and all associated data.</p>
+    <button class="dash-btn dash-btn-danger" onclick="DashApp.deleteAccount()"><i class="fas fa-trash"></i> Delete Account</button>
+  </div>
+</div>
+
+  </div><!-- /dash-content -->
+</div><!-- /dash-main -->
+</div><!-- /dash-layout -->
+
+<!-- ===== MODAL ===== -->
+<div class="dash-modal-overlay" id="dashModal">
+  <div class="dash-modal">
+    <div class="dash-modal-header">
+      <div class="dash-modal-title" id="modalTitle">Modal</div>
+      <button class="dash-modal-close" onclick="DashApp.closeModal()" aria-label="Close modal"><i class="fas fa-arrow-left"></i></button>
+    </div>
+    <div class="dash-modal-body" id="modalBody"></div>
+    <div class="dash-modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<!-- ===== NOTIFICATIONS ===== -->
+<div class="dash-notifications" id="dashNotifications"></div>
+
+<script src="js/auth.js"></script>
+<script src="js/auth-guard.js"></script>
+<script>renderUserMenu('authUserMenu');</script>
+<script src="js/notifications.js"></script>
+
+<script src="js/dashboard.js"></script>
+<script src="js/global.js"></script>
+
+</body>
+</html>

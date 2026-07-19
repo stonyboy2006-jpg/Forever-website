@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
+<meta name="theme-color" content="#1A1A2E">
+<title id="pageTitle">Our Story - Forever &amp; Always</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/ai-concierge.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase.js"></script>
+<style>
+.story-page{padding:120px 20px 60px;min-height:100vh;background:var(--dark);}
+.story-page .story-timeline{max-width:700px;margin:0 auto;position:relative;}
+.story-page .story-timeline::before{content:'';position:absolute;top:0;left:50%;width:2px;height:100%;background:linear-gradient(to bottom,transparent,var(--gold),var(--gold-light),var(--gold),transparent);transform:translateX(-50%);}
+.story-page .story-item{display:flex;align-items:flex-start;margin-bottom:50px;position:relative;}
+.story-page .story-item:nth-child(even){flex-direction:row-reverse;}
+.story-page .story-item .story-date{position:absolute;top:0;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--dark);padding:6px 18px;border-radius:50px;font-family:'Inter',sans-serif;font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;z-index:2;white-space:nowrap;font-weight:600;}
+.story-page .story-item .story-content{width:45%;padding:28px;background:rgba(255,255,255,0.03);border:1px solid rgba(212,175,55,0.08);border-radius:var(--radius);margin-top:40px;backdrop-filter:blur(10px);}
+.story-page .story-item:nth-child(odd) .story-content{margin-right:auto;}
+.story-page .story-item:nth-child(even) .story-content{margin-left:auto;}
+.story-page .story-content h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.3rem;margin-bottom:6px;}
+.story-page .story-content p{color:var(--text-light);line-height:1.8;}
+.story-page .story-content .story-img-placeholder{width:100%;height:200px;background:linear-gradient(135deg,rgba(212,175,55,0.1),rgba(212,175,55,0.05));border-radius:var(--radius-sm);margin-bottom:15px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:2rem;border:1px solid rgba(212,175,55,0.1);}
+@media(max-width:768px){
+  .story-page .story-timeline::before{left:20px;}
+  .story-page .story-item,.story-page .story-item:nth-child(even){flex-direction:row;padding-left:50px;}
+  .story-page .story-item .story-date{left:20px;transform:translateX(0);}
+  .story-page .story-item .story-content{width:100%;margin:40px 0 0 0!important;padding:20px;}
+}
+</style>
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation menu">
+  <i class="fas fa-bars icon-menu"></i><i class="fas fa-times icon-close"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar-nav" id="sidebarNav" role="navigation" aria-label="Main navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"><i class="fas fa-ring"></i></div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">Forever &amp; Always</div>
+        <div class="sidebar-brand-sub">Wedding Menu</div>
+      </div>
+    </div>
+    <button class="sidebar-close" aria-label="Close menu"><i class="fas fa-arrow-left"></i></button>
+  </div>
+  <nav class="sidebar-links">
+    <div class="sidebar-section-label">Main</div>
+    <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i> Home</a>
+    <a href="our-story.html" class="sidebar-link active"><i class="fas fa-heart"></i> Our Story</a>
+    <a href="wedding-details.html" class="sidebar-link"><i class="fas fa-info-circle"></i> Wedding Details</a>
+    <a href="wedding-party.html" class="sidebar-link"><i class="fas fa-user-friends"></i> Wedding Party</a>
+    <a href="events.html" class="sidebar-link"><i class="fas fa-calendar-alt"></i> Events</a>
+    <div class="sidebar-section-label">Media</div>
+    <a href="gallery.html" class="sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+    <a href="timeline.html" class="sidebar-link"><i class="fas fa-clock"></i> Timeline</a>
+    <a href="story.html" class="sidebar-link"><i class="fas fa-book-open"></i> Love Story</a>
+    <div class="sidebar-section-label">Guests</div>
+    <a href="rsvp.html" class="sidebar-link"><i class="fas fa-envelope"></i> RSVP</a>
+    <a href="gift-registry.html" class="sidebar-link"><i class="fas fa-gift"></i> Gift Registry</a>
+    <a href="music.html" class="sidebar-link"><i class="fas fa-music"></i> Wedding Music</a>
+    <a href="invitation.html" class="sidebar-link"><i class="fas fa-paper-plane"></i> Invitation</a>
+    <a href="memories.html" class="sidebar-link"><i class="fas fa-camera-retro"></i> Memories</a>
+    <a href="planner.html" class="sidebar-link"><i class="fas fa-clipboard-list"></i> Planner</a>
+    <a href="profile.html" class="sidebar-link"><i class="fas fa-user-circle"></i> My Profile</a>
+    <a href="faq.html" class="sidebar-link"><i class="fas fa-question-circle"></i> FAQ</a>
+    <div class="sidebar-section-label">More</div>
+    <a href="ai-assistant.html" class="sidebar-link"><i class="fas fa-robot"></i> AI Assistant</a>
+    <a href="contact.html" class="sidebar-link"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="developer.html" class="sidebar-link"><i class="fas fa-code"></i> Developer</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-links" id="authUserMenu">
+      <a href="setup.html" class="sidebar-link"><i class="fas fa-rocket"></i> Get Started</a>
+      <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    </div>
+    <script>renderUserMenu('authUserMenu');</script>
+  </div>
+</aside>
+<div class="page-wrapper">
+
+<a href="index.html" class="back-btn" aria-label="Back to Home"><i class="fas fa-arrow-left"></i> Back to Home</a>
+<div class="story-page"><div class="container">
+<div class="section-title"><div class="label">Our Journey</div><h2>Our <span class="gold">Love Story</span></h2><div class="divider"></div><p>How it all began</p></div>
+<div class="story-timeline" id="storyTimeline"></div>
+</div></div>
+
+<!-- AI Concierge Widget -->
+
+<div class="ai-widget-window" id="aiWidgetWindow">
+  <div class="ai-widget-header"><div class="ai-widget-header-icon"><i class="fas fa-robot"></i></div><div class="ai-widget-header-info"><h4>AI Concierge</h4><p>Ask me anything</p></div><button class="ai-widget-close" onclick="toggleAIWidget()" aria-label="Close AI widget"><i class="fas fa-arrow-left"></i></button></div>
+  <div class="ai-widget-messages" id="aiWidgetMessages"></div>
+  <div class="ai-widget-typing" id="aiWidgetTyping"><div class="bubble"><div class="dots"><span></span><span></span><span></span></div></div></div>
+  <div class="ai-widget-qs" id="aiWidgetQs"></div>
+  <div class="ai-widget-input-area">
+    <input class="ai-widget-input" id="aiWidgetInput" placeholder="Ask a question..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendWidgetMsg();}">
+    <button class="ai-widget-send" onclick="sendWidgetMsg()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+<script src="js/ai-concierge.js"></script>
+<script>
+function toggleAIWidget(){document.getElementById('aiWidgetWindow').classList.toggle('open')}
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof AIConcierge==='undefined')return;
+  AIConcierge.init();
+  var c=document.getElementById('aiWidgetMessages');
+  if(c)c.innerHTML='<div class="ai-widget-msg ai"><div class="bubble">'+AIConcierge.getWelcomeMessage().replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')+'</div></div>';
+  var q=document.getElementById('aiWidgetQs');
+  if(q)q.innerHTML=AIConcierge.getSuggestedQuestions().map(function(qt){return '<span class="ai-widget-q" onclick="document.getElementById(\'aiWidgetInput\').value=\''+qt.replace(/'/g,"\\'")+'\';sendWidgetMsg();">'+qt+'</span>';}).join('');
+});
+function sendWidgetMsg(){var i=document.getElementById('aiWidgetInput'),t=i.value.trim();if(!t)return;i.value='';addWidgetMsg(t,'user');showWidgetTyping(true);AIConcierge.processMessage(t).then(function(r){showWidgetTyping(false);addWidgetMsg(r.text,'ai');});}
+function addWidgetMsg(text,role){var c=document.getElementById('aiWidgetMessages'),msg=document.createElement('div');msg.className='ai-widget-msg '+role;msg.innerHTML='<div class="bubble">'+text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')+'</div>';c.appendChild(msg);c.scrollTop=c.scrollHeight;}
+function showWidgetTyping(show){document.getElementById('aiWidgetTyping').classList.toggle('show',show)}
+</script>
+
+<script src="js/nav.js"></script>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <div class="footer-divider"></div>
+      <a href="index.html">Home</a>
+      <a href="our-story.html">Our Story</a>
+      <a href="wedding-details.html">Wedding Details</a>
+      <a href="events.html">Events</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="rsvp.html">RSVP</a>
+    </div>
+    <div class="footer-col">
+      <h4>More Info</h4>
+      <div class="footer-divider"></div>
+      <a href="timeline.html">Timeline</a>
+      <a href="wedding-party.html">Wedding Party</a>
+      <a href="gift-registry.html">Gift Registry</a>
+      <a href="faq.html">FAQ</a>
+      <a href="ai-assistant.html">AI Assistant</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <div class="footer-divider"></div>
+      <p><i class="fab fa-whatsapp" style="color:var(--gold);margin-right:6px;"></i> 08025092458</p>
+      <p><i class="fas fa-phone" style="color:var(--gold);margin-right:6px;"></i> 07039557981</p>
+    </div>
+  </div>
+  <div class="developer">Designed &amp; Developed by <span class="dev-name">David Leelee Douglas / Stonyboy</span></div>
+  <div class="dev-contact" style="color:var(--text-light);font-size:0.8rem;margin-top:4px;"><i class="fab fa-whatsapp" style="color:var(--gold);"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> Contact: 07039557981</div>
+  <div class="copyright" style="color:var(--text-light);font-size:0.8rem;opacity:0.6;margin-top:8px;">&copy; 2026 Forever &amp; Always. All rights reserved.</div>
+</footer>
+
+<script>
+async function load(){
+  var d={};
+  try{d=await fbGetDoc('weddingInfo','main')||{};}catch(e){}
+  if(!d||!d.groomName)d=JSON.parse(localStorage.getItem('weddingData')||'{}');
+  var c=document.getElementById('storyTimeline');
+  var story=d.weddingStory||'Our beautiful story together...';
+  var title=d.storyTitle||'How We Met';
+  var html='<div class="story-item"><div class="story-date">Our Story</div><div class="story-content"><div class="story-img-placeholder"><i class="fas fa-heart"></i></div><h3>'+escHtml(title)+'</h3><p>'+escHtml(story)+'</p></div></div>';
+  var photos=[];
+  if(d.groomPhoto)photos.push(d.groomPhoto);
+  if(d.bridePhoto)photos.push(d.bridePhoto);
+  if(photos.length)html+='<div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-top:20px;">'+photos.map(function(p){return '<img src="'+p+'" loading="lazy" style="width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);">';}).join('')+'</div>';
+  c.innerHTML=html;
+  document.title=(d.groomName||'Groom')+' & '+(d.brideName||'Bride')+' - Our Story';
+}
+function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+load();
+</script>
+<script src="js/global.js"></script>
+
+<script src="js/website-title.js"></script>
+<script src="js/floating-panel.js"></script>
+</div><!-- /.page-wrapper -->
+
+<script src="js/auth.js"></script>
+<script src="js/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /setup.html
+Disallow: /dashboard.html
+Disallow: /preview.html
+Disallow: /admin.html
+Disallow: /ai-assistant.html
+Disallow: /developer.html
+Disallow: /js/
+Disallow: /css/
+
+Sitemap: https://your-wedding-domain.com/sitemap.xml

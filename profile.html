@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Luxury Wedding Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root{--gold:#D4AF37;--dark:#0B0F19;--dark-soft:#111827;--text:#E8E0D0;--text-light:#A09888;--white:#fff;--font-heading:'Playfair Display',serif;--font-body:'Poppins',sans-serif;--font-sans:'Poppins',sans-serif;--font-script:'Great Vibes',cursive;--radius:16px;--radius-sm:8px;--radius-lg:24px;--transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);--success:#22c55e;--error:#ef4444;--warning:#f59e0b;--info:#3b82f6;--gold-light:#e8c968;--gold-dark:#b8941f}
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body.plan-page {
+            font-family: var(--font-body);
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--dark-soft);
+            border-right: 1px solid rgba(212,175,55,0.1);
+            padding: 2rem 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid rgba(212,175,55,0.1);
+        }
+
+        .sidebar-logo h2 {
+            font-family: var(--font-script);
+            color: var(--gold);
+            font-size: 1.8rem;
+            font-weight: 400;
+        }
+
+        .sidebar-logo p {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0.3rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.85rem 1.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--text);
+            background: rgba(212,175,55,0.05);
+        }
+
+        .sidebar-nav a.active {
+            color: var(--gold);
+            background: rgba(212,175,55,0.08);
+            border-left-color: var(--gold);
+        }
+
+        .sidebar-nav a i {
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .sidebar-nav .nav-section {
+            padding: 1rem 1.5rem 0.5rem;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            opacity: 0.5;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(212,175,55,0.1);
+        }
+
+        .sidebar-footer a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .sidebar-footer a:hover {
+            color: var(--error);
+            background: rgba(239,68,68,0.1);
+        }
+
+        .main-content {
+            margin-left: 260px;
+            min-height: 100vh;
+            padding: 0 0 2rem;
+        }
+
+        .hero-section {
+            padding: 4rem 3rem 2rem;
+            background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(11,15,25,0.9) 100%);
+            border-bottom: 1px solid rgba(212,175,55,0.15);
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-section p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .hero-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: var(--white);
+            overflow: hidden;
+            border: 3px solid rgba(212,175,55,0.3);
+        }
+
+        .hero-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 3rem;
+        }
+
+        .card {
+            background: rgba(17,24,39,0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212,175,55,0.12);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i {
+            color: var(--gold);
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .profile-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .profile-field label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-light);
+        }
+
+        .profile-field .value {
+            font-size: 1rem;
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        .profile-field .value.gold {
+            color: var(--gold);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(11,15,25,0.6);
+            border: 1px solid rgba(212,175,55,0.15);
+            border-radius: var(--radius-sm);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-light);
+            opacity: 0.5;
+        }
+
+        .photo-upload {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .photo-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(212,175,55,0.1);
+            border: 2px dashed rgba(212,175,55,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-preview i {
+            font-size: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .photo-upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: var(--radius-sm);
+            color: var(--gold);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .photo-upload-btn:hover {
+            background: rgba(212,175,55,0.2);
+        }
+
+        .photo-upload-btn input {
+            display: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--dark);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(212,175,55,0.3);
+            color: var(--gold);
+        }
+
+        .btn-outline:hover {
+            background: rgba(212,175,55,0.1);
+        }
+
+        .btn-danger {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: var(--error);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239,68,68,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(212,175,55,0.1);
+            margin: 2rem 0;
+        }
+
+        .delete-section {
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            background: rgba(239,68,68,0.03);
+        }
+
+        .delete-section .card-title {
+            color: var(--error);
+        }
+
+        .delete-section .card-title i {
+            color: var(--error);
+        }
+
+        .delete-section p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .delete-confirm {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .delete-confirm input {
+            flex: 1;
+            padding: 0.85rem 1rem;
+            background: rgba(11,15,25,0.6);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: var(--radius-sm);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .delete-confirm input:focus {
+            outline: none;
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            z-index: 10000;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: rgba(34,197,94,0.15);
+            border: 1px solid rgba(34,197,94,0.3);
+            color: var(--success);
+        }
+
+        .notification.error {
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: var(--error);
+        }
+
+        .notification.warning {
+            background: rgba(245,158,11,0.15);
+            border: 1px solid rgba(245,158,11,0.3);
+            color: var(--warning);
+        }
+
+        .notification i {
+            font-size: 1.1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 3rem;
+            border-top: 1px solid rgba(212,175,55,0.1);
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        footer span {
+            color: var(--gold);
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 200;
+            width: 42px;
+            height: 42px;
+            background: var(--dark-soft);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: var(--radius-sm);
+            color: var(--gold);
+            font-size: 1.1rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 99;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .hero-section {
+                padding: 5rem 1.5rem 2rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .delete-confirm {
+                flex-direction: column;
+            }
+
+            .delete-confirm input,
+            .delete-confirm .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                padding: 1.25rem;
+            }
+
+            .photo-upload {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body class="plan-page">
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <h2>Forever Yours</h2>
+            <p>Luxury Wedding Planner</p>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">Main</div>
+            <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="planner.html"><i class="fas fa-calendar-alt"></i> Wedding Planner</a>
+            <a href="about.html"><i class="fas fa-heart"></i> Our Story</a>
+
+            <div class="nav-section">Manage</div>
+            <a href="guests.html"><i class="fas fa-users"></i> Guest List</a>
+            <a href="vendors.html"><i class="fas fa-store"></i> Vendors</a>
+            <a href="budget.html"><i class="fas fa-coins"></i> Budget</a>
+            <a href="seating.html"><i class="fas fa-chair"></i> Seating Chart</a>
+
+            <div class="nav-section">Design</div>
+            <a href="gallery.html"><i class="fas fa-images"></i> Photo Gallery</a>
+            <a href="rsvp.html"><i class="fas fa-envelope-open-text"></i> RSVP</a>
+            <a href="timeline.html"><i class="fas fa-clock"></i> Timeline</a>
+
+            <div class="nav-section">Account</div>
+            <a href="profile.html" class="active"><i class="fas fa-user-circle"></i> My Profile</a>
+            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" id="logoutBtn" onclick="handleLogout(event)">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="hero-avatar" id="heroAvatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h1>My Profile</h1>
+            <p>Manage your account and personal information</p>
+        </section>
+
+        <div class="container">
+            <div class="card" id="profileInfoCard">
+                <h2 class="card-title"><i class="fas fa-id-card"></i> Profile Information</h2>
+                <div class="profile-info">
+                    <div class="profile-field">
+                        <label>Full Name</label>
+                        <div class="value" id="infoName">-</div>
+                    </div>
+                    <div class="profile-field">
+                        <label>Email Address</label>
+                        <div class="value" id="infoEmail">-</div>
+                    </div>
+                    <div class="profile-field">
+                        <label>Phone Number</label>
+                        <div class="value" id="infoPhone">-</div>
+                    </div>
+                    <div class="profile-field">
+                        <label>Website Name</label>
+                        <div class="value gold" id="infoWebsite">-</div>
+                    </div>
+                    <div class="profile-field">
+                        <label>Account Created</label>
+                        <div class="value" id="infoCreated">-</div>
+                    </div>
+                    <div class="profile-field">
+                        <label>Profile Photo</label>
+                        <div class="value" id="infoPhotoStatus">Not set</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-pen"></i> Edit Profile</h2>
+                <form id="editProfileForm" onsubmit="handleEditProfile(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="editName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="editEmail" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="editPhone" placeholder="Enter your phone number">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Website Name</label>
+                        <input type="text" id="editWebsite" placeholder="Enter your wedding website name">
+                    </div>
+                    <div class="form-group">
+                        <label>Profile Photo</label>
+                        <div class="photo-upload">
+                            <div class="photo-preview" id="photoPreview">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <label class="photo-upload-btn" for="photoInput">
+                                <i class="fas fa-upload"></i> Choose Photo
+                            </label>
+                            <input type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-gold" id="saveProfileBtn">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-lock"></i> Change Password</h2>
+                <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" id="currentPassword" placeholder="Enter your current password" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" id="newPassword" placeholder="Enter new password" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm New Password</label>
+                            <input type="password" id="confirmPassword" placeholder="Confirm new password" required minlength="6">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline" id="changePasswordBtn">
+                        <i class="fas fa-key"></i> Update Password
+                    </button>
+                </form>
+            </div>
+
+            <div class="delete-section">
+                <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> Delete Account</h2>
+                <p>Permanently delete your account and all associated data. This action cannot be undone. You will need to type <strong>DELETE</strong> below to confirm.</p>
+                <div class="delete-confirm">
+                    <input type="text" id="deleteConfirmInput" placeholder='Type "DELETE" to confirm'>
+                    <button class="btn btn-danger" id="deleteAccountBtn" onclick="handleDeleteAccount()">
+                        <i class="fas fa-trash-alt"></i> Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 <span>Forever Yours</span> Luxury Wedding Planner. All rights reserved.</p>
+        </footer>
+    </main>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText"></span>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script>
+        let currentUser = null;
+        let profilePhotoBase64 = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof isAuthenticated === 'function' && !isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            loadUserProfile();
+        });
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const icon = notification.querySelector('i');
+            const text = document.getElementById('notificationText');
+
+            notification.className = 'notification ' + type;
+            text.textContent = message;
+
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                icon.className = 'fas fa-times-circle';
+            } else if (type === 'warning') {
+                icon.className = 'fas fa-exclamation-circle';
+            }
+
+            notification.classList.add('show');
+
+            setTimeout(function() {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        function loadUserProfile() {
+            try {
+                if (typeof getUserProfile === 'function') {
+                    currentUser = getUserProfile();
+                } else {
+                    const stored = localStorage.getItem('currentUser') || localStorage.getItem('user');
+                    currentUser = stored ? JSON.parse(stored) : null;
+                }
+
+                if (!currentUser) {
+                    showNotification('No user profile found. Please log in.', 'warning');
+                    setTimeout(function() {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                    return;
+                }
+
+                populateProfileInfo(currentUser);
+                populateEditForm(currentUser);
+                updateHeroAvatar(currentUser.photo || currentUser.profilePhoto);
+            } catch (err) {
+                showNotification('Error loading profile data.', 'error');
+            }
+        }
+
+        function populateProfileInfo(user) {
+            document.getElementById('infoName').textContent = user.name || user.fullName || '-';
+            document.getElementById('infoEmail').textContent = user.email || '-';
+            document.getElementById('infoPhone').textContent = user.phone || '-';
+            document.getElementById('infoWebsite').textContent = user.websiteName || '-';
+
+            if (user.createdAt || user.created) {
+                const date = new Date(user.createdAt || user.created);
+                document.getElementById('infoCreated').textContent = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } else {
+                document.getElementById('infoCreated').textContent = '-';
+            }
+
+            const photo = user.photo || user.profilePhoto;
+            document.getElementById('infoPhotoStatus').textContent = photo ? 'Uploaded' : 'Not set';
+        }
+
+        function populateEditForm(user) {
+            document.getElementById('editName').value = user.name || user.fullName || '';
+            document.getElementById('editEmail').value = user.email || '';
+            document.getElementById('editPhone').value = user.phone || '';
+            document.getElementById('editWebsite').value = user.websiteName || '';
+
+            const photo = user.photo || user.profilePhoto;
+            if (photo) {
+                profilePhotoBase64 = photo;
+                document.getElementById('photoPreview').innerHTML = '<img src="' + photo + '" alt="Profile">';
+            }
+        }
+
+        function updateHeroAvatar(photo) {
+            const avatar = document.getElementById('heroAvatar');
+            if (photo) {
+                avatar.innerHTML = '<img src="' + photo + '" alt="Profile">';
+            }
+        }
+
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                showNotification('Please select a valid image file.', 'error');
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification('Image size must be less than 5MB.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                profilePhotoBase64 = e.target.result;
+                document.getElementById('photoPreview').innerHTML = '<img src="' + profilePhotoBase64 + '" alt="Profile Preview">';
+                document.getElementById('infoPhotoStatus').textContent = 'New photo selected';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleEditProfile(event) {
+            event.preventDefault();
+
+            const btn = document.getElementById('saveProfileBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            const updatedProfile = {
+                name: document.getElementById('editName').value.trim(),
+                fullName: document.getElementById('editName').value.trim(),
+                email: document.getElementById('editEmail').value.trim(),
+                phone: document.getElementById('editPhone').value.trim(),
+                websiteName: document.getElementById('editWebsite').value.trim()
+            };
+
+            if (profilePhotoBase64) {
+                updatedProfile.photo = profilePhotoBase64;
+                updatedProfile.profilePhoto = profilePhotoBase64;
+            }
+
+            try {
+                if (typeof updateProfile === 'function') {
+                    updateProfile(updatedProfile);
+                } else {
+                    const stored = localStorage.getItem('currentUser') || localStorage.getItem('user');
+                    const existing = stored ? JSON.parse(stored) : {};
+                    const merged = Object.assign({}, existing, updatedProfile);
+                    localStorage.setItem('currentUser', JSON.stringify(merged));
+                    localStorage.setItem('user', JSON.stringify(merged));
+                }
+
+                currentUser = Object.assign({}, currentUser, updatedProfile);
+                populateProfileInfo(currentUser);
+                updateHeroAvatar(currentUser.photo || currentUser.profilePhoto);
+
+                showNotification('Profile updated successfully!', 'success');
+            } catch (err) {
+                showNotification('Failed to update profile. Please try again.', 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        }
+
+        function handleChangePassword(event) {
+            event.preventDefault();
+
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+
+            if (newPass !== confirm) {
+                showNotification('New passwords do not match.', 'error');
+                return;
+            }
+
+            if (newPass.length < 6) {
+                showNotification('New password must be at least 6 characters.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('changePasswordBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+            try {
+                if (typeof changePassword === 'function') {
+                    changePassword(current, newPass);
+                } else {
+                    const stored = localStorage.getItem('currentUser') || localStorage.getItem('user');
+                    const user = stored ? JSON.parse(stored) : null;
+
+                    if (!user) {
+                        showNotification('User session expired. Please log in again.', 'error');
+                        return;
+                    }
+
+                    const storedPassword = user.password || '';
+                    if (storedPassword !== current) {
+                        showNotification('Current password is incorrect.', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-key"></i> Update Password';
+                        return;
+                    }
+
+                    user.password = newPass;
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+
+                showNotification('Password updated successfully!', 'success');
+                document.getElementById('changePasswordForm').reset();
+            } catch (err) {
+                showNotification('Failed to update password. Please try again.', 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-key"></i> Update Password';
+        }
+
+        function handleDeleteAccount() {
+            const input = document.getElementById('deleteConfirmInput');
+            const confirmText = input.value.trim();
+
+            if (confirmText !== 'DELETE') {
+                showNotification('Please type "DELETE" to confirm account deletion.', 'warning');
+                input.focus();
+                return;
+            }
+
+            if (!confirm('Are you absolutely sure? This will permanently delete your account and all data.')) {
+                return;
+            }
+
+            const btn = document.getElementById('deleteAccountBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+
+            try {
+                if (typeof deleteAccount === 'function') {
+                    deleteAccount();
+                } else {
+                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('weddingData');
+                    localStorage.removeItem('guestList');
+                    localStorage.removeItem('vendors');
+                    localStorage.removeItem('budget');
+                    localStorage.removeItem('seating');
+                    localStorage.removeItem('timeline');
+                }
+
+                showNotification('Account deleted. Redirecting...', 'success');
+                setTimeout(function() {
+                    window.location.href = 'login.html';
+                }, 1500);
+            } catch (err) {
+                showNotification('Failed to delete account. Please try again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete Account';
+            }
+        }
+
+        function handleLogout(event) {
+            event.preventDefault();
+            if (typeof logout === 'function') {
+                logout();
+            } else {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                localStorage.removeItem('authToken');
+            }
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

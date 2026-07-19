@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Wedding Music Library - Choose the perfect soundtrack for your special day">
+<meta name="theme-color" content="#0B0F19">
+<title>Wedding Music - Forever &amp; Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/music.css">
+<script>
+:root{--gold:#D4AF37;--dark:#0B0F19;--text:#E8E0D0;--text-light:#A09888}
+</script>
+</head>
+<body class="music-page">
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="main-nav" style="position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(11,15,25,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(212,175,55,0.08);padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between">
+  <a href="index.html" class="nav-logo" style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px"><i class="fas fa-ring"></i> <span id="navLogo">Forever & Always</span></a>
+  <div class="nav-links" style="display:flex;align-items:center;gap:8px;list-style:none;flex-wrap:wrap">
+    <li><a href="index.html" style="padding:8px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.85rem;color:var(--text-light);transition:all 0.3s;text-decoration:none">Home</a></li>
+    <li><a href="our-story.html" style="padding:8px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.85rem;color:var(--text-light);transition:all 0.3s;text-decoration:none">Our Story</a></li>
+    <li><a href="wedding-details.html" style="padding:8px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.85rem;color:var(--text-light);transition:all 0.3s;text-decoration:none">Details</a></li>
+    <li><a href="gallery.html" style="padding:8px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.85rem;color:var(--text-light);transition:all 0.3s;text-decoration:none">Gallery</a></li>
+    <li><a href="rsvp.html" style="padding:8px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.85rem;color:var(--text-light);transition:all 0.3s;text-decoration:none">RSVP</a></li>
+    <li><a href="music.html" style="padding:8px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.85rem;color:var(--gold);transition:all 0.3s;text-decoration:none;font-weight:600"><i class="fas fa-music" style="margin-right:4px"></i> Music</a></li>
+    <li><a href="gift-registry.html" style="padding:8px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.85rem;color:var(--text-light);transition:all 0.3s;text-decoration:none">Gifts</a></li>
+    <li><a href="invitation.html" style="padding:8px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.85rem;color:var(--text-light);transition:all 0.3s;text-decoration:none">Invitation</a></li>
+    <li><a href="dashboard.html" style="padding:8px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.85rem;color:var(--text-light);transition:all 0.3s;text-decoration:none">Dashboard</a></li>
+  </div>
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:50px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.2);color:var(--gold);font-family:'Poppins',sans-serif;font-size:0.78rem;font-weight:500;text-decoration:none;transition:all 0.3s"><i class="fas fa-arrow-left"></i> Back</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="music-hero">
+  <div class="container">
+    <div class="icon"><i class="fas fa-music"></i></div>
+    <h1>Wedding <span class="gold">Music</span></h1>
+    <div class="tagline">The Soundtrack of Our Love</div>
+    <p>Choose the perfect music to set the mood for your wedding website. Select from our curated collection or upload your own songs.</p>
+  </div>
+</section>
+
+<!-- ===== MAIN CONTENT ===== -->
+<section style="padding:0 0 80px">
+  <div class="container">
+
+    <!-- Music Settings Bar -->
+    <div class="music-settings-bar">
+      <div class="music-settings-left">
+        <label>Background Music <button class="music-toggle" id="musicEnabled" onclick="MusicApp.toggleMusicEnabled()" aria-label="Toggle background music"><div class="knob"></div></button></label>
+      </div>
+      <div class="music-settings-right">
+        <label><i class="fas fa-volume-high" style="color:var(--gold);margin-right:4px"></i> Volume</label>
+        <input type="range" class="music-volume-slider" id="musicVolume" min="0" max="1" step="0.1" value="0.7" oninput="MusicApp.setVolume(parseFloat(this.value))" aria-label="Volume">
+        <label><input type="checkbox" id="musicLoop" checked> Loop</label>
+        <label><input type="checkbox" id="musicFadeIn" checked> Fade In</label>
+        <label><input type="checkbox" id="musicFadeOut" checked> Fade Out</label>
+        <button class="music-save-btn" onclick="MusicApp.saveMusicConfig()"><i class="fas fa-save"></i> Save</button>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="music-categories" id="musicCategories" role="tablist" aria-label="Music categories"></div>
+
+    <!-- Track List -->
+    <div class="music-tracks" id="musicTrackList" role="list" aria-label="Music tracks"></div>
+
+    <!-- Upload Section -->
+    <div class="music-upload-section">
+      <h3><i class="fas fa-cloud-arrow-up" style="margin-right:8px"></i> Upload Your Music</h3>
+      <p>Add your own wedding songs. We support MP3, WAV, OGG, and M4A formats up to 20MB each.</p>
+      <div class="music-upload-zone" id="musicUploadZone">
+        <i class="fas fa-cloud-arrow-up"></i>
+        <span>Drag & drop your music files here</span>
+        <small>or click to browse &bull; MP3, WAV, OGG, M4A &bull; Max 20MB</small>
+        <input type="file" id="musicUploadInput" accept=".mp3,.wav,.ogg,.m4a,audio/*" multiple aria-label="Upload music files">
+      </div>
+      <div class="music-uploaded-list" id="uploadedList"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== NOW PLAYING BAR ===== -->
+<div class="now-playing" role="region" aria-label="Music player">
+  <div class="now-playing-inner">
+    <div class="np-art"><i class="fas fa-music"></i><div class="eq"><span></span><span></span><span></span></div></div>
+    <div class="np-info">
+      <div class="np-title">No track selected</div>
+      <div class="np-artist">Choose a song to play</div>
+    </div>
+    <div class="np-progress">
+      <span class="np-time np-current">0:00</span>
+      <div class="np-bar" role="slider" aria-label="Seek" tabindex="0"><div class="np-bar-fill" style="width:0%"></div></div>
+      <span class="np-time np-total">0:00</span>
+    </div>
+    <div class="np-controls">
+      <button class="np-btn np-shuffle" onclick="MusicApp.toggleShuffle()" aria-label="Shuffle"><i class="fas fa-shuffle"></i></button>
+      <button class="np-btn np-prev" onclick="MusicApp.playPrev()" aria-label="Previous track"><i class="fas fa-backward-step"></i></button>
+      <button class="np-btn play" onclick="MusicApp.togglePlay()" aria-label="Play or pause"><i class="fas fa-play"></i></button>
+      <button class="np-btn np-next" onclick="MusicApp.playNext()" aria-label="Next track"><i class="fas fa-forward-step"></i></button>
+      <button class="np-btn np-repeat" onclick="MusicApp.cycleRepeat()" aria-label="Repeat"><i class="fas fa-repeat"></i></button>
+    </div>
+    <div class="np-volume">
+      <button class="np-mute" onclick="MusicApp.toggleMute()" aria-label="Mute"><i class="fas fa-volume-high"></i></button>
+      <input type="range" class="np-volume-slider" min="0" max="1" step="0.1" value="0.7" oninput="MusicApp.setVolume(parseFloat(this.value))" aria-label="Volume">
+    </div>
+    <button class="np-close" onclick="document.querySelector('.now-playing').classList.remove('visible')" aria-label="Close player"><i class="fas fa-xmark"></i></button>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer style="background:rgba(6,10,20,0.95);border-top:1px solid rgba(212,175,55,0.08);padding:40px 24px;text-align:center">
+  <div class="container">
+    <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);margin-bottom:8px">Forever & Always</div>
+    <p style="color:var(--text-light);font-size:0.85rem;margin-bottom:16px">Made with <i class="fas fa-heart" style="color:var(--gold);font-size:0.75rem"></i> for our special day</p>
+    <div style="display:flex;justify-content:center;gap:16px;margin-bottom:16px">
+      <a href="index.html" style="color:var(--text-light);font-size:0.82rem;transition:color 0.3s">Home</a>
+      <a href="our-story.html" style="color:var(--text-light);font-size:0.82rem;transition:color 0.3s">Our Story</a>
+      <a href="wedding-details.html" style="color:var(--text-light);font-size:0.82rem;transition:color 0.3s">Details</a>
+      <a href="rsvp.html" style="color:var(--text-light);font-size:0.82rem;transition:color 0.3s">RSVP</a>
+      <a href="gallery.html" style="color:var(--text-light);font-size:0.82rem;transition:color 0.3s">Gallery</a>
+      <a href="gift-registry.html" style="color:var(--text-light);font-size:0.82rem;transition:color 0.3s">Gifts</a>
+      <a href="faq.html" style="color:var(--text-light);font-size:0.82rem;transition:color 0.3s">FAQ</a>
+      <a href="contact.html" style="color:var(--text-light);font-size:0.82rem;transition:color 0.3s">Contact</a>
+    </div>
+    <p style="color:var(--text-muted);font-size:0.75rem">&copy; <script>document.write(new Date().getFullYear())</script> Forever & Always. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script src="js/music.js"></script>
+</body>
+</html>

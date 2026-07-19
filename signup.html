@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Create your Forever & Always wedding account">
+<meta name="theme-color" content="#0B0F19">
+<title>Sign Up - Forever &amp; Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth.css">
+<style>:root{--gold:#D4AF37;--dark:#0B0F19;--dark-soft:#111827;--text:#E8E0D0;--text-light:#A09888;--white:#fff;--font-heading:'Playfair Display',serif;--font-body:'Poppins',sans-serif;--font-sans:'Poppins',sans-serif;--font-script:'Great Vibes',cursive;--radius:16px;--radius-sm:8px;--radius-lg:24px;--transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);--success:#22c55e;--error:#ef4444;--warning:#f59e0b;--info:#3b82f6;--gold-light:#e8c968;--gold-dark:#b8941f}</style>
+</head>
+<body class="auth-page">
+
+<!-- Particles -->
+<div class="auth-particles" id="authParticles"></div>
+
+<div class="auth-container">
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <div class="auth-logo">
+      <a href="index.html"><i class="fas fa-ring"></i> Forever & Always</a>
+      <div class="auth-subtitle">Begin Your Wedding Journey</div>
+    </div>
+
+    <!-- Title -->
+    <h1 class="auth-title">Create <span class="gold">Account</span></h1>
+    <p class="auth-desc">Sign up to start planning your dream wedding</p>
+
+    <!-- Form -->
+    <form id="signupForm" onsubmit="handleSignUp(event)" novalidate>
+      <!-- Name -->
+      <div class="auth-form-group">
+        <label>Full Name <span class="required">*</span></label>
+        <div class="auth-input-wrapper">
+          <input type="text" id="signupName" class="auth-input" placeholder="Enter your full name" autocomplete="name" required>
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="auth-error" id="nameError"></div>
+      </div>
+
+      <!-- Email -->
+      <div class="auth-form-group">
+        <label>Email Address <span class="required">*</span></label>
+        <div class="auth-input-wrapper">
+          <input type="email" id="signupEmail" class="auth-input" placeholder="Enter your email" autocomplete="email" required>
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="auth-error" id="emailError"></div>
+      </div>
+
+      <!-- Password -->
+      <div class="auth-form-group">
+        <label>Password <span class="required">*</span></label>
+        <div class="auth-input-wrapper">
+          <input type="password" id="signupPassword" class="auth-input" placeholder="Min. 8 characters" autocomplete="new-password" required oninput="checkPasswordStrength(this.value)">
+          <i class="fas fa-lock"></i>
+        </div>
+        <div class="auth-strength"><div class="auth-strength-fill" id="strengthFill"></div></div>
+        <div class="auth-strength-text" id="strengthText"></div>
+        <div class="auth-error" id="passwordError"></div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="auth-form-group">
+        <label>Confirm Password <span class="required">*</span></label>
+        <div class="auth-input-wrapper">
+          <input type="password" id="signupConfirm" class="auth-input" placeholder="Re-enter your password" autocomplete="new-password" required>
+          <i class="fas fa-lock"></i>
+        </div>
+        <div class="auth-error" id="confirmError"></div>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="auth-btn" id="signupBtn">
+        <i class="fas fa-user-plus"></i> Create Account
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <div class="auth-footer">
+      Already have an account? <a href="login.html">Log In</a>
+    </div>
+
+    <!-- Back -->
+    <div style="text-align:center;margin-top:20px">
+      <a href="index.html" style="font-size:0.82rem;color:var(--text-light);text-decoration:none;display:inline-flex;align-items:center;gap:6px"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script>
+(function(){
+  /* If already logged in, redirect */
+  if(isLoggedIn()){window.location.href='setup.html';return;}
+
+  /* Particles */
+  const pc=document.getElementById('authParticles');
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');p.className='auth-particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDelay=Math.random()*6+'s';
+    p.style.animationDuration=(4+Math.random()*4)+'s';
+    pc.appendChild(p);
+  }
+
+  /* Focus first field */
+  setTimeout(function(){document.getElementById('signupName').focus();},300);
+})();
+
+function showError(id,msg){
+  const el=document.getElementById(id);if(!el)return;
+  el.textContent=msg;el.classList.add('show');
+  const input=el.closest('.auth-form-group').querySelector('.auth-input');
+  if(input)input.classList.add('error');
+}
+function clearErrors(){
+  document.querySelectorAll('.auth-error').forEach(e=>{e.classList.remove('show');e.textContent='';});
+  document.querySelectorAll('.auth-input').forEach(i=>i.classList.remove('error'));
+}
+
+function checkPasswordStrength(pw){
+  const fill=document.getElementById('strengthFill');
+  const txt=document.getElementById('strengthText');
+  if(!pw){fill.style.width='0';txt.textContent='';return;}
+  let score=0;
+  if(pw.length>=8)score++;
+  if(pw.length>=12)score++;
+  if(/[A-Z]/.test(pw))score++;
+  if(/[0-9]/.test(pw))score++;
+  if(/[^A-Za-z0-9]/.test(pw))score++;
+
+  const levels=[
+    {w:'20%',c:'var(--error)',t:'Very Weak'},
+    {w:'40%',c:'var(--error)',t:'Weak'},
+    {w:'60%',c:'var(--warning)',t:'Fair'},
+    {w:'80%',c:'var(--info)',t:'Strong'},
+    {w:'100%',c:'var(--success)',t:'Very Strong'}
+  ];
+  const l=levels[Math.min(score,4)];
+  fill.style.width=l.w;fill.style.background=l.c;
+  txt.textContent=l.t;txt.style.color=l.c;
+}
+
+async function handleSignUp(e){
+  e.preventDefault();
+  clearErrors();
+
+  const name=document.getElementById('signupName').value;
+  const email=document.getElementById('signupEmail').value;
+  const pw=document.getElementById('signupPassword').value;
+  const confirm=document.getElementById('signupConfirm').value;
+  const btn=document.getElementById('signupBtn');
+
+  let valid=true;
+
+  if(!name.trim()){showError('nameError','Full name is required');valid=false;}
+  if(!email.trim()){showError('emailError','Email address is required');valid=false;}
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())){showError('emailError','Please enter a valid email address');valid=false;}
+  if(!pw){showError('passwordError','Password is required');valid=false;}
+  else if(pw.length<8){showError('passwordError','Password must be at least 8 characters');valid=false;}
+  if(pw!==confirm){showError('confirmError','Passwords do not match');valid=false;}
+
+  if(!valid)return;
+
+  btn.disabled=true;
+  btn.innerHTML='<div class="spinner"></div> Creating Account...';
+
+  try{
+    const result=await signUp(name,email,pw);
+    if(result.ok){
+      showAuthNotification('Account created successfully! Redirecting...','success');
+      setTimeout(function(){afterLoginRedirect();},1200);
+    }else{
+      showAuthNotification(result.error,'error');
+      btn.disabled=false;
+      btn.innerHTML='<i class="fas fa-user-plus"></i> Create Account';
+    }
+  }catch(err){
+    showAuthNotification('Something went wrong. Please try again.','error');
+    btn.disabled=false;
+    btn.innerHTML='<i class="fas fa-user-plus"></i> Create Account';
+  }
+}
+</script>
+</body>
+</html>

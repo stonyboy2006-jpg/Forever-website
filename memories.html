@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Wedding Memories - Relive our special moments through photos and videos">
+<meta name="theme-color" content="#0B0F19">
+<title>Wedding Memories - Forever &amp; Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/memories.css">
+<style>:root{--gold:#D4AF37;--dark:#0B0F19;--text:#E8E0D0;--text-light:#A09888;--font-heading:'Playfair Display',serif;--font-body:'Poppins',sans-serif;--font-sans:'Poppins',sans-serif;--font-script:'Great Vibes',cursive;--radius:16px;--radius-sm:8px;--radius-lg:24px;--transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94)}</style>
+</head>
+<body class="mem-page">
+
+<div class="mem-sparkles"></div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="main-nav" style="position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(11,15,25,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(212,175,55,0.08);padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between">
+  <a href="index.html" style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px"><i class="fas fa-ring"></i> Forever & Always</a>
+  <div style="display:flex;align-items:center;gap:6px;list-style:none;flex-wrap:wrap">
+    <a href="index.html" style="padding:8px 14px;border-radius:8px;font-size:0.85rem;color:var(--text-light);text-decoration:none">Home</a>
+    <a href="our-story.html" style="padding:8px 14px;border-radius:8px;font-size:0.85rem;color:var(--text-light);text-decoration:none">Story</a>
+    <a href="gallery.html" style="padding:8px 14px;border-radius:8px;font-size:0.85rem;color:var(--text-light);text-decoration:none">Gallery</a>
+    <a href="memories.html" style="padding:8px 14px;border-radius:8px;font-size:0.85rem;color:var(--gold);text-decoration:none;font-weight:600"><i class="fas fa-camera-retro" style="margin-right:4px"></i> Memories</a>
+    <a href="rsvp.html" style="padding:8px 14px;border-radius:8px;font-size:0.85rem;color:var(--text-light);text-decoration:none">RSVP</a>
+    <a href="music.html" style="padding:8px 14px;border-radius:8px;font-size:0.85rem;color:var(--text-light);text-decoration:none">Music</a>
+    <a href="invitation.html" style="padding:8px 14px;border-radius:8px;font-size:0.85rem;color:var(--text-light);text-decoration:none">Invite</a>
+    <a href="dashboard.html" style="padding:8px 14px;border-radius:8px;font-size:0.85rem;color:var(--text-light);text-decoration:none">Dashboard</a>
+  </div>
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:50px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.2);color:var(--gold);font-size:0.78rem;text-decoration:none"><i class="fas fa-arrow-left"></i> Back</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="mem-hero">
+  <div class="mem-hero-icon"><i class="fas fa-camera-retro"></i></div>
+  <h1>Wedding <span class="gold">Memories</span></h1>
+  <div class="tagline">Cherished Moments, Forever Captured</div>
+  <p>Relive the magic of our special day through photos and videos shared by us and our loved ones.</p>
+</section>
+
+<!-- ===== FEATURED VIDEO ===== -->
+<div class="mem-featured" id="memFeatured" style="display:none">
+  <div class="mem-featured-card" onclick="MemApp.openLightbox('featured')">
+    <div class="mem-featured-thumb">
+      <div class="play-icon"><i class="fas fa-play"></i></div>
+    </div>
+    <div class="mem-featured-info">
+      <div class="mem-featured-badge"><i class="fas fa-film"></i> Featured Wedding Film</div>
+      <h2>Our Wedding Highlights</h2>
+      <p>A cinematic journey through our most beautiful moments</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTROLS ===== -->
+<div class="mem-controls">
+  <div class="mem-controls-inner">
+    <div class="mem-search">
+      <i class="fas fa-search"></i>
+      <input type="text" id="memSearch" placeholder="Search memories..." oninput="MemApp.setAlbum(document.querySelector('.mem-album-tab.active')?.dataset.album||'all')" aria-label="Search memories">
+    </div>
+    <div class="mem-type-btns">
+      <button class="mem-type-btn active" data-type="all" onclick="MemApp.setType('all')"><i class="fas fa-images"></i> All</button>
+      <button class="mem-type-btn" data-type="photos" onclick="MemApp.setType('photos')"><i class="fas fa-image"></i> Photos</button>
+      <button class="mem-type-btn" data-type="videos" onclick="MemApp.setType('videos')"><i class="fas fa-video"></i> Videos</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ALBUM TABS ===== -->
+<div style="max-width:1200px;margin:0 auto 24px;padding:0 24px;position:relative;z-index:1">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+    <h2 style="font-family:var(--font-heading);color:var(--white);font-size:1.4rem;margin:0">Our Albums</h2>
+    <div id="memStats"></div>
+  </div>
+  <div class="mem-albums" id="memAlbums"></div>
+</div>
+
+<!-- ===== MASONRY GRID ===== -->
+<div class="mem-grid" id="memGrid"></div>
+
+<!-- ===== GUEST UPLOAD ===== -->
+<section class="mem-upload">
+  <div class="mem-upload-card">
+    <h3><i class="fas fa-cloud-arrow-up" style="margin-right:8px"></i> Share Your Moments</h3>
+    <p>Upload photos or videos from the wedding to share with everyone.</p>
+    <div class="mem-dropzone" id="memDropzone">
+      <i class="fas fa-cloud-arrow-up"></i>
+      <span>Drag & drop your photos or videos here</span>
+      <small>or click to browse &bull; Photos & Videos up to 50MB</small>
+      <input type="file" id="memUploadInput" accept="image/*,video/*" multiple aria-label="Upload photos or videos">
+    </div>
+    <div class="mem-upload-list" id="memUploadList"></div>
+  </div>
+</section>
+
+<!-- ===== LIGHTBOX ===== -->
+<div class="mem-lightbox" id="memLightbox" role="dialog" aria-label="Media viewer">
+  <button class="mem-lb-close" onclick="MemApp.closeLightbox()" aria-label="Close"><i class="fas fa-xmark"></i></button>
+  <div class="mem-lb-slideshow"><button id="slideshowBtn" onclick="MemApp.toggleSlideshow()" aria-label="Toggle slideshow"><i class="fas fa-play"></i> Slideshow</button></div>
+  <button class="mem-lb-nav mem-lb-prev" onclick="MemApp.navLightbox(-1)" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+  <div class="mem-lb-content"></div>
+  <button class="mem-lb-nav mem-lb-next" onclick="MemApp.navLightbox(1)" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+  <div class="mem-lb-info">
+    <span class="title"></span>
+    <span class="counter"></span>
+    <div class="mem-lb-actions">
+      <button onclick="MemApp.shareMedia(document.querySelector('.mem-lb-content [src]')?.closest('.mem-item')?.dataset.id||'')" title="Share"><i class="fas fa-share-nodes"></i></button>
+      <button onclick="MemApp.downloadMedia(document.querySelector('.mem-lb-content [src]')?.closest('.mem-item')?.dataset.id||'')" title="Download"><i class="fas fa-download"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SHARE MODAL ===== -->
+<div class="mem-share-modal" id="memShareModal">
+  <div class="mem-share-box">
+    <h3><i class="fas fa-share-nodes" style="margin-right:8px"></i> Share Memory</h3>
+    <div class="mem-share-grid">
+      <button class="mem-share-btn wa" onclick="MemApp.shareWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+      <button class="mem-share-btn fb" onclick="MemApp.shareFB()"><i class="fab fa-facebook-f"></i> Facebook</button>
+      <button class="mem-share-btn tw" onclick="MemApp.shareTW()"><i class="fab fa-x-twitter"></i> X</button>
+      <button class="mem-share-btn em" onclick="MemApp.shareEmail()"><i class="fas fa-envelope"></i> Email</button>
+      <button class="mem-share-btn cp" onclick="MemApp.copyLink()"><i class="fas fa-link"></i> Copy Link</button>
+    </div>
+    <button class="mem-share-close" onclick="MemApp.closeShare()">Cancel</button>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer style="background:rgba(6,10,20,0.95);border-top:1px solid rgba(212,175,55,0.08);padding:40px 24px;text-align:center;position:relative;z-index:1">
+  <div class="container">
+    <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);margin-bottom:8px">Forever & Always</div>
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:16px 0">
+      <a href="index.html" style="color:var(--text-light);font-size:0.82rem">Home</a>
+      <a href="our-story.html" style="color:var(--text-light);font-size:0.82rem">Story</a>
+      <a href="wedding-details.html" style="color:var(--text-light);font-size:0.82rem">Details</a>
+      <a href="gallery.html" style="color:var(--text-light);font-size:0.82rem">Gallery</a>
+      <a href="memories.html" style="color:var(--gold);font-size:0.82rem;font-weight:600">Memories</a>
+      <a href="rsvp.html" style="color:var(--text-light);font-size:0.82rem">RSVP</a>
+      <a href="music.html" style="color:var(--text-light);font-size:0.82rem">Music</a>
+      <a href="invitation.html" style="color:var(--text-light);font-size:0.82rem">Invitation</a>
+      <a href="gift-registry.html" style="color:var(--text-light);font-size:0.82rem">Gifts</a>
+      <a href="contact.html" style="color:var(--text-light);font-size:0.82rem">Contact</a>
+    </div>
+    <p style="color:var(--text-muted);font-size:0.75rem">&copy; <script>document.write(new Date().getFullYear())</script> Forever & Always</p>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script src="js/memories.js"></script>
+</body>
+</html>

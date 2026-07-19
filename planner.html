@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Wedding Planning Dashboard - Organize every detail of your perfect day">
+<meta name="theme-color" content="#0B0F19">
+<title>Wedding Planner - Forever &amp; Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/planner.css">
+<style>:root{--gold:#D4AF37;--dark:#0B0F19;--dark-soft:#111827;--text:#E8E0D0;--text-light:#A09888;--white:#fff;--font-heading:'Playfair Display',serif;--font-body:'Poppins',sans-serif;--font-sans:'Poppins',sans-serif;--font-script:'Great Vibes',cursive;--radius:16px;--radius-sm:8px;--radius-lg:24px;--transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);--success:#22c55e;--error:#ef4444;--warning:#f59e0b;--info:#3b82f6;--gold-light:#e8c968;--gold-dark:#b8941f}</style>
+</head>
+<body class="plan-page">
+
+<!-- ===== SIDEBAR ===== -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation menu"><i class="fas fa-bars"></i></button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar-nav" id="sidebarNav" role="navigation" aria-label="Main navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"><i class="fas fa-ring"></i></div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">Forever &amp; Always</div>
+        <div class="sidebar-brand-sub">Wedding Menu</div>
+      </div>
+    </div>
+    <button class="sidebar-close" aria-label="Close menu"><i class="fas fa-arrow-left"></i></button>
+  </div>
+  <nav class="sidebar-links">
+    <div class="sidebar-section-label">Main</div>
+    <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i> Home</a>
+    <a href="our-story.html" class="sidebar-link"><i class="fas fa-heart"></i> Our Story</a>
+    <a href="wedding-details.html" class="sidebar-link"><i class="fas fa-info-circle"></i> Wedding Details</a>
+    <a href="wedding-party.html" class="sidebar-link"><i class="fas fa-user-friends"></i> Wedding Party</a>
+    <a href="events.html" class="sidebar-link"><i class="fas fa-calendar-alt"></i> Events</a>
+    <div class="sidebar-section-label">Media</div>
+    <a href="gallery.html" class="sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+    <a href="timeline.html" class="sidebar-link"><i class="fas fa-clock"></i> Timeline</a>
+    <a href="story.html" class="sidebar-link"><i class="fas fa-book-open"></i> Love Story</a>
+    <div class="sidebar-section-label">Guests</div>
+    <a href="rsvp.html" class="sidebar-link"><i class="fas fa-envelope"></i> RSVP</a>
+    <a href="gift-registry.html" class="sidebar-link"><i class="fas fa-gift"></i> Gift Registry</a>
+    <a href="music.html" class="sidebar-link"><i class="fas fa-music"></i> Wedding Music</a>
+    <a href="invitation.html" class="sidebar-link"><i class="fas fa-paper-plane"></i> Invitation</a>
+    <a href="memories.html" class="sidebar-link"><i class="fas fa-camera-retro"></i> Memories</a>
+    <a href="planner.html" class="sidebar-link active"><i class="fas fa-clipboard-list"></i> Planner</a>
+    <a href="profile.html" class="sidebar-link"><i class="fas fa-user-circle"></i> My Profile</a>
+    <a href="faq.html" class="sidebar-link"><i class="fas fa-question-circle"></i> FAQ</a>
+    <div class="sidebar-section-label">More</div>
+    <a href="ai-assistant.html" class="sidebar-link"><i class="fas fa-robot"></i> AI Assistant</a>
+    <a href="contact.html" class="sidebar-link"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="developer.html" class="sidebar-link"><i class="fas fa-code"></i> Developer</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-links" id="authUserMenu">
+      <a href="setup.html" class="sidebar-link"><i class="fas fa-rocket"></i> Get Started</a>
+      <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    </div>
+    <script>renderUserMenu('authUserMenu');</script>
+  </div>
+</aside>
+
+<!-- ===== HEADER ===== -->
+<section class="plan-header">
+  <h1>Wedding <span class="gold">Planner</span></h1>
+  <p>Organize every detail of your perfect day</p>
+</section>
+
+<div class="plan-container">
+
+  <!-- ===== STATS DASHBOARD ===== -->
+  <div class="plan-stats">
+    <div class="plan-stat">
+      <div class="plan-stat-icon gold"><i class="fas fa-heart"></i></div>
+      <div class="plan-stat-value" id="statDaysLeft">0</div>
+      <div class="plan-stat-label">Days Until Wedding</div>
+    </div>
+    <div class="plan-stat">
+      <div class="plan-stat-icon green"><i class="fas fa-check-circle"></i></div>
+      <div class="plan-stat-value" id="statTasksDone">0</div>
+      <div class="plan-stat-label">Tasks Done</div>
+    </div>
+    <div class="plan-stat">
+      <div class="plan-stat-icon orange"><i class="fas fa-clock"></i></div>
+      <div class="plan-stat-value" id="statTasksRemaining">0</div>
+      <div class="plan-stat-label">Tasks Remaining</div>
+    </div>
+    <div class="plan-stat">
+      <div class="plan-stat-icon blue"><i class="fas fa-dollar-sign"></i></div>
+      <div class="plan-stat-value" id="statBudget">$0</div>
+      <div class="plan-stat-label">Total Budget</div>
+    </div>
+    <div class="plan-stat">
+      <div class="plan-stat-icon red"><i class="fas fa-receipt"></i></div>
+      <div class="plan-stat-value" id="statSpent">$0</div>
+      <div class="plan-stat-label">Amount Spent</div>
+    </div>
+    <div class="plan-stat">
+      <div class="plan-stat-icon green"><i class="fas fa-piggy-bank"></i></div>
+      <div class="plan-stat-value" id="statRemaining">$0</div>
+      <div class="plan-stat-label">Remaining Budget</div>
+    </div>
+    <div class="plan-stat">
+      <div class="plan-stat-icon blue"><i class="fas fa-users"></i></div>
+      <div class="plan-stat-value" id="statGuestsInvited">0</div>
+      <div class="plan-stat-label">Guests Invited</div>
+    </div>
+    <div class="plan-stat">
+      <div class="plan-stat-icon green"><i class="fas fa-envelope-open"></i></div>
+      <div class="plan-stat-value" id="statRsvpConfirmed">0</div>
+      <div class="plan-stat-label">RSVP Confirmed</div>
+    </div>
+    <div class="plan-stat">
+      <div class="plan-stat-icon gold"><i class="fas fa-store"></i></div>
+      <div class="plan-stat-value" id="statVendors">0</div>
+      <div class="plan-stat-label">Vendors</div>
+    </div>
+    <div class="plan-stat">
+      <div class="plan-stat-icon orange"><i class="fas fa-chair"></i></div>
+      <div class="plan-stat-value" id="statTables">0</div>
+      <div class="plan-stat-label">Tables</div>
+    </div>
+  </div>
+
+  <!-- ===== PROGRESS ===== -->
+  <div class="plan-progress">
+    <div class="plan-progress-header">
+      <h3><i class="fas fa-tasks" style="color:var(--gold);margin-right:8px"></i>Overall Planning Progress</h3>
+      <span id="planProgressPct">0%</span>
+    </div>
+    <div class="plan-progress-bar"><div class="plan-progress-fill" id="planProgressFill" style="width:0%"></div></div>
+    <div style="font-size:0.82rem;color:var(--text-light);margin-top:8px" id="planProgressLabel">0 / 0 tasks complete</div>
+  </div>
+
+  <!-- ===== TABS ===== -->
+  <div class="plan-tabs">
+    <button class="plan-tab active" data-tab="checklist"><i class="fas fa-clipboard-check"></i> Checklist</button>
+    <button class="plan-tab" data-tab="budget"><i class="fas fa-wallet"></i> Budget</button>
+    <button class="plan-tab" data-tab="vendors"><i class="fas fa-store"></i> Vendors</button>
+    <button class="plan-tab" data-tab="guests"><i class="fas fa-users"></i> Guests</button>
+    <button class="plan-tab" data-tab="seating"><i class="fas fa-chair"></i> Seating</button>
+    <button class="plan-tab" data-tab="calendar"><i class="fas fa-calendar"></i> Calendar</button>
+    <button class="plan-tab" data-tab="notes"><i class="fas fa-sticky-note"></i> Notes</button>
+  </div>
+
+  <!-- ===== CHECKLIST ===== -->
+  <div class="plan-section active" id="sec-checklist">
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title"><i class="fas fa-clipboard-check"></i> Wedding Checklist</div>
+        <button class="plan-btn" onclick="addCheckCategory()"><i class="fas fa-plus"></i> Add Category</button>
+      </div>
+      <div id="checklistContainer"></div>
+    </div>
+  </div>
+
+  <!-- ===== BUDGET ===== -->
+  <div class="plan-section" id="sec-budget">
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title"><i class="fas fa-wallet"></i> Budget Tracker</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <label style="font-size:0.82rem;color:var(--text-light)">Total Budget: $</label>
+          <input type="number" id="budgetTotalInput" style="width:140px;padding:8px 12px;border:1px solid rgba(212,175,55,0.15);border-radius:8px;background:rgba(255,255,255,0.04);color:var(--gold);font-size:0.95rem;font-weight:600" onchange="updateBudgetTotal(this.value)" placeholder="0">
+          <button class="plan-btn" onclick="addBudgetCategory()"><i class="fas fa-plus"></i> Add</button>
+        </div>
+      </div>
+      <div class="plan-budget-summary" id="budgetSummary"></div>
+      <div id="budgetRows"></div>
+    </div>
+  </div>
+
+  <!-- ===== VENDORS ===== -->
+  <div class="plan-section" id="sec-vendors">
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title"><i class="fas fa-store"></i> Vendor Directory</div>
+        <button class="plan-btn" onclick="openVendorModal()"><i class="fas fa-plus"></i> Add Vendor</button>
+      </div>
+      <div class="plan-vendor-grid" id="vendorGrid"></div>
+    </div>
+  </div>
+
+  <!-- ===== GUESTS ===== -->
+  <div class="plan-section" id="sec-guests">
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title"><i class="fas fa-users"></i> Guest Manager</div>
+        <div style="display:flex;gap:8px">
+          <button class="plan-btn" onclick="openGuestModal()"><i class="fas fa-plus"></i> Add Guest</button>
+          <button class="plan-btn" onclick="exportGuests('csv')" style="background:rgba(255,255,255,0.06);color:var(--text-light)"><i class="fas fa-download"></i> CSV</button>
+          <button class="plan-btn" onclick="exportGuests('json')" style="background:rgba(255,255,255,0.06);color:var(--text-light)"><i class="fas fa-download"></i> JSON</button>
+        </div>
+      </div>
+      <div id="guestStatsBar"></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+        <div style="flex:1;min-width:200px;position:relative">
+          <i class="fas fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:0.8rem"></i>
+          <input type="text" placeholder="Search guests..." oninput="searchGuests(this.value)" style="width:100%;padding:10px 12px 10px 36px;border:1px solid rgba(212,175,55,0.1);border-radius:8px;background:rgba(255,255,255,0.04);color:var(--text);font-size:0.85rem">
+        </div>
+        <div style="display:flex;gap:4px">
+          <button class="guest-filter-btn plan-tab active" data-filter="all" onclick="filterGuests('all')" style="font-size:0.78rem;padding:6px 12px">All</button>
+          <button class="guest-filter-btn plan-tab" data-filter="confirmed" onclick="filterGuests('confirmed')" style="font-size:0.78rem;padding:6px 12px">Confirmed</button>
+          <button class="guest-filter-btn plan-tab" data-filter="pending" onclick="filterGuests('pending')" style="font-size:0.78rem;padding:6px 12px">Pending</button>
+          <button class="guest-filter-btn plan-tab" data-filter="declined" onclick="filterGuests('declined')" style="font-size:0.78rem;padding:6px 12px">Declined</button>
+        </div>
+        <select onchange="sortGuests(this.value)" style="padding:8px 12px;border:1px solid rgba(212,175,55,0.1);border-radius:8px;background:rgba(255,255,255,0.04);color:var(--text);font-size:0.82rem">
+          <option value="name">Sort by Name</option>
+          <option value="family">Sort by Side</option>
+          <option value="rsvp">Sort by RSVP</option>
+        </select>
+      </div>
+      <div id="guestGrid"></div>
+    </div>
+  </div>
+
+  <!-- ===== SEATING ===== -->
+  <div class="plan-section" id="sec-seating">
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title"><i class="fas fa-chair"></i> Seating Arrangement</div>
+        <button class="plan-btn" onclick="addTable()"><i class="fas fa-plus"></i> Add Table</button>
+      </div>
+      <p style="font-size:0.82rem;color:var(--text-light);margin-bottom:16px">Assign guests from your RSVP list to tables for the reception. Unassigned guests are highlighted below.</p>
+      <div class="plan-seating" id="seatingContainer"></div>
+    </div>
+  </div>
+
+  <!-- ===== CALENDAR ===== -->
+  <div class="plan-section" id="sec-calendar">
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title"><i class="fas fa-calendar"></i> Wedding Calendar</div>
+        <div style="display:flex;gap:8px">
+          <button class="plan-btn" id="calViewBtn" onclick="toggleCalView()" style="background:rgba(255,255,255,0.06);color:var(--text-light)">Weekly</button>
+          <button class="plan-btn" onclick="openEventModal()"><i class="fas fa-plus"></i> Add Event</button>
+        </div>
+      </div>
+      <div class="plan-cal-header">
+        <div class="plan-cal-nav"><button onclick="calPrev()"><i class="fas fa-chevron-left"></i></button></div>
+        <h3 id="calMonthYear"></h3>
+        <div class="plan-cal-nav"><button onclick="calNext()"><i class="fas fa-chevron-right"></i></button></div>
+      </div>
+      <div class="plan-cal-grid" id="calendarGrid"></div>
+    </div>
+    <div class="plan-card" style="margin-top:16px">
+      <div class="plan-card-title" style="margin-bottom:12px"><i class="fas fa-list"></i> Upcoming Events</div>
+      <div id="eventList"></div>
+    </div>
+  </div>
+
+  <!-- ===== NOTES ===== -->
+  <div class="plan-section" id="sec-notes">
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title"><i class="fas fa-sticky-note"></i> Wedding Notes</div>
+        <button class="plan-btn" onclick="addNote()"><i class="fas fa-plus"></i> Add Note</button>
+      </div>
+      <div style="margin-bottom:16px;position:relative">
+        <i class="fas fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:0.8rem"></i>
+        <input type="text" placeholder="Search notes..." oninput="searchNotes(this.value)" style="width:100%;padding:10px 12px 10px 36px;border:1px solid rgba(212,175,55,0.1);border-radius:8px;background:rgba(255,255,255,0.04);color:var(--text);font-size:0.85rem">
+      </div>
+      <div class="plan-notes-grid" id="notesContainer"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== VENDOR MODAL ===== -->
+<div class="plan-modal-overlay" id="vendorModal">
+  <div class="plan-modal">
+    <h3><i class="fas fa-store"></i> <span id="vendorModalTitle">Add Vendor</span></h3>
+    <label>Business Name *</label>
+    <input type="text" id="vendorName" placeholder="e.g. ABC Photography">
+    <label>Type</label>
+    <select id="vendorType">
+      <option>Photographer</option><option>Videographer</option><option>Caterer</option><option>Florist</option><option>DJ/Band</option><option>Decorator</option><option>Planner</option><option>Makeup Artist</option><option>Transportation</option><option>Other</option>
+    </select>
+    <label>Contact Person</label>
+    <input type="text" id="vendorContact" placeholder="Contact name">
+    <label>Phone</label>
+    <input type="tel" id="vendorPhone" placeholder="Phone number">
+    <label>Email</label>
+    <input type="email" id="vendorEmail" placeholder="Email address">
+    <label>Website</label>
+    <input type="url" id="vendorWebsite" placeholder="https://...">
+    <label>Address</label>
+    <input type="text" id="vendorAddress" placeholder="Business address">
+    <label>Cost ($)</label>
+    <input type="number" id="vendorCost" placeholder="0">
+    <label>Status</label>
+    <select id="vendorStatus"><option value="pending">Pending</option><option value="booked">Booked</option><option value="cancelled">Cancelled</option></select>
+    <label>Notes</label>
+    <textarea id="vendorNotes" rows="3" placeholder="Additional notes..."></textarea>
+    <div class="plan-modal-actions">
+      <button class="cancel" onclick="closeVendorModal()">Cancel</button>
+      <button class="save" onclick="saveVendor()"><i class="fas fa-check"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GUEST MODAL ===== -->
+<div class="plan-modal-overlay" id="guestModal">
+  <div class="plan-modal">
+    <h3><i class="fas fa-users"></i> <span id="guestModalTitle">Add Guest</span></h3>
+    <label>Guest Name *</label>
+    <input type="text" id="guestName" placeholder="Full name">
+    <label>Side / Family</label>
+    <select id="guestFamily">
+      <option>Bride Side</option><option>Groom Side</option><option>Family</option><option>Friends</option><option>Colleagues</option><option>Other</option>
+    </select>
+    <label>Table Number</label>
+    <input type="text" id="guestTable" placeholder="e.g. Table 1">
+    <label>RSVP Status</label>
+    <select id="guestRsvp"><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="declined">Declined</option></select>
+    <label>Meal Choice</label>
+    <select id="guestMeal"><option>Standard</option><option>Vegetarian</option><option>Vegan</option><option>Halal</option><option>Kosher</option><option>Gluten-Free</option><option>Other</option></select>
+    <div class="plan-modal-actions">
+      <button class="cancel" onclick="$('guestModal').classList.remove('open')">Cancel</button>
+      <button class="save" onclick="saveGuest()"><i class="fas fa-check"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EVENT MODAL ===== -->
+<div class="plan-modal-overlay" id="eventModal">
+  <div class="plan-modal">
+    <h3><i class="fas fa-calendar-plus"></i> Add Event</h3>
+    <label>Event Title *</label>
+    <input type="text" id="eventTitle" placeholder="e.g. Cake Tasting">
+    <label>Date *</label>
+    <input type="date" id="eventDate">
+    <label>Time</label>
+    <input type="time" id="eventTime">
+    <label>Description</label>
+    <textarea id="eventDesc" rows="3" placeholder="Details..."></textarea>
+    <div class="plan-modal-actions">
+      <button class="cancel" onclick="$('eventModal').classList.remove('open')">Cancel</button>
+      <button class="save" onclick="saveEvent()"><i class="fas fa-check"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer style="text-align:center;padding:48px 24px 32px;color:var(--text-light);font-size:0.82rem;border-top:1px solid rgba(212,175,55,0.08);margin-top:60px">
+  <a href="index.html" style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);text-decoration:none;display:inline-block;margin-bottom:12px"><i class="fas fa-ring"></i> Forever & Always</a>
+  <p>Organize your perfect wedding with love and care.</p>
+  <p style="margin-top:12px"><a href="index.html" style="color:var(--gold);text-decoration:none">Home</a></p>
+</footer>
+
+<script src="js/script.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/planner.js"></script>
+</body>
+</html>

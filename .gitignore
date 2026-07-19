@@ -1,0 +1,19 @@
+# Firebase configuration (contains API keys — never commit)
+js/firebase-config.js
+
+# Keep the example template
+!js/firebase-config.example.js
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node.js (if used)
+node_modules/
