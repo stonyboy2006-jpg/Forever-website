@@ -4,43 +4,54 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
-<meta name="description" content="Something went wrong on our end. Please try again later or contact support for help.">
+<meta name="description" content="Something went wrong on our end. Please try again.">
 <meta property="og:title" content="Server Error">
-<meta property="og:description" content="Something went wrong on our end. Please try again later or contact support for help.">
+<meta property="og:description" content="Something went wrong on our end. Please try again.">
 <meta property="og:image" content="https://foreverandalwayswedding.com/icons/icon-512.svg">
 <meta property="og:url" content="https://foreverandalwayswedding.com/500.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Server Error">
-<meta name="twitter:description" content="Something went wrong on our end. Please try again later or contact support for help.">
+<meta name="twitter:description" content="Something went wrong on our end. Please try again.">
 <link rel="canonical" href="https://foreverandalwayswedding.com/500.html">
-<title>500 Server Error - Forever &amp; Always</title>
+<title>Server Error — Forever &amp; Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0B0F19;color:#E8E0D0;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:24px}
-.container{max-width:500px}
-.code{font-family:'Playfair Display',serif;font-size:clamp(5rem,15vw,10rem);background:linear-gradient(135deg,#D4AF37,#B8860B,#D4AF37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
-h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:#fff;margin:12px 0 8px}
-p{color:#A09888;font-size:0.95rem;line-height:1.7;margin-bottom:24px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:linear-gradient(135deg,#D4AF37,#B8860B);color:#0B0F19;border-radius:50px;font-weight:600;text-decoration:none;font-size:0.85rem;transition:all 0.3s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,175,55,0.3)}
-.icon{font-size:3rem;margin-bottom:12px}
-.retry-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:rgba(255,255,255,0.05);border:1px solid rgba(212,175,55,0.2);color:#D4AF37;border-radius:50px;font-weight:500;text-decoration:none;font-size:0.85rem;margin-left:12px;transition:all 0.3s}
-.retry-btn:hover{background:rgba(212,175,55,0.1);transform:translateY(-2px)}
+body{font-family:'Poppins',sans-serif;background:#0B0F19;color:#E8E0D0;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.bg-orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:0.12;pointer-events:none}
+.bg-orb.gold{width:400px;height:400px;background:#D4AF37;top:-100px;right:-100px}
+.bg-orb.rose{width:300px;height:300px;background:#E8C4C0;bottom:-80px;left:-80px}
+.container{text-align:center;padding:2rem;position:relative;z-index:1;max-width:520px}
+.icon{font-size:3.5rem;margin-bottom:1rem;opacity:0.9}
+.code{font-family:'Playfair Display',serif;font-size:clamp(4rem,12vw,8rem);font-weight:700;background:linear-gradient(135deg,#D4AF37,#F7E7CE,#D4AF37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:0.3rem}
+h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:#fff;margin-bottom:0.5rem}
+p{font-size:0.95rem;color:#A09888;line-height:1.7;margin-bottom:1.5rem;max-width:420px;margin-left:auto;margin-right:auto}
+.links{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:0.8rem 1.8rem;border:1px solid rgba(212,175,55,0.25);background:rgba(212,175,55,0.06);color:#D4AF37;font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:500;border-radius:50px;text-decoration:none;transition:all 0.3s ease;cursor:pointer}
+.btn:hover{background:rgba(212,175,55,0.14);border-color:rgba(212,175,55,0.45);transform:translateY(-2px);box-shadow:0 6px 20px rgba(212,175,55,0.12)}
+.btn-primary{background:linear-gradient(135deg,#D4AF37,#B8962E);color:#0B0F19;border:none;font-weight:600}
+.btn-primary:hover{box-shadow:0 8px 28px rgba(212,175,55,0.3)}
+.btn-secondary{background:transparent;border:1px solid rgba(212,175,55,0.25);color:#D4AF37}
+.notice{color:rgba(255,255,255,0.2);font-size:0.75rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(212,175,55,0.06)}
 </style>
 </head>
 <body>
+<div class="bg-orb gold"></div>
+<div class="bg-orb rose"></div>
 <div class="container">
   <div class="icon">&#9888;</div>
   <div class="code">500</div>
-  <h2>Internal Server Error</h2>
-  <p>Something went wrong on our end. Please try again later. If the problem persists, contact support.</p>
-  <div>
-    <a href="index.html" class="btn">&#8592; Back to Home</a>
-    <a href="javascript:location.reload()" class="retry-btn">&#8635; Retry</a>
+  <h2>Something Went Wrong</h2>
+  <p>We encountered an unexpected error. Please try again. If the problem persists, contact the wedding owner or our support team.</p>
+  <div class="links">
+    <a href="javascript:location.reload()" class="btn btn-primary"><i class="fas fa-sync"></i> Retry</a>
+    <a href="index.html" class="btn btn-secondary"><i class="fas fa-home"></i> Back to Home</a>
   </div>
+  <div class="notice"><i class="fas fa-ring"></i> Forever &amp; Always &mdash; Luxury Wedding Platform</div>
 </div>
 </body>
 </html>

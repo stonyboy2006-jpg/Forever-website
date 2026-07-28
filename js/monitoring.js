@@ -191,5 +191,5 @@
   }
 
   window.WeddingMonitoring=W;
-  console.log('System Monitoring initialized');
+  // System Monitoring initialized
 })();

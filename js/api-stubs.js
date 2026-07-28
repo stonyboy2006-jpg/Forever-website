@@ -228,5 +228,5 @@
   function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
   window.WeddingAPI=W;
-  console.log('API Stubs initialized');
+  // API Stubs initialized
 })();

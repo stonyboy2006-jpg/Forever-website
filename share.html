@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Invitation Center — Forever &amp; Always</title>
+<meta name="description" content="Premium wedding invitation sharing dashboard">
+<meta name="theme-color" content="#0B0F19">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" id="ogTitle" content="Share Wedding Invitation">
+<meta property="og:description" id="ogDesc" content="Share your wedding invitation with guests">
+<meta property="og:image" id="ogImage" content="">
+<meta property="og:url" id="ogUrl" content="">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" id="twTitle" content="Share Wedding Invitation">
+<meta name="twitter:description" id="twDesc" content="Share your wedding invitation with guests">
+<meta name="twitter:image" id="twImage" content="">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https:;">
+<link rel="canonical" href="https://foreverandalwayswedding.com/share.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/share.css">
+</head>
+<body>
+<a href="#mainContent" class="skip-link">Skip to main content</a>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+<aside id="dashboardSidebar" class="sidebar" role="navigation" aria-label="Owner navigation">
+<div class="sidebar-header">
+  <div class="sidebar-brand"><a href="index.html"><img src="icons/icon-192.svg" alt="Forever &amp; Always" style="height:32px"></a></div>
+  <button id="closeSidebarBtn" class="close-sidebar-btn" aria-label="Close sidebar"><i class="fas fa-times"></i></button>
+</div>
+<nav class="sidebar-nav" role="menubar">
+  <a href="dashboard.html" class="sidebar-link" role="menuitem"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+  <a href="share.html" class="sidebar-link active" role="menuitem"><i class="fas fa-share-alt"></i><span>Share Invitation</span></a>
+  <a href="invitation.html" class="sidebar-link" role="menuitem"><i class="fas fa-envelope"></i><span>Invitations</span></a>
+  <a href="settings.html" class="sidebar-link" role="menuitem"><i class="fas fa-cog"></i><span>Settings</span></a>
+</nav>
+<div class="sidebar-footer">
+  <div class="sidebar-user" id="sidebarUserArea"></div>
+  <button id="sidebarLogoutBtn" class="sidebar-logout" role="menuitem"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+</div>
+</aside>
+
+<main id="mainContent" class="ic-main" role="main">
+<div class="ic-bg">
+  <div class="ic-particles" id="icParticles"></div>
+  <div class="ic-accent ic-accent-tl" aria-hidden="true"></div>
+  <div class="ic-accent ic-accent-tr" aria-hidden="true"></div>
+  <div class="ic-accent ic-accent-bl" aria-hidden="true"></div>
+  <div class="ic-accent ic-accent-br" aria-hidden="true"></div>
+</div>
+
+<header class="ic-header" role="banner">
+  <button id="menuToggle" class="ic-menu-toggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+  <div class="ic-header-inner">
+    <div class="ic-header-text">
+      <div class="ic-label" aria-hidden="true"><i class="fas fa-paper-plane"></i></div>
+      <h1 class="ic-title">Invitation Center</h1>
+      <p class="ic-subtitle">Share your wedding invitation with family and friends around the world.</p>
+      <div class="ic-header-divider" aria-hidden="true"></div>
+    </div>
+    <div class="ic-preview-card" id="icPreviewCard" aria-label="Wedding preview">
+      <div class="ic-preview-photo" id="icPreviewPhoto"><i class="fas fa-heart"></i></div>
+      <div class="ic-preview-info">
+        <div class="ic-preview-names" id="icPreviewNames">Groom &amp; Bride</div>
+        <div class="ic-preview-detail" id="icPreviewDate"><i class="fas fa-calendar-alt"></i> <span>TBD</span></div>
+        <div class="ic-preview-detail" id="icPreviewVenue"><i class="fas fa-map-marker-alt"></i> <span>TBD</span></div>
+        <div class="ic-preview-theme" id="icPreviewTheme"><i class="fas fa-palette"></i> <span>Royal Gold</span></div>
+      </div>
+      <div class="ic-preview-badge" id="icPreviewBadge"><span class="ic-badge-dot"></span> Draft</div>
+    </div>
+  </div>
+</header>
+
+<section class="ic-analytics-summary" aria-label="Invitation statistics">
+  <div class="ic-analytics-grid" id="icStatsGrid"></div>
+</section>
+
+<div class="ic-two-col">
+  <section class="ic-link-card" aria-label="Invitation link">
+    <div class="ic-card-header"><i class="fas fa-link"></i> Your Invitation Link</div>
+    <div class="ic-link-input-row">
+      <input type="text" id="icLinkInput" class="ic-link-input" readonly aria-label="Invitation link">
+      <button class="ic-btn ic-btn-gold ic-btn-copy" id="icCopyBtn" onclick="ShareCenter.copyLink()" aria-label="Copy invitation link"><i class="fas fa-copy"></i> Copy</button>
+    </div>
+    <div class="ic-link-generate-row">
+      <button class="ic-btn ic-btn-outline" onclick="ShareCenter.generateLink()" aria-label="Generate invitation link"><i class="fas fa-wand-magic-sparkles"></i> Generate Link</button>
+      <button class="ic-btn ic-btn-outline" onclick="ShareCenter.regenerateLink()" aria-label="Regenerate invitation link"><i class="fas fa-rotate"></i> Regenerate</button>
+    </div>
+    <p class="ic-link-note"><i class="fas fa-check-circle"></i> Anyone with this link can view your wedding invitation.</p>
+  </section>
+
+  <section class="ic-qr-panel" aria-label="QR Code">
+    <div class="ic-card-header"><i class="fas fa-qrcode"></i> QR Code</div>
+    <div class="ic-qr-display" id="icQRDisplay"></div>
+    <div class="ic-qr-actions">
+      <button class="ic-btn ic-btn-gold" onclick="ShareCenter.downloadQR('png')" aria-label="Download QR as PNG"><i class="fas fa-download"></i> PNG</button>
+      <button class="ic-btn ic-btn-outline" onclick="ShareCenter.downloadQR('svg')" aria-label="Download QR as SVG"><i class="fas fa-file-code"></i> SVG</button>
+      <button class="ic-btn ic-btn-outline" onclick="ShareCenter.printQR()" aria-label="Print QR code"><i class="fas fa-print"></i> Print</button>
+      <button class="ic-btn ic-btn-outline" onclick="ShareCenter.shareQR()" aria-label="Share QR code"><i class="fas fa-share-nodes"></i> Share</button>
+    </div>
+  </section>
+</div>
+
+<section class="ic-platforms-section" aria-label="Share on social platforms">
+  <div class="ic-card-header"><i class="fas fa-share-alt"></i> Share Platforms</div>
+  <p class="ic-platforms-desc">Choose a platform to share your wedding invitation</p>
+  <div class="ic-platforms-grid" id="icPlatformsGrid"></div>
+</section>
+
+<div class="ic-two-col">
+  <section class="ic-recent-shares" aria-label="Recent shares">
+    <div class="ic-card-header"><i class="fas fa-clock-rotate-left"></i> Recent Shares</div>
+    <div class="ic-history-controls">
+      <select id="icHistoryFilter" aria-label="Filter by platform" onchange="ShareCenter.renderHistory()">
+        <option value="all">All Platforms</option>
+      </select>
+      <input type="text" id="icHistorySearch" placeholder="Search..." aria-label="Search shares" oninput="ShareCenter.renderHistory()">
+      <button class="ic-btn ic-btn-sm ic-btn-outline" onclick="ShareCenter.exportHistory()" aria-label="Export history"><i class="fas fa-download"></i> Export</button>
+      <button class="ic-btn ic-btn-sm ic-btn-outline ic-btn-danger" onclick="if(confirm('Clear all share history?')){ShareCenter.clearHistory();ShareCenter.renderHistory()}" aria-label="Clear history"><i class="fas fa-trash"></i></button>
+    </div>
+    <div id="icHistoryContainer" class="ic-history-container"></div>
+  </section>
+
+  <section class="ic-detailed-analytics" aria-label="Detailed analytics">
+    <div class="ic-card-header"><i class="fas fa-chart-bar"></i> Invitation Analytics</div>
+    <div class="ic-analytics-cards" id="icDetailAnalytics"></div>
+    <div class="ic-chart-section" id="icChartSection"></div>
+  </section>
+</div>
+
+<section class="ic-quick-actions" aria-label="Quick actions">
+  <div class="ic-card-header"><i class="fas fa-bolt"></i> Quick Actions</div>
+  <div class="ic-actions-grid" id="icActionsGrid"></div>
+</section>
+
+<section class="ic-live-status" aria-label="Live status">
+  <div class="ic-status-inner" id="icLiveStatus"></div>
+</section>
+
+<footer class="ic-footer" role="contentinfo">
+  <div class="ic-footer-brand">Forever <span class="ic-heart">&hearts;</span> Always</div>
+  <div class="ic-footer-copy">&copy; <span id="icFooterYear">2026</span> Forever &amp; Always. All rights reserved.</div>
+  <div class="ic-footer-dev">Designed &amp; Developed by <span class="ic-dev-name">Leelee David Douglas (Stonyboy)</span></div>
+</footer>
+</main>
+
+<div id="notificationContainer" style="position:fixed;top:20px;right:20px;z-index:10000;pointer-events:none"></div>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/error-logger.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/maintenance.js"></script>
+<script src="js/audit-log.js"></script>
+<script src="js/share-center.js"></script>
+<script src="js/global.js"></script>
+<script>
+(function(){
+  var toggle=document.getElementById('menuToggle');
+  var sidebar=document.getElementById('dashboardSidebar');
+  var overlay=document.getElementById('sidebarOverlay');
+  var closeBtn=document.getElementById('closeSidebarBtn');
+  if(toggle)toggle.addEventListener('click',function(){sidebar.classList.add('open');overlay.classList.add('visible');});
+  if(closeBtn)closeBtn.addEventListener('click',function(){sidebar.classList.remove('open');overlay.classList.remove('visible');});
+  if(overlay)overlay.addEventListener('click',function(){sidebar.classList.remove('open');overlay.classList.remove('visible');});
+
+  if(typeof ShareCenter!=='undefined'){
+    ShareCenter.renderSharePage('mainContent');
+    ShareCenter.updateOGTags();
+  }
+
+  var fy=document.getElementById('icFooterYear');
+  if(fy)fy.textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

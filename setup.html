@@ -3,9 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Set up your Forever &amp; Always wedding website with our easy-to-use setup wizard.">
+<meta property="og:title" content="Wedding Setup Wizard">
+<meta property="og:description" content="Set up your Forever &amp; Always wedding website with our easy-to-use setup wizard.">
+<meta property="og:image" content="https://foreverandalwayswedding.com/icons/icon-512.svg">
+<meta property="og:url" content="https://foreverandalwayswedding.com/setup.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Wedding Setup Wizard">
+<meta name="twitter:description" content="Set up your Forever &amp; Always wedding website with our easy-to-use setup wizard.">
+<link rel="canonical" href="https://foreverandalwayswedding.com/setup.html">
 <title id="pageTitle">Setup - Forever &amp; Always</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; frame-src 'self' https://www.google.com https://maps.google.com; media-src 'self' blob:;">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -1450,13 +1462,13 @@ body::before {
       <span class="step-number-inner">12</span>
     </div>
     <h2>Preview &amp; Complete</h2>
-    <p>Review everything before saving</p>
+    <p>Review everything before publishing</p>
   </div>
   <div id="previewContent"></div>
   <div class="setup-nav" style="flex-direction:column;gap:12px;">
     <div style="display:flex;gap:14px;width:100%;">
       <button class="btn btn-prev" onclick="prevStep(12)" style="flex:1;justify-content:center;"><i class="fas fa-arrow-left"></i> Edit</button>
-      <button class="btn btn-publish" onclick="completeSetup()" style="flex:2;justify-content:center;"><i class="fas fa-check"></i> Save &amp; Complete</button>
+      <button class="btn btn-publish" onclick="completeSetup()" style="flex:2;justify-content:center;"><i class="fas fa-rocket"></i> Publish Wedding</button>
     </div>
   </div>
 </div>
@@ -1760,7 +1772,7 @@ function handleFiles(files, preview, callback, isMultiple) {
 function addPreviewItem(container, src, removeCb) {
   const div = document.createElement('div');
   div.className = 'photo-preview-item';
-  div.innerHTML = `<img src="${src}" alt="Photo">${removeCb !== null ? '<button class="remove-photo">&times;</button>' : ''}`;
+  div.innerHTML = `<img src="${src}" alt="Photo" loading="lazy" decoding="async">${removeCb !== null ? '<button class="remove-photo">&times;</button>' : ''}`;
   if (removeCb !== null) {
     div.querySelector('.remove-photo').onclick = function() { div.remove(); removeCb(); };
   }
@@ -1968,10 +1980,10 @@ function updatePreview() {
   document.getElementById('previewContent').innerHTML = `
     <div class="preview-section">
       <div class="preview-hero">
-        ${d.coverPhoto ? `<img src="${d.coverPhoto}" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:20px;">` : ''}
+        ${d.coverPhoto ? `<img src="${d.coverPhoto}" alt="Wedding cover photo" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:20px;">` : ''}
         <div style="display:flex;justify-content:center;gap:30px;margin-bottom:20px;flex-wrap:wrap;">
-          ${d.groomPhoto ? `<img src="${d.groomPhoto}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid ${d.themeColor};">` : '<div style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--gold);border:3px solid '+d.themeColor+';"><i class="fas fa-user"></i></div>'}
-          ${d.bridePhoto ? `<img src="${d.bridePhoto}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid ${d.themeColor};">` : '<div style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--gold);border:3px solid '+d.themeColor+';"><i class="fas fa-user"></i></div>'}
+          ${d.groomPhoto ? `<img src="${d.groomPhoto}" alt="Groom photo" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid ${d.themeColor};">` : '<div style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--gold);border:3px solid '+d.themeColor+';"><i class="fas fa-user"></i></div>'}
+          ${d.bridePhoto ? `<img src="${d.bridePhoto}" alt="Bride photo" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid ${d.themeColor};">` : '<div style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--gold);border:3px solid '+d.themeColor+';"><i class="fas fa-user"></i></div>'}
         </div>
         <div class="names">${d.groom || 'Groom'} <span class="and">&amp;</span> ${d.bride || 'Bride'}</div>
         ${d.motto ? `<p style="color:var(--gold-light);font-style:italic;margin-top:8px;">&ldquo;${d.motto}&rdquo;</p>` : ''}
@@ -1995,10 +2007,12 @@ function updatePreview() {
 function saveDraftAndPreview() {
   saveStepData(currentStep);
   const btn = document.querySelector('.btn-publish');
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving draft...';
   btn.disabled = true;
 
+  var weddingId = typeof InviteSys !== 'undefined' && InviteSys.updateWeddingId ? InviteSys.updateWeddingId() : 'wedding_' + Date.now().toString(36);
   const weddingInfo = {
+    weddingId: weddingId,
     groomName: setupData.groom,
     brideName: setupData.bride,
     weddingDate: setupData.date,
@@ -2055,7 +2069,7 @@ function saveDraftAndPreview() {
 async function completeSetup() {
   saveStepData(currentStep);
   const btn = document.querySelector('.btn-publish');
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  btn.innerHTML = '<i class="fas fa-rocket"></i> Publishing...';
   btn.disabled = true;
 
   const entries = document.querySelectorAll('.event-entry');
@@ -2069,7 +2083,11 @@ async function completeSetup() {
     }
   });
 
+  var weddingId = typeof InviteSys !== 'undefined' && InviteSys.updateWeddingId ? InviteSys.updateWeddingId() : 'wedding_' + Date.now().toString(36);
+  var inviteUrl = window.location.origin + '/invite/' + weddingId;
+
   const weddingInfo = {
+    weddingId: weddingId,
     groomName: setupData.groom,
     brideName: setupData.bride,
     weddingDate: setupData.date,
@@ -2101,32 +2119,38 @@ async function completeSetup() {
     rsvpCustom: setupData.rsvpCustom,
     events: setupData.events,
     gallery: setupData.gallery,
-    socialLinks: { whatsapp:setupData.whatsapp, facebook:setupData.facebook, instagram:setupData.instagram, tiktok:setupData.tiktok, twitter:setupData.twitter, telegram:setupData.telegram, youtube:setupData.youtube, messenger:setupData.messenger }
+    socialLinks: { whatsapp:setupData.whatsapp, facebook:setupData.facebook, instagram:setupData.instagram, tiktok:setupData.tiktok, twitter:setupData.twitter, telegram:setupData.telegram, youtube:setupData.youtube, messenger:setupData.messenger },
+    isPublished: true,
+    publishedAt: Date.now(),
+    inviteUrl: inviteUrl
   };
-  await fbSetDoc('weddingInfo', 'main', weddingInfo);
+
+  try { await fbSetDoc('weddingInfo', 'main', weddingInfo); } catch(e) {}
   localStorage.setItem('wedding_groom', setupData.groom || '');
   localStorage.setItem('wedding_bride', setupData.bride || '');
 
-  for (const ev of setupData.events) {
-    if (ev.name) await fbAddDoc('events', { eventName: ev.name, eventDate: ev.date, eventTime: ev.time, eventVenue: ev.venue, description: ev.desc });
-  }
+  try {
+    for (const ev of setupData.events) {
+      if (ev.name) await fbAddDoc('events', { eventName: ev.name, eventDate: ev.date, eventTime: ev.time, eventVenue: ev.venue, description: ev.desc });
+    }
+  } catch(e) {}
 
-  for (const img of setupData.gallery) {
-    await fbAddDoc('gallery', { imageUrl: img, uploadDate: new Date().toISOString() });
-  }
+  try {
+    for (const img of setupData.gallery) {
+      await fbAddDoc('gallery', { imageUrl: img, uploadDate: new Date().toISOString() });
+    }
+  } catch(e) {}
 
-  await fbSetDoc('socialLinks', 'main', {
-    whatsapp: setupData.whatsapp,
-    facebook: setupData.facebook,
-    instagram: setupData.instagram,
-    tiktok: setupData.tiktok,
-    twitter: setupData.twitter,
-    telegram: setupData.telegram,
-    youtube: setupData.youtube,
-    messenger: setupData.messenger
-  });
+  try {
+    await fbSetDoc('socialLinks', 'main', {
+      whatsapp: setupData.whatsapp, facebook: setupData.facebook, instagram: setupData.instagram,
+      tiktok: setupData.tiktok, twitter: setupData.twitter, telegram: setupData.telegram,
+      youtube: setupData.youtube, messenger: setupData.messenger
+    });
+  } catch(e) {}
 
   const localData = {
+    weddingId: weddingId,
     groomName: setupData.groom,
     brideName: setupData.bride,
     weddingDate: setupData.date,
@@ -2160,46 +2184,51 @@ async function completeSetup() {
     events: setupData.events,
     gallery: setupData.gallery,
     socialLinks: { whatsapp:setupData.whatsapp, facebook:setupData.facebook, instagram:setupData.instagram, tiktok:setupData.tiktok, twitter:setupData.twitter, telegram:setupData.telegram, youtube:setupData.youtube, messenger:setupData.messenger },
-    isPublished: false,
+    isPublished: true,
+    publishedAt: Date.now(),
+    inviteUrl: inviteUrl,
     createdAt: Date.now(),
     updatedAt: Date.now()
   };
   localStorage.setItem('weddingData', JSON.stringify(localData));
 
-  btn.innerHTML = '<i class="fas fa-check"></i> Saved!';
-
-  const g = setupData.groom || 'Groom';
-  const b = setupData.bride || 'Bride';
-  document.getElementById('congratsNames').textContent = `${g} & ${b}`;
-  document.getElementById('welcomeNames').textContent = `${g} \u2764 ${b}`;
-
-  const photosContainer = document.getElementById('welcomePhotos');
-  photosContainer.innerHTML = '';
-  if (setupData.groomPhoto) photosContainer.innerHTML += `<img src="${setupData.groomPhoto}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);">`;
-  if (setupData.bridePhoto) photosContainer.innerHTML += `<img src="${setupData.bridePhoto}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);">`;
-
-  function updateWelcomeCountdown() {
-    const target = new Date(setupData.date + 'T' + (setupData.time || '16:00'));
-    const diff = target - new Date();
-    if (diff <= 0) {
-      document.getElementById('wd').textContent = '00';
-      document.getElementById('wh').textContent = '00';
-      document.getElementById('wm').textContent = '00';
-      document.getElementById('ws').textContent = '00';
-      return;
-    }
-    document.getElementById('wd').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2,'0');
-    document.getElementById('wh').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2,'0');
-    document.getElementById('wm').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2,'0');
-    document.getElementById('ws').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2,'0');
+  if(typeof PublishEngine!=='undefined'){
+    PublishEngine.saveVersion(localData,'Initial publish from setup wizard');
+    PublishEngine.applyOGTags(localData);
+    PublishEngine.sendNotification('invitation_published','Your wedding invitation has been published from the setup wizard!');
   }
-  updateWelcomeCountdown();
-  setInterval(updateWelcomeCountdown, 1000);
 
-  setTimeout(() => {
-    document.getElementById('successOverlay').classList.add('active');
+  btn.innerHTML = '<i class="fas fa-check"></i> Published!';
+  btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+
+  showPublishToast(setupData.groom || 'Groom', setupData.bride || 'Bride', inviteUrl);
+}
+
+function showPublishToast(groom, bride, inviteUrl) {
+  var existing = document.querySelector('.publish-toast');
+  if (existing) existing.remove();
+  var t = document.createElement('div');
+  t.className = 'publish-toast';
+  t.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:100002;padding:20px 28px;border-radius:16px;background:rgba(20,30,20,0.97);border:1px solid rgba(34,197,94,0.3);backdrop-filter:blur(20px);box-shadow:0 12px 48px rgba(0,0,0,0.5);display:flex;flex-direction:column;align-items:center;gap:14px;font-family:Poppins,sans-serif;opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);max-width:90vw;min-width:320px;text-align:center';
+  t.innerHTML = '<div style="width:48px;height:48px;border-radius:50%;background:rgba(34,197,94,0.15);display:flex;align-items:center;justify-content:center"><i class="fas fa-check-circle" style="font-size:1.5rem;color:#22c55e"></i></div>' +
+    '<div style="color:#e8e0d0;font-size:1rem;font-weight:600">Wedding Published Successfully!</div>' +
+    '<div style="color:#a09888;font-size:0.82rem;line-height:1.5">Your wedding website is now live and ready to receive guests.</div>' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">' +
+    '<button onclick="window.location.href=\'index.html\'" style="padding:10px 20px;background:linear-gradient(135deg,#D4AF37,#B8860B);border:none;border-radius:10px;color:#0B0F19;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;font-size:0.85rem"><i class="fas fa-eye" style="margin-right:6px"></i>View Website</button>' +
+    '<button onclick="window.location.href=\'share.html\'" style="padding:10px 20px;background:rgba(255,255,255,0.06);border:1px solid rgba(212,175,55,0.2);border-radius:10px;color:#D4AF37;font-weight:500;cursor:pointer;font-family:Poppins,sans-serif;font-size:0.85rem"><i class="fas fa-share-alt" style="margin-right:6px"></i>Share Invitation</button>' +
+    '</div>';
+  document.body.appendChild(t);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      t.style.transform = 'translateX(-50%) translateY(0)';
+      t.style.opacity = '1';
+    });
+  });
+  setTimeout(function() {
     localStorage.setItem('_setup_just_completed', '1');
-  }, 600);
+    localStorage.setItem('_publish_success', '1');
+    window.location.href = 'index.html';
+  }, 3500);
 }
 
 function viewWebsite() {
@@ -2230,9 +2259,10 @@ document.getElementById('sThemeColor').addEventListener('input', function() {
   <div class="ai-widget-qs" id="aiWidgetQs"></div>
   <div class="ai-widget-input-area">
     <input class="ai-widget-input" id="aiWidgetInput" placeholder="Ask a question..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendWidgetMsg();}">
-    <button class="ai-widget-send" onclick="sendWidgetMsg()"><i class="fas fa-paper-plane"></i></button>
+    <button class="ai-widget-send" onclick="sendWidgetMsg()" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
   </div>
 </div>
+<script src="js/publish.js"></script>
 <script src="js/ai-concierge.js"></script>
 <script>
 function toggleAIWidget(){document.getElementById('aiWidgetWindow').classList.toggle('open')}
@@ -2249,6 +2279,7 @@ function addWidgetMsg(text,role){var c=document.getElementById('aiWidgetMessages
 function showWidgetTyping(show){document.getElementById('aiWidgetTyping').classList.toggle('show',show)}
 </script>
 <script src="js/notifications.js"></script>
+<script src="js/invitation-system.js"></script>
 
 <script src="js/website-title.js"></script>
 <script src="js/global.js"></script>
@@ -2284,13 +2315,13 @@ function showWidgetTyping(show){document.getElementById('aiWidgetTyping').classL
       <h4 style="font-family:var(--font-heading);font-size:1.1rem;color:var(--gold);margin-bottom:12px;">Contact</h4>
       <div style="width:40px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:14px;"></div>
       <p style="color:var(--text-light);font-size:0.85rem;"><i class="fab fa-whatsapp" style="color:var(--gold);margin-right:8px;"></i> 08025092458</p>
-      <p style="color:var(--text-light);font-size:0.85rem;"><i class="fas fa-phone" style="color:var(--gold);margin-right:8px;"></i> 07039557981</p>
+      <p style="color:var(--text-light);font-size:0.85rem;"><i class="fas fa-phone" style="color:var(--gold);margin-right:8px;"></i> 08157610930</p>
     </div>
   </div>
   <div style="text-align:center;padding:20px 24px;border-top:1px solid rgba(212,175,55,0.04);">
     <div class="footer-brand" id="footerBrand">Forever <span class="heart">&#10084;</span> Always</div>
     <div style="color:var(--text-light);font-size:0.85rem;">Designed &amp; Developed by <span style="color:var(--gold);">David Leelee Douglas / Stonyboy</span></div>
-    <div style="color:var(--text-light);font-size:0.75rem;margin-top:4px;opacity:0.6;"><i class="fab fa-whatsapp" style="color:var(--gold);"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> Contact: 07039557981</div>
+    <div style="color:var(--text-light);font-size:0.75rem;margin-top:4px;opacity:0.6;"><i class="fab fa-whatsapp" style="color:var(--gold);"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> Contact: 08157610930</div>
     <div style="color:var(--text-light);font-size:0.75rem;opacity:0.5;margin-top:6px;">&copy; 2026 Forever &amp; Always. All rights reserved.</div>
   </div>
 </footer>

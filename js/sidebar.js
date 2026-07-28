@@ -15,6 +15,9 @@ var SIDEBAR_KEY='wedding_sidebar_state';
 var sidebar,toggle,overlay,isMobile,isHome;
 
 function init(){
+  /* Phase 19: Never initialize sidebar on public invite pages */
+  if (window.__PUBLIC_INVITE_PAGE === true) return;
+
   sidebar=document.getElementById('sidebarNav');
   toggle=document.getElementById('sidebarToggle');
   overlay=document.getElementById('sidebarOverlay');

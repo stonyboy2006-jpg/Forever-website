@@ -96,10 +96,16 @@
     return session.userId === ownerId;
   }
 
-  /* ===== REDIRECT TO 403 ===== */
+  /* ===== REDIRECT TO BRANDED 403 ===== */
   function redirectTo403() {
     var currentPath = window.location.href;
     window.location.replace('403.html?ref=' + encodeURIComponent(currentPath));
+  }
+
+  /* ===== REDIRECT TO BRANDED 404 ===== */
+  function redirectTo404() {
+    var currentPath = window.location.href;
+    window.location.replace('404.html?ref=' + encodeURIComponent(currentPath));
   }
 
   /* ===== REDIRECT TO LOGIN ===== */
@@ -156,7 +162,7 @@
 
   /* ===== HIDE ADMIN UI ELEMENTS FROM GUESTS ===== */
   function hideAdminUI() {
-    if (!isGuest()) return;
+    if (!isGuest() && !window.__PUBLIC_INVITE_PAGE) return;
 
     /* Remove all admin/edit buttons */
     var selectors = [
@@ -177,7 +183,31 @@
       '.dash-btn-gold', '[onclick*="PublishEngine"]',
       '[onclick*="publish"]', '[onclick*="Publish"]',
       '#ownerDashboardSection', '#ownerProfileIcon',
-      '#invitationCenterContainer', '#welcomeCardSection'
+      '#invitationCenterContainer', '#welcomeCardSection',
+      '.floating-wrapper', '#floatingWrapper', '#floatingPanel',
+      '.fp-toggle', '.fp-panel', '.fp-body',
+      '[data-owner]', '[data-dev-credit]', '[data-admin-credit]',
+      '.auth-user-menu', '.auth-user-dropdown', '#authUserDropdown',
+      '.auth-user-trigger', '.auth-user-avatar', '.auth-user-name',
+      '.auth-user-email', '.auth-user-chevron',
+      '.auth-dropdown-item', '.auth-logout-btn',
+      '.owner-dashboard', '#ownerDashboardSection',
+      '.sidebar', '#sidebarNav', '#sidebarOverlay', '#sidebarToggle',
+      '.dash-header', '.dash-sidebar', '.dashboard-header',
+      '.notif-badge', '#notifBadge',
+      '.welcome-dropdown', '.welcome-dropdown-item',
+      '.owner-profile-dropdown', '.owner-profile-dd-item',
+      '.draft-badge', '.draft-indicator',
+      '.publish-indicator', '.live-badge',
+      '.setup-progress', '.setup-reminder',
+      '.setup-wizard', '.wizard-step',
+      '.notification-center', '#notificationCenter',
+      '.account-menu', '.account-dropdown',
+      '.logout-btn', '[onclick*="logout"]', '[onclick*="Logout"]',
+      '.ai-assistant-widget', '#aiAssistantWidget',
+      '.publish-updates', '.publish-button',
+      '.get-started-btn', '.get-started-section',
+      '.quick-actions-panel'
     ];
     selectors.forEach(function (sel) {
       document.querySelectorAll(sel).forEach(function (el) {
@@ -200,7 +230,7 @@
 
   /* ===== APPLY GUEST RESTRICTIONS TO NAV ===== */
   function restrictNavigation() {
-    if (!isGuest()) return;
+    if (!isGuest() && !window.__PUBLIC_INVITE_PAGE) return;
 
     /* Override sidebar link clicks to prevent navigation to private pages */
     document.querySelectorAll('.sidebar-link, .welcome-dropdown-item, .owner-profile-dd-item, .auth-dropdown-item').forEach(function (link) {
@@ -254,8 +284,38 @@
     });
   }
 
+  /* ===== INVITE PAGE EARLY EXIT ===== */
+  function isOnInvitePage() {
+    var page = window.location.pathname.split('/').pop() || '';
+    return page === 'invite.html' || window.location.pathname.indexOf('/invite/') === 0 || window.location.pathname.indexOf('/inv/') === 0 || window.__PUBLIC_INVITE_PAGE === true;
+  }
+
   /* ===== INIT ===== */
   function init() {
+    if (isOnInvitePage()) {
+      /* On public invite page — skip all auth guarding, hideAdminUI, and restrictNavigation.
+         The invite-guard.js handles all content lockdown. */
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+          hideAdminUI();
+          restrictNavigation();
+          secureShareLinks();
+        });
+      } else {
+        hideAdminUI();
+        restrictNavigation();
+        secureShareLinks();
+      }
+      var observer = new MutationObserver(function () {
+        hideAdminUI();
+        restrictNavigation();
+      });
+      if (document.body) {
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+      return;
+    }
+
     runGuard();
 
     if (document.readyState === 'loading') {

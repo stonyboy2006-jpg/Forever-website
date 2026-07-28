@@ -280,5 +280,5 @@
   }
 
   window.WeddingCustomizer=W;
-  console.log('Invitation Customizer initialized');
+  // Invitation Customizer initialized
 })();

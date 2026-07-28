@@ -118,5 +118,5 @@
   }
 
   window.AuditLog=W;
-  console.log('Audit Log initialized');
+  // Audit Log initialized
 })();

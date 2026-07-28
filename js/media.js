@@ -188,5 +188,5 @@
   function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
   window.WeddingMedia=W;
-  console.log('Media Library initialized');
+  // Media Library initialized
 })();

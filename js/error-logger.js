@@ -105,5 +105,5 @@
   });
 
   window.ErrorLogger=W;
-  console.log('Error Logger initialized');
+  // Error Logger initialized
 })();

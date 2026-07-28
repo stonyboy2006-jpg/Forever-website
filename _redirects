@@ -1,3 +1,7 @@
-# Netlify _redirects (fallback)
-/invite/:slug    /invite.html    200
-/invite/:slug/*  /invite.html    200
+# Netlify _redirects
+# Invite routes -> public invitation page
+/invite/:slug       /invite.html    200
+/invite/:slug/*     /invite.html    200
+
+# Catch-all 404 for unknown routes
+/*                  /404.html       404

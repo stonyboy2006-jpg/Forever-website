@@ -635,6 +635,22 @@
     document.dispatchEvent(rsvpEvent);
   }
 
+  function showInviteNotFound(weddingId) {
+    var loading = document.getElementById('loadingScreen');
+    if (loading) {
+      loading.innerHTML =
+        '<div style="text-align:center;padding:40px 20px;max-width:480px">' +
+        '<div style="font-size:3.5rem;margin-bottom:16px">&#128140;</div>' +
+        '<h2 style="font-family:\'Playfair Display\',serif;font-size:1.8rem;color:#fff;margin-bottom:8px">Invitation Not Found</h2>' +
+        '<p style="color:#A09888;font-size:0.95rem;line-height:1.7;margin-bottom:24px">This invitation could not be found. It may have been removed or the link may be incorrect.</p>' +
+        '<a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:linear-gradient(135deg,#D4AF37,#B8962E);color:#0B0F19;border-radius:50px;font-weight:600;text-decoration:none;font-family:\'Poppins\',sans-serif;font-size:0.85rem;cursor:pointer;border:none"><i class="fas fa-home"></i> Home</a>' +
+        '<p style="color:rgba(255,255,255,0.15);font-size:0.72rem;margin-top:24px"><i class="fas fa-ring"></i> Forever &amp; Always &mdash; Luxury Wedding Platform</p>' +
+        '</div>';
+      loading.style.background = '#0B0F19';
+    }
+    trackEvent('invite_not_found');
+  }
+
   function initInvitePage() {
     var urlParams = new URLSearchParams(window.location.search);
     var weddingId = urlParams.get('id');
@@ -661,8 +677,8 @@
     }
 
     loadWeddingData(weddingId, function (data) {
-      if (!data) {
-        document.getElementById('loadingStatus').textContent = 'Invitation not found';
+      if (!data || !data.groomName) {
+        showInviteNotFound(weddingId);
         return;
       }
       renderInvitePage(data, weddingId);

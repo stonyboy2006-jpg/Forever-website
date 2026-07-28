@@ -1,6 +1,11 @@
 (function() {
   var currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  var isInvitePage = (currentPage === 'invite.html' || window.location.pathname.indexOf('/invite/') === 0);
+  var isInvitePage = (currentPage === 'invite.html' || window.location.pathname.indexOf('/invite/') === 0 || window.__PUBLIC_INVITE_PAGE === true);
+  if (isInvitePage) {
+    /* Phase 19: Public invite pages must never show owner/developer content.
+       The invite-guard.js handles all lockdown. Skip all global.js additions. */
+    return;
+  }
   var isPublicPage = isInvitePage || ['index.html', 'our-story.html', 'wedding-details.html', 'wedding-party.html', 'events.html', 'gallery.html', 'timeline.html', 'story.html', 'rsvp.html', 'gift-registry.html', 'music.html', 'faq.html', 'contact.html', 'about.html', '404.html', '403.html'].indexOf(currentPage) !== -1;
 
   function isGuest() {

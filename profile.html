@@ -4,8 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile - Luxury Wedding Planner</title>
+    <meta name="description" content="Manage your profile and account settings on the Forever &amp; Always wedding platform.">
+    <meta property="og:title" content="My Profile - Account Settings">
+    <meta property="og:description" content="Manage your profile and account settings on the Forever &amp; Always wedding platform.">
+    <meta property="og:image" content="https://foreverandalwayswedding.com/icons/icon-512.svg">
+    <meta property="og:url" content="https://foreverandalwayswedding.com/profile.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="My Profile - Account Settings">
+    <meta name="twitter:description" content="Manage your profile and account settings on the Forever &amp; Always wedding platform.">
+    <link rel="canonical" href="https://foreverandalwayswedding.com/profile.html">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; frame-src 'self' https://www.google.com https://maps.google.com; media-src 'self' blob:;">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -579,7 +591,7 @@
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <h2>Forever Yours</h2>
+            <h2>Forever &amp; Always</h2>
             <p>Luxury Wedding Planner</p>
         </div>
         <nav class="sidebar-nav">
@@ -589,10 +601,10 @@
             <a href="about.html"><i class="fas fa-heart"></i> Our Story</a>
 
             <div class="nav-section">Manage</div>
-            <a href="guests.html"><i class="fas fa-users"></i> Guest List</a>
-            <a href="vendors.html"><i class="fas fa-store"></i> Vendors</a>
-            <a href="budget.html"><i class="fas fa-coins"></i> Budget</a>
-            <a href="seating.html"><i class="fas fa-chair"></i> Seating Chart</a>
+            <a href="dashboard.html"><i class="fas fa-users"></i> Guest List</a>
+            <a href="planner.html"><i class="fas fa-store"></i> Vendors</a>
+            <a href="dashboard.html"><i class="fas fa-coins"></i> Budget</a>
+            <a href="planner.html"><i class="fas fa-chair"></i> Seating Chart</a>
 
             <div class="nav-section">Design</div>
             <a href="gallery.html"><i class="fas fa-images"></i> Photo Gallery</a>
@@ -694,16 +706,16 @@
                 <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
                     <div class="form-group">
                         <label>Current Password</label>
-                        <input type="password" id="currentPassword" placeholder="Enter your current password" required>
+                        <input type="password" id="currentPassword" placeholder="Enter your current password" required autocomplete="current-password">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>New Password</label>
-                            <input type="password" id="newPassword" placeholder="Enter new password" required minlength="6">
+                            <input type="password" id="newPassword" placeholder="Enter new password" required minlength="6" autocomplete="new-password">
                         </div>
                         <div class="form-group">
                             <label>Confirm New Password</label>
-                            <input type="password" id="confirmPassword" placeholder="Confirm new password" required minlength="6">
+                            <input type="password" id="confirmPassword" placeholder="Confirm new password" required minlength="6" autocomplete="new-password">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-outline" id="changePasswordBtn">
@@ -725,7 +737,7 @@
         </div>
 
         <footer>
-            <p>&copy; 2026 <span>Forever Yours</span> Luxury Wedding Planner. All rights reserved.</p>
+            <p>&copy; 2026 <span>Forever &amp; Always</span> Luxury Wedding Planner. All rights reserved.</p>
         </footer>
     </main>
 
@@ -735,6 +747,7 @@
     </div>
 
     <script src="js/auth.js"></script>
+    <script src="js/auth-guard.js"></script>
     <script src="js/sidebar.js"></script>
     <script>
         let currentUser = null;
@@ -836,7 +849,7 @@
             const photo = user.photo || user.profilePhoto;
             if (photo) {
                 profilePhotoBase64 = photo;
-                document.getElementById('photoPreview').innerHTML = '<img src="' + photo + '" alt="Profile">';
+                document.getElementById('photoPreview').innerHTML = '<img src="' + photo + '" alt="Profile" loading="lazy" decoding="async">';
             }
         }
 
@@ -864,7 +877,7 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 profilePhotoBase64 = e.target.result;
-                document.getElementById('photoPreview').innerHTML = '<img src="' + profilePhotoBase64 + '" alt="Profile Preview">';
+                document.getElementById('photoPreview').innerHTML = '<img src="' + profilePhotoBase64 + '" alt="Profile Preview" loading="lazy" decoding="async">';
                 document.getElementById('infoPhotoStatus').textContent = 'New photo selected';
             };
             reader.readAsDataURL(file);
@@ -937,31 +950,22 @@
 
             try {
                 if (typeof changePassword === 'function') {
-                    changePassword(current, newPass);
-                } else {
-                    const stored = localStorage.getItem('currentUser') || localStorage.getItem('user');
-                    const user = stored ? JSON.parse(stored) : null;
-
-                    if (!user) {
-                        showNotification('User session expired. Please log in again.', 'error');
-                        return;
-                    }
-
-                    const storedPassword = user.password || '';
-                    if (storedPassword !== current) {
-                        showNotification('Current password is incorrect.', 'error');
+                    changePassword(current, newPass).then(function(result) {
+                        if (result && result.ok === false) {
+                            showNotification(result.error || 'Password update failed.', 'error');
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fas fa-key"></i> Update Password';
+                            return;
+                        }
+                        showNotification('Password updated successfully!', 'success');
+                        document.getElementById('changePasswordForm').reset();
                         btn.disabled = false;
                         btn.innerHTML = '<i class="fas fa-key"></i> Update Password';
-                        return;
-                    }
-
-                    user.password = newPass;
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    localStorage.setItem('user', JSON.stringify(user));
+                    });
+                    return;
+                } else {
+                    showNotification('Authentication system not available.', 'error');
                 }
-
-                showNotification('Password updated successfully!', 'success');
-                document.getElementById('changePasswordForm').reset();
             } catch (err) {
                 showNotification('Failed to update password. Please try again.', 'error');
             }

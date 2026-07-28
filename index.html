@@ -935,61 +935,80 @@
 <script src="js/sidebar.js"></script>
 <script>
 (function() {
-  var published = false;
-  try {
-    var d = JSON.parse(localStorage.getItem('weddingData') || '{}');
-    published = !!d.isPublished;
-  } catch(e) {}
-
-  if (!published) return;
-
-  var hide = function(id) {
-    var el = document.getElementById(id);
-    if (el) el.style.display = 'none';
+  function getWeddingData() {
+    try { return JSON.parse(localStorage.getItem('weddingData') || '{}'); } catch(e) { return {}; }
+  }
+  var escHtml = function(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
   };
 
-  hide('welcomeCardSection');
-  hide('heroDraftCard');
-  hide('btnGetStarted');
+  function applyPublishedState() {
+    var d = getWeddingData();
+    var published = !!d.isPublished;
 
-  var rsvpBtn = document.getElementById('btnRSVP');
-  if (rsvpBtn) rsvpBtn.style.display = 'inline-flex';
+    var hide = function(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    };
 
-  var heroLabel = document.getElementById('heroLabel');
-  if (heroLabel) heroLabel.textContent = 'Our Wedding';
+    if (published) {
+      hide('welcomeCardSection');
+      hide('heroDraftCard');
+      hide('btnGetStarted');
+      hide('invitationCenterSection');
 
-  setTimeout(function() {
-    var dashContainer = document.getElementById('ownerDashboardContainer');
-    if (dashContainer && typeof renderOwnerDashboard === 'function') {
-      renderOwnerDashboard('ownerDashboardContainer');
+      var rsvpBtn = document.getElementById('btnRSVP');
+      if (rsvpBtn) rsvpBtn.style.display = 'inline-flex';
+
+      var heroLabel = document.getElementById('heroLabel');
+      if (heroLabel) heroLabel.textContent = 'Our Wedding';
+
+      setTimeout(function() {
+        var dashContainer = document.getElementById('ownerDashboardContainer');
+        if (dashContainer && typeof renderOwnerDashboard === 'function') {
+          renderOwnerDashboard('ownerDashboardContainer');
+        }
+
+        var gbContainer = document.getElementById('ownerGuestbookSection');
+        if (gbContainer && typeof Guestbook !== 'undefined') {
+          Guestbook.renderOwnerGuestbookManager('ownerGuestbookSection');
+        }
+
+        var remContainer = document.getElementById('ownerRemindersContainer');
+        if (remContainer && typeof Reminders !== 'undefined') {
+          Reminders.renderRemindersSection('ownerRemindersContainer');
+        }
+
+        var guestMsgsContainer = document.getElementById('guestMessagesSection');
+        if (guestMsgsContainer) {
+          var dd = getWeddingData();
+          var guests = dd.guests || [];
+          var withMessages = guests.filter(function(g) { return g.message && g.message.trim(); }).slice(0, 5);
+          if (withMessages.length) {
+            guestMsgsContainer.innerHTML =
+              '<div class="owner-section"><h3><i class="fas fa-comment-dots"></i> Recent Guest Messages</h3><div class="owner-notif-list">' +
+              withMessages.map(function(g) {
+                return '<div class="owner-notif-item"><div class="owner-notif-icon" style="background:rgba(236,72,153,0.1);color:#ec4899"><i class="fas fa-heart"></i></div><div class="owner-notif-content"><strong>' + escHtml(g.guestName || g.name || 'Guest') + '</strong><span>' + escHtml(g.message || '') + '</span></div></div>';
+              }).join('') +
+              '</div></div>';
+          }
+        }
+      }, 300);
     }
+  }
 
-    var gbContainer = document.getElementById('ownerGuestbookSection');
-    if (gbContainer && typeof Guestbook !== 'undefined') {
-      Guestbook.renderOwnerGuestbookManager('ownerGuestbookSection');
-    }
+  applyPublishedState();
 
-    var remContainer = document.getElementById('ownerRemindersContainer');
-    if (remContainer && typeof Reminders !== 'undefined') {
-      Reminders.renderRemindersSection('ownerRemindersContainer');
-    }
+  document.addEventListener('wedding_published', function() {
+    applyPublishedState();
+  });
 
-    var guestMsgsContainer = document.getElementById('guestMessagesSection');
-    if (guestMsgsContainer) {
-      var d = {};
-      try { d = JSON.parse(localStorage.getItem('weddingData') || '{}'); } catch(e) {}
-      var guests = d.guests || [];
-      var withMessages = guests.filter(function(g) { return g.message && g.message.trim(); }).slice(0, 5);
-      if (withMessages.length) {
-        guestMsgsContainer.innerHTML =
-          '<div class="owner-section"><h3><i class="fas fa-comment-dots"></i> Recent Guest Messages</h3><div class="owner-notif-list">' +
-          withMessages.map(function(g) {
-            return '<div class="owner-notif-item"><div class="owner-notif-icon" style="background:rgba(236,72,153,0.1);color:#ec4899"><i class="fas fa-heart"></i></div><div class="owner-notif-content"><strong>' + escHtml(g.guestName || g.name || 'Guest') + '</strong><span>' + escHtml(g.message || '') + '</span></div></div>';
-          }).join('') +
-          '</div></div>';
-      }
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'weddingData') {
+      applyPublishedState();
     }
-  }, 300);
+  });
 })();
 </script>
 </body>

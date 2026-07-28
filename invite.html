@@ -48,13 +48,103 @@
 <script src="js/firebase.js"></script>
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/invite.css">
+<style id="phase19GuardStyles">
+/* Phase 19 — Lock Down Public Invitation Experience */
+/* Never show owner/admin/dashboard content on invite pages */
+html.invite-page .sidebar,
+html.invite-page #sidebarNav,
+html.invite-page #sidebarOverlay,
+html.invite-page #sidebarToggle,
+html.invite-page .sidebar-link,
+html.invite-page .auth-user-menu,
+html.invite-page .auth-user-dropdown,
+html.invite-page .auth-user-trigger,
+html.invite-page .auth-user-avatar,
+html.invite-page .auth-user-name,
+html.invite-page .auth-user-email,
+html.invite-page .auth-dropdown-item,
+html.invite-page .owner-dashboard,
+html.invite-page #ownerDashboardSection,
+html.invite-page .dash-btn-gold,
+html.invite-page .dash-header,
+html.invite-page .floating-wrapper,
+html.invite-page #floatingPanel,
+html.invite-page .fp-toggle,
+html.invite-page .edit-btn,
+html.invite-page .btn-publish,
+html.invite-page .publish-btn,
+html.invite-page #btnPublish,
+html.invite-page .admin-nav,
+html.invite-page .admin-link,
+html.invite-page [data-admin],
+html.invite-page [data-owner],
+html.invite-page [data-dev-credit],
+html.invite-page .notif-badge,
+html.invite-page .inner-back-btn,
+html.invite-page .welcome-dropdown,
+html.invite-page .owner-profile-dropdown,
+html.invite-page .draft-badge,
+html.invite-page .draft-indicator,
+html.invite-page .publish-indicator,
+html.invite-page .live-badge,
+html.invite-page .setup-progress,
+html.invite-page .setup-reminder,
+html.invite-page .setup-wizard,
+html.invite-page .notification-center,
+html.invite-page .account-menu,
+html.invite-page .logout-btn,
+html.invite-page .ai-assistant-widget,
+html.invite-page .publish-updates,
+html.invite-page .publish-button,
+html.invite-page .get-started-btn,
+html.invite-page .quick-actions-panel,
+html.invite-page .ds-toast-container {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  z-index: -9999 !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+html.invite-page a[href*="dashboard"],
+html.invite-page a[href*="setup"],
+html.invite-page a[href*="planner"],
+html.invite-page a[href*="profile"],
+html.invite-page a[href*="settings"],
+html.invite-page a[href*="customize"],
+html.invite-page a[href*="developer"],
+html.invite-page a[href*="memories"],
+html.invite-page a[href*="admin"],
+html.invite-page a[href*="analytics"],
+html.invite-page a[href*="reports"],
+html.invite-page a[href*="guests"],
+html.invite-page a[href*="invitation-center"],
+html.invite-page a[href*="ai-assistant"],
+html.invite-page a[href*="preview"],
+html.invite-page a[href*="login"],
+html.invite-page a[href*="signup"],
+html.invite-page a[href*="forgot-password"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+html.invite-page [class*="dash-"],
+html.invite-page [id*="dash"],
+html.invite-page [class*="admin"],
+html.invite-page [class*="owner"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+</style>
 </head>
 <body>
 <noscript><div style="position:fixed;inset:0;z-index:99999;background:#0B0F19;display:flex;align-items:center;justify-content:center;font-family:sans-serif;color:#fff;padding:24px;text-align:center"><div><h2 style="font-family:serif;color:#D4AF37;margin-bottom:12px">JavaScript Required</h2><p>Please enable JavaScript to view this wedding invitation.</p></div></div></noscript>
 <a href="#main" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999;background:#D4AF37;color:#0B0F19;padding:12px 24px;font-weight:600;text-decoration:none;border-radius:0 0 8px 0">Skip to content</a>
 
 <!-- Loading Screen -->
-<div class="invite-loading" id="loadingScreen">
+<div class="invite-loading" id="loadingScreen" role="status" aria-live="polite">
   <div class="spinner"></div>
   <p id="loadingStatus">Loading invitation...</p>
 </div>
@@ -66,9 +156,9 @@
 <section class="invite-hero" id="main">
   <div class="invite-hero-bg" id="inviteHeroBg"></div>
   <div class="invite-hero-overlay"></div>
-  <div class="invite-hero-particles" id="heroParticles"></div>
+  <div class="invite-hero-particles" id="heroParticles" aria-hidden="true"></div>
   <div class="invite-hero-content">
-    <div class="invite-ornament">&#x1F48D;</div>
+    <div class="invite-ornament" aria-hidden="true">&#x1F48D;</div>
     <div class="invite-tagline" id="invTagline">Together With Their Families</div>
     <h1 class="invite-hero-names">
       <span id="invGroomName">Groom</span>
@@ -77,8 +167,8 @@
     </h1>
     <div class="invite-couple-photo">
       <div class="placeholder" id="couplePlaceholder"><i class="fas fa-heart"></i></div>
-      <img id="invGroomPhoto" src="" alt="Groom" style="display:none" loading="lazy" decoding="async">
-      <img id="invBridePhoto" src="" alt="Bride" style="display:none" loading="lazy" decoding="async">
+      <img id="invGroomPhoto" src="" alt="Groom's Photo" style="display:none" loading="lazy" decoding="async">
+      <img id="invBridePhoto" src="" alt="Bride's Photo" style="display:none" loading="lazy" decoding="async">
     </div>
     <div class="invite-info-row">
       <div class="invite-info-item"><i class="fas fa-calendar-alt"></i> <span id="invDate"></span></div>
@@ -96,13 +186,13 @@
 </section>
 
 <!-- ====== RSVP SECTION ====== -->
-<section class="invite-rsvp-section" id="rsvpSection">
+<section class="invite-rsvp-section" id="rsvpSection" aria-label="RSVP Section">
   <h2>Will You Join Us?</h2>
   <p class="rsvp-sub">Your presence is the greatest gift of all</p>
-  <div class="rsvp-buttons" id="rsvpButtons">
-    <button class="rsvp-btn rsvp-btn-accept" id="btnAccept"><i class="fas fa-heart"></i> Accept Invitation</button>
-    <button class="rsvp-btn rsvp-btn-maybe" id="btnMaybe"><i class="fas fa-clock"></i> Maybe Attending</button>
-    <button class="rsvp-btn rsvp-btn-decline" id="btnDecline"><i class="fas fa-times"></i> Decline Invitation</button>
+  <div class="rsvp-buttons" id="rsvpButtons" role="group" aria-label="RSVP options">
+    <button class="rsvp-btn rsvp-btn-accept" id="btnAccept" aria-label="Accept wedding invitation"><i class="fas fa-heart" aria-hidden="true"></i> Accept Invitation</button>
+    <button class="rsvp-btn rsvp-btn-maybe" id="btnMaybe" aria-label="Maybe attending"><i class="fas fa-clock" aria-hidden="true"></i> Maybe Attending</button>
+    <button class="rsvp-btn rsvp-btn-decline" id="btnDecline" aria-label="Decline invitation"><i class="fas fa-times" aria-hidden="true"></i> Decline Invitation</button>
   </div>
 </section>
 
@@ -114,8 +204,8 @@
 <section class="invite-details">
   <div class="container">
     <h2>Wedding Details</h2>
-    <div class="details-grid">
-      <div class="detail-card">
+    <div class="details-grid" role="list">
+      <div class="detail-card" role="listitem">
         <i class="fas fa-calendar-day"></i>
         <h4>Date & Time</h4>
         <p id="invDateDetail"><span id="invDate2"></span><br><span id="invTime2"></span></p>
@@ -228,7 +318,7 @@
 </section>
 
 <!-- ====== RSVP FORM MODAL ====== -->
-<div class="rsvp-form-overlay" id="rsvpFormOverlay">
+<div class="rsvp-form-overlay" id="rsvpFormOverlay" role="dialog" aria-modal="true" aria-labelledby="rsvpFormTitle">
   <div class="rsvp-form-container" id="rsvpFormContainer">
     <h3 id="rsvpFormTitle">Accept Invitation</h3>
     <p class="form-sub">We'd love to know more about you</p>
@@ -278,7 +368,7 @@
 </div>
 
 <!-- ====== FOOTER ====== -->
-<footer class="invite-footer">
+<footer class="invite-footer" role="contentinfo">
   <div class="names" id="invFullNames">Forever & Always</div>
   <p>Designed with love for our special day</p>
 </footer>
@@ -290,6 +380,7 @@
 
 </div><!-- /inviteContent -->
 
+<script src="js/invite-guard.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/auth-guard.js"></script>
 <script src="js/invitation-system.js"></script>
@@ -297,6 +388,18 @@
 <script src="js/guestbook.js"></script>
 <script src="js/reminders.js"></script>
 <script>
+// Keyboard support: Escape to close RSVP modal
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var overlay = document.getElementById('rsvpFormOverlay');
+    if (overlay && overlay.style.display !== 'none') {
+      InviteSys && InviteSys.closeForm && InviteSys.closeForm();
+      var btn = document.getElementById('btnAccept');
+      if (btn) btn.focus();
+    }
+  }
+});
+
 // Generate hero particles
 (function(){
   var c = document.getElementById('heroParticles');

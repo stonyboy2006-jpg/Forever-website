@@ -168,5 +168,5 @@
   function escapeJS(s){return escapeHTML(s).replace(/'/g,"\\'").replace(/\n/g,'\\n');}
 
   window.WeddingAIContent=W;
-  console.log('AI Content Generator initialized');
+    // AI Content Generator initialized
 })();

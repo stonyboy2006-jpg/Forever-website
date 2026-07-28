@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reminders — Forever &amp; Always</title>
+<meta name="description" content="Stay on track with your wedding timeline. View and manage all your wedding reminders and notifications.">
+<meta property="og:title" content="Wedding Reminders &amp; Notifications">
+<meta property="og:description" content="Stay on track with your wedding timeline. View and manage all your wedding reminders and notifications.">
+<meta property="og:image" content="https://foreverandalwayswedding.com/icons/icon-512.svg">
+<meta property="og:url" content="https://foreverandalwayswedding.com/reminders.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Wedding Reminders &amp; Notifications">
+<meta name="twitter:description" content="Stay on track with your wedding timeline. View and manage all your wedding reminders and notifications.">
+<link rel="canonical" href="https://foreverandalwayswedding.com/reminders.html">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0B0F19">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/sidebar.css">
+</head>
+<body>
+<a href="#mainContent" class="skip-link">Skip to main content</a>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+<aside id="dashboardSidebar" class="sidebar" role="navigation" aria-label="Owner navigation">
+<div class="sidebar-header">
+<div class="sidebar-brand"><a href="index.html"><img src="icons/icon-192.svg" alt="Forever &amp; Always" style="height:32px"></a></div>
+<button id="closeSidebarBtn" class="close-sidebar-btn" aria-label="Close sidebar"><i class="fas fa-times"></i></button>
+</div>
+<nav class="sidebar-nav" role="menubar">
+<a href="dashboard.html" class="sidebar-link" role="menuitem"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+<a href="planner.html" class="sidebar-link" role="menuitem"><i class="fas fa-clipboard-list"></i><span>Planner</span></a>
+<a href="reminders.html" class="sidebar-link active" role="menuitem"><i class="fas fa-bell"></i><span>Reminders</span></a>
+<a href="ai-assistant.html" class="sidebar-link" role="menuitem"><i class="fas fa-robot"></i><span>AI Assistant</span></a>
+<a href="media.html" class="sidebar-link" role="menuitem"><i class="fas fa-photo-video"></i><span>Media</span></a>
+<a href="settings.html" class="sidebar-link" role="menuitem"><i class="fas fa-cog"></i><span>Settings</span></a>
+</nav>
+<div class="sidebar-footer">
+<div class="sidebar-user" id="sidebarUserArea"></div>
+<button id="sidebarLogoutBtn" class="sidebar-logout" role="menuitem"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+</div>
+</aside>
+<main id="mainContent" class="main-content" role="main">
+<header class="main-header" role="banner">
+<button id="menuToggle" class="menu-toggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+<div class="header-title"><h1>Wedding Reminders</h1><p class="header-subtitle">Stay on track with your wedding timeline</p></div>
+<div class="header-actions">
+<button onclick="WeddingReminders.generateFromTemplate()" class="header-btn" title="Generate from template" aria-label="Generate reminders from template"><i class="fas fa-magic"></i></button>
+</div>
+</header>
+<div style="padding:20px">
+<div id="reminderPanel" style="max-width:800px;margin:0 auto"></div>
+</div>
+</main>
+<div id="notificationContainer" style="position:fixed;top:20px;right:20px;z-index:10000;pointer-events:none"></div>
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/error-logger.js"></script>
+<script src="js/audit-log.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/reminders.js"></script>
+<script src="js/global.js"></script>
+<script>
+(function(){
+  var toggle=document.getElementById('menuToggle');
+  var sidebar=document.getElementById('dashboardSidebar');
+  var overlay=document.getElementById('sidebarOverlay');
+  var closeBtn=document.getElementById('closeSidebarBtn');
+  if(toggle)toggle.addEventListener('click',function(){sidebar.classList.add('open');overlay.classList.add('visible');});
+  if(closeBtn)closeBtn.addEventListener('click',function(){sidebar.classList.remove('open');overlay.classList.remove('visible');});
+  if(overlay)overlay.addEventListener('click',function(){sidebar.classList.remove('open');overlay.classList.remove('visible');});
+  if(typeof WeddingReminders!=='undefined')WeddingReminders.renderRemindersPanel('reminderPanel');
+})();
+</script>
+</body>
+</html>

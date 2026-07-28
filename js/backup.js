@@ -192,5 +192,5 @@
   function formatDateForFile(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 
   window.WeddingBackup=W;
-  console.log('Backup & Restore initialized');
+  // Backup & Restore initialized
 })();

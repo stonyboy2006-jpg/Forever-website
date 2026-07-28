@@ -197,6 +197,10 @@ P.publishUpdates=function(){
   P.applyOGTags(d);
   if(typeof showNotification==='function')showNotification('Updates published! Website is now live.','success');
   P.sendNotification('updates_published','Wedding updates published successfully!');
+  try {
+    var evt = new CustomEvent('wedding_published', { detail: { weddingId: d.weddingId, inviteUrl: P.getInviteUrl(d), isUpdate: true } });
+    document.dispatchEvent(evt);
+  } catch(e) {}
 };
 
 // ===== MAIN PUBLISH =====
@@ -227,6 +231,11 @@ P.publish=function(opts){
 
   P.trackEvent('publish');
   P.sendNotification('invitation_published','Your wedding invitation is now live!');
+
+  try {
+    var evt = new CustomEvent('wedding_published', { detail: { weddingId: weddingId, inviteUrl: inviteUrl } });
+    document.dispatchEvent(evt);
+  } catch(e) {}
 
   return{success:true,weddingId:weddingId,inviteUrl:inviteUrl};
 };

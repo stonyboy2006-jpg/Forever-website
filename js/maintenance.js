@@ -191,5 +191,5 @@
   }else{
     W.checkAndRedirect();
   }
-  console.log('Maintenance Mode controller initialized');
+  // Maintenance Mode controller initialized
 })();
