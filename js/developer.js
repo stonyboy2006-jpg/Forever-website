@@ -44,7 +44,10 @@ var DeveloperPage = {
           var el = e.target;
           var target = parseInt(el.dataset.count) || 0;
           var suffix = el.dataset.suffix || '';
-          if (target > 0) {
+          var text = el.dataset.text || '';
+          if (text) {
+            el.textContent = text;
+          } else if (target > 0) {
             DeveloperPage.animateCount(el, target, suffix);
           }
           observer.unobserve(el);
@@ -81,6 +84,115 @@ var DeveloperLightbox = {
     style.textContent = '@keyframes devFadeIn{from{opacity:0}to{opacity:1}}';
     document.head.appendChild(style);
     document.body.appendChild(overlay);
+  }
+};
+
+var DeveloperActions = {
+  phone: '08157610930',
+  whatsapp: '08025092458',
+  whatsappLink: 'https://wa.me/2348025092458',
+  email: 'stonyboy@example.com',
+  name: 'Leelee David Douglas (Stonyboy)',
+
+  copyPhone: function() {
+    var self = this;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(self.phone).then(function() {
+        self.showNotification('Phone number copied!');
+      });
+    } else {
+      var input = document.createElement('input');
+      input.value = self.phone;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      self.showNotification('Phone number copied!');
+    }
+  },
+
+  copyWhatsApp: function() {
+    var self = this;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(self.whatsapp).then(function() {
+        self.showNotification('WhatsApp number copied!');
+      });
+    } else {
+      var input = document.createElement('input');
+      input.value = self.whatsapp;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      self.showNotification('WhatsApp number copied!');
+    }
+  },
+
+  copyEmail: function() {
+    var self = this;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(self.email).then(function() {
+        self.showNotification('Email copied!');
+      });
+    } else {
+      var input = document.createElement('input');
+      input.value = self.email;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      self.showNotification('Email copied!');
+    }
+  },
+
+  share: function() {
+    var self = this;
+    var shareData = {
+      title: self.name + ' — Developer Profile',
+      text: 'Check out ' + self.name + ' — Full Stack Developer, Founder & Software Engineer. Creator of the Luxury Wedding Platform.',
+      url: window.location.href
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch(function() {});
+    } else {
+      var text = shareData.text + '\n' + shareData.url;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function() {
+          self.showNotification('Profile link copied to clipboard!');
+        });
+      }
+    }
+  },
+
+  downloadVCard: function() {
+    var self = this;
+    var vcard = 'BEGIN:VCARD\nVERSION:3.0\nN:Douglas;Leelee David;;;\nFN:Leelee David Douglas\nNICKNAME:Stonyboy\nORG:Luxury Wedding Platform\nTITLE:Full Stack Developer &bull; Founder &bull; Software Engineer\nTEL;TYPE=CELL:08157610930\nTEL;TYPE=CELL:08025092458\nEMAIL:' + self.email + '\nADR;TYPE=HOME:;;Nigeria;;;;\nURL:' + window.location.href + '\nNOTE:Creator of the Luxury Wedding Platform\nEND:VCARD';
+    var blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'Leelee-David-Douglas-Stonyboy.vcf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    self.showNotification('Contact card downloaded!');
+  },
+
+  showNotification: function(message) {
+    var notification = document.createElement('div');
+    notification.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#D4AF37,#B8860B);color:#0B0F19;padding:14px 28px;border-radius:12px;font-family:Poppins,sans-serif;font-size:0.9rem;font-weight:600;z-index:100001;box-shadow:0 8px 30px rgba(212,175,55,0.4);animation:devNotifIn 0.3s ease';
+    notification.textContent = message;
+    var style = document.createElement('style');
+    style.textContent = '@keyframes devNotifIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
+    document.head.appendChild(style);
+    document.body.appendChild(notification);
+    setTimeout(function() {
+      notification.style.opacity = '0';
+      notification.style.transform = 'translateX(-50%) translateY(20px)';
+      notification.style.transition = 'all 0.3s ease';
+      setTimeout(function() { notification.remove(); }, 300);
+    }, 2500);
   }
 };
 

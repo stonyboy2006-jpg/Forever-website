@@ -32,7 +32,8 @@ function createSession(user) {
     name: user.name,
     email: user.email,
     createdAt: Date.now(),
-    expiresAt: Date.now() + (30 * 24 * 60 * 60 * 1000)
+    expiresAt: Date.now() + (7 * 24 * 60 * 60 * 1000),
+    lastActivity: Date.now()
   };
   localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
   return session;
@@ -45,6 +46,8 @@ function getSession() {
       localStorage.removeItem(AUTH_SESSION_KEY);
       return null;
     }
+    s.lastActivity = Date.now();
+    localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(s));
     return s;
   } catch { return null; }
 }
@@ -81,7 +84,7 @@ async function signUp(name, email, password) {
 
   const hashedPassword = await hashPassword(password);
   const user = {
-    id: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+    id: 'user_' + Date.now() + '_' + (crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').substr(0,16) : Math.random().toString(36).substr(2,9)),
     name: trimmedName,
     email: trimmedEmail,
     password: hashedPassword,
@@ -166,7 +169,8 @@ function showAuthNotification(message, type) {
     box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:authNotifIn 0.3s ease;
     max-width:90vw;
   `;
-  el.innerHTML = `<i class="fas ${icons[type] || icons.info}" style="color:${colors[type] || colors.info};font-size:1rem"></i><span>${message}</span>`;
+  el.innerHTML = `<i class="fas ${icons[type] || icons.info}" style="color:${colors[type] || colors.info};font-size:1rem"></i><span></span>`;
+  el.querySelector('span').textContent = message;
   document.body.appendChild(el);
 
   setTimeout(() => {
@@ -191,14 +195,16 @@ function renderUserMenu(containerId) {
     return;
   }
 
-  const initial = (session.name || 'U').charAt(0).toUpperCase();
+  var initial = (session.name || 'U').charAt(0).toUpperCase();
+  var safeName = sanitizeHTML(session.name || '');
+  var safeEmail = sanitizeHTML(session.email || '');
   container.innerHTML = `
     <div class="auth-user-menu">
       <div class="auth-user-trigger" onclick="toggleUserDropdown()">
         <div class="auth-user-avatar">${initial}</div>
         <div class="auth-user-info">
-          <div class="auth-user-name">${session.name}</div>
-          <div class="auth-user-email">${session.email}</div>
+          <div class="auth-user-name">${safeName}</div>
+          <div class="auth-user-email">${safeEmail}</div>
         </div>
         <i class="fas fa-chevron-down auth-user-chevron"></i>
       </div>
@@ -236,7 +242,9 @@ document.addEventListener('click', function(e) {
 /* ===== REDIRECT HELPER ===== */
 function getRedirectUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get('redirect') || 'index.html';
+  const url = params.get('redirect') || 'index.html';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('//')) return 'index.html';
+  return url;
 }
 
 function afterLoginRedirect() {
@@ -454,4 +462,16 @@ function updateNotifBadge() {
     b.textContent = count;
     b.style.display = count > 0 ? 'flex' : 'none';
   });
+}
+
+/* ===== Input Sanitization ===== */
+function sanitizeInput(str){
+  if(typeof str!=='string')return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+}
+function sanitizeHTML(str){
+  if(typeof str!=='string')return '';
+  var div=document.createElement('div');
+  div.textContent=str;
+  return div.innerHTML;
 }

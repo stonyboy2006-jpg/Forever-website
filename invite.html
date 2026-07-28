@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" class="invite-page">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
+<meta name="description" content="You're cordially invited to our wedding celebration">
+<meta name="theme-color" content="#0B0F19">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; frame-src 'self' https://www.google.com https://maps.google.com; media-src 'self' blob:;">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" id="ogTitle" content="Wedding Invitation">
+<meta property="og:description" id="ogDesc" content="Join us in celebrating our special day">
+<meta property="og:image" id="ogImage" content="">
+<meta property="og:url" id="ogUrl" content="">
+<meta property="og:site_name" content="Forever & Always">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" id="twTitle" content="Wedding Invitation">
+<meta name="twitter:description" id="twDesc" content="Join us in celebrating our special day">
+<meta name="twitter:image" id="twImage" content="">
+<link rel="canonical" id="canonicalLink" href="https://foreverandalwayswedding.com/invite/">
+<script type="application/ld+json" id="schemaJson">
+{
+  "@context": "https://schema.org",
+  "@type": "WeddingEvent",
+  "name": "Wedding Invitation",
+  "description": "Join us in celebrating our special day",
+  "url": "https://foreverandalwayswedding.com/invite/",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "organizer": {
+    "@type": "Person",
+    "name": ""
+  }
+}
+</script>
+<title id="pageTitle">Wedding Invitation</title>
+<link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">
+<link rel="apple-touch-icon" href="icons/icon-192.svg">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase.js"></script>
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/invite.css">
+</head>
+<body>
+<noscript><div style="position:fixed;inset:0;z-index:99999;background:#0B0F19;display:flex;align-items:center;justify-content:center;font-family:sans-serif;color:#fff;padding:24px;text-align:center"><div><h2 style="font-family:serif;color:#D4AF37;margin-bottom:12px">JavaScript Required</h2><p>Please enable JavaScript to view this wedding invitation.</p></div></div></noscript>
+<a href="#main" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999;background:#D4AF37;color:#0B0F19;padding:12px 24px;font-weight:600;text-decoration:none;border-radius:0 0 8px 0">Skip to content</a>
+
+<!-- Loading Screen -->
+<div class="invite-loading" id="loadingScreen">
+  <div class="spinner"></div>
+  <p id="loadingStatus">Loading invitation...</p>
+</div>
+
+<!-- Hidden content (shown after data loads) -->
+<div id="inviteContent" style="display:none" role="main">
+
+<!-- ====== HERO SECTION ====== -->
+<section class="invite-hero" id="main">
+  <div class="invite-hero-bg" id="inviteHeroBg"></div>
+  <div class="invite-hero-overlay"></div>
+  <div class="invite-hero-particles" id="heroParticles"></div>
+  <div class="invite-hero-content">
+    <div class="invite-ornament">&#x1F48D;</div>
+    <div class="invite-tagline" id="invTagline">Together With Their Families</div>
+    <h1 class="invite-hero-names">
+      <span id="invGroomName">Groom</span>
+      <span class="amp">&</span>
+      <span id="invBrideName">Bride</span>
+    </h1>
+    <div class="invite-couple-photo">
+      <div class="placeholder" id="couplePlaceholder"><i class="fas fa-heart"></i></div>
+      <img id="invGroomPhoto" src="" alt="Groom" style="display:none" loading="lazy" decoding="async">
+      <img id="invBridePhoto" src="" alt="Bride" style="display:none" loading="lazy" decoding="async">
+    </div>
+    <div class="invite-info-row">
+      <div class="invite-info-item"><i class="fas fa-calendar-alt"></i> <span id="invDate"></span></div>
+      <div class="invite-info-item"><i class="fas fa-clock"></i> <span id="invTime"></span></div>
+      <div class="invite-info-item"><i class="fas fa-map-marker-alt"></i> <span id="invVenue"></span></div>
+    </div>
+    <div class="invite-countdown">
+      <div class="invite-cd-box"><span class="countdown-num" id="cdDays">00</span><span class="countdown-label">Days</span></div>
+      <div class="invite-cd-box"><span class="countdown-num" id="cdHours">00</span><span class="countdown-label">Hours</span></div>
+      <div class="invite-cd-box"><span class="countdown-num" id="cdMinutes">00</span><span class="countdown-label">Minutes</span></div>
+      <div class="invite-cd-box"><span class="countdown-num" id="cdSeconds">00</span><span class="countdown-label">Seconds</span></div>
+    </div>
+    <div class="countdown-message-invite">Counting down to our special day</div>
+  </div>
+</section>
+
+<!-- ====== RSVP SECTION ====== -->
+<section class="invite-rsvp-section" id="rsvpSection">
+  <h2>Will You Join Us?</h2>
+  <p class="rsvp-sub">Your presence is the greatest gift of all</p>
+  <div class="rsvp-buttons" id="rsvpButtons">
+    <button class="rsvp-btn rsvp-btn-accept" id="btnAccept"><i class="fas fa-heart"></i> Accept Invitation</button>
+    <button class="rsvp-btn rsvp-btn-maybe" id="btnMaybe"><i class="fas fa-clock"></i> Maybe Attending</button>
+    <button class="rsvp-btn rsvp-btn-decline" id="btnDecline"><i class="fas fa-times"></i> Decline Invitation</button>
+  </div>
+</section>
+
+<!-- ====== GUESTBOOK SECTION ====== -->
+<section class="invite-guestbook" id="guestbookContainer">
+</section>
+
+<!-- ====== DETAILS SECTION ====== -->
+<section class="invite-details">
+  <div class="container">
+    <h2>Wedding Details</h2>
+    <div class="details-grid">
+      <div class="detail-card">
+        <i class="fas fa-calendar-day"></i>
+        <h4>Date & Time</h4>
+        <p id="invDateDetail"><span id="invDate2"></span><br><span id="invTime2"></span></p>
+      </div>
+      <div class="detail-card">
+        <i class="fas fa-map-pin"></i>
+        <h4>Venue</h4>
+        <p><span id="invVenue2"></span><br><span id="invAddress"></span><br><span id="invLocation"></span></p>
+      </div>
+      <div class="detail-card">
+        <i class="fas fa-vest"></i>
+        <h4>Dress Code</h4>
+        <p id="invDressCode">Black Tie Optional</p>
+      </div>
+      <div class="detail-card">
+        <i class="fas fa-gift"></i>
+        <h4>Gift Information</h4>
+        <p id="invGiftInfo">Your presence is the greatest gift</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== LOVE STORY ====== -->
+<section class="invite-story" id="storySection">
+  <div class="container">
+    <h2>Our Love Story</h2>
+    <p class="story-sub" id="invStoryTitle"></p>
+    <div class="invite-story-text" id="invStory"></div>
+  </div>
+</section>
+
+<!-- ====== TIMELINE ====== -->
+<section class="invite-timeline" id="timelineSection" style="display:none;">
+  <div class="container">
+    <h2 style="font-family:var(--font-heading);font-size:clamp(1.6rem,3.5vw,2.2rem);color:#fff;text-align:center;margin-bottom:36px">Wedding Timeline</h2>
+    <div class="timeline-container" id="invTimeline"></div>
+  </div>
+</section>
+
+<!-- ====== VIDEOS ====== -->
+<section class="invite-videos" id="videosSection" style="display:none;">
+  <div class="container">
+    <h2 style="font-family:var(--font-heading);font-size:clamp(1.6rem,3.5vw,2.2rem);color:#fff;text-align:center;margin-bottom:36px">Wedding Videos</h2>
+    <div class="videos-grid" id="invVideos"></div>
+  </div>
+</section>
+
+<!-- ====== MAP SECTION ====== -->
+<section class="invite-map-section">
+  <div class="container">
+    <h2 style="font-family:var(--font-heading);font-size:clamp(1.3rem,3vw,1.8rem);color:#fff;text-align:center;margin-bottom:24px">Find the Venue</h2>
+    <div id="invMap"></div>
+  </div>
+</section>
+
+<!-- ====== GALLERY ====== -->
+<section class="invite-gallery">
+  <div class="container">
+    <h2>Our Gallery</h2>
+    <div class="invite-gallery-grid" id="invGallery"></div>
+  </div>
+</section>
+
+<!-- ====== GIFT REGISTRY ====== -->
+<section class="invite-gift-registry" id="giftRegistrySection" style="display:none;">
+  <div class="container">
+    <h2 style="font-family:var(--font-heading);font-size:clamp(1.6rem,3.5vw,2.2rem);color:#fff;text-align:center;margin-bottom:8px">Gift Registry</h2>
+    <p style="color:var(--text-light);text-align:center;margin-bottom:36px">Your presence is the greatest gift, but if you wish to honor us further</p>
+    <div class="gift-registry-content" id="invGiftRegistry"></div>
+  </div>
+</section>
+
+<!-- ====== SHARE SECTION ====== -->
+<section class="invite-share-section" id="shareSection">
+  <div class="container">
+    <h2>Share the Invitation</h2>
+    <p class="share-sub">Help us spread the joy — share with family and friends</p>
+    <div class="invite-share-buttons" id="inviteShareButtons"></div>
+    <button class="invite-btn invite-btn-primary" id="inviteShareNative" style="display:none;margin:0 auto 24px" onclick="InviteSys.shareViaNative()"><i class="fas fa-share-alt"></i> Share via...</button>
+    <h3 style="font-family:var(--font-heading);color:var(--accent);margin-bottom:16px;font-size:1.1rem">Scan QR Code</h3>
+    <div class="invite-qr-container">
+      <div class="invite-qr-box" id="inviteQRContainer"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== DRESS CODE & CONTACT ====== -->
+<section class="invite-info-section">
+  <div class="container">
+    <div class="info-section-grid">
+      <div class="info-box">
+        <i class="fas fa-vest"></i>
+        <h4>Dress Code</h4>
+        <p id="invDressCode2">Black Tie Optional</p>
+      </div>
+      <div class="info-box">
+        <i class="fas fa-phone-alt"></i>
+        <h4>Contact</h4>
+        <p id="invContactPhone"></p>
+        <p id="invContactEmail"></p>
+      </div>
+      <div class="info-box">
+        <i class="fas fa-calendar-plus"></i>
+        <h4>Add to Calendar</h4>
+        <div id="addToCalendar"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== RSVP FORM MODAL ====== -->
+<div class="rsvp-form-overlay" id="rsvpFormOverlay">
+  <div class="rsvp-form-container" id="rsvpFormContainer">
+    <h3 id="rsvpFormTitle">Accept Invitation</h3>
+    <p class="form-sub">We'd love to know more about you</p>
+    <form id="rsvpFormElement">
+      <input type="hidden" id="rsvpStatus" value="">
+      <div class="rsvp-form-row">
+        <div class="rsvp-form-group">
+          <label>Full Name *</label>
+          <input type="text" id="rsvpName" placeholder="Your full name" required>
+        </div>
+        <div class="rsvp-form-group">
+          <label>Email (optional)</label>
+          <input type="email" id="rsvpEmail" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="rsvp-form-row">
+        <div class="rsvp-form-group">
+          <label>Phone (optional)</label>
+          <input type="tel" id="rsvpPhone" placeholder="+1 (555) 000-0000">
+        </div>
+        <div class="rsvp-form-group">
+          <label>Number of Guests *</label>
+          <input type="number" id="rsvpGuestCount" min="1" max="20" value="1">
+        </div>
+      </div>
+      <div class="rsvp-form-group">
+        <label>Meal Preference (optional)</label>
+        <select id="rsvpMealPreference">
+          <option value="">No preference</option>
+          <option value="chicken">Chicken</option>
+          <option value="beef">Beef</option>
+          <option value="fish">Fish</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="vegan">Vegan</option>
+        </select>
+      </div>
+      <div class="rsvp-form-group">
+        <label>Special Message to Couple</label>
+        <textarea id="rsvpMessage" placeholder="Share your wishes, blessings, or a favorite memory..." rows="3"></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-rsvp-cancel" id="rsvpCancelBtn"><i class="fas fa-times"></i> Cancel</button>
+        <button type="submit" class="btn-rsvp-submit" id="rsvpFormSubmit"><i class="fas fa-paper-plane"></i> Submit RSVP</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer class="invite-footer">
+  <div class="names" id="invFullNames">Forever & Always</div>
+  <p>Designed with love for our special day</p>
+</footer>
+
+<!-- Music Player -->
+<div class="invite-music-player" id="inviteMusicPlayer">
+  <button class="invite-music-btn" aria-label="Toggle background music"><i class="fas fa-music"></i></button>
+</div>
+
+</div><!-- /inviteContent -->
+
+<script src="js/auth.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/invitation-system.js"></script>
+<script src="js/share-security.js"></script>
+<script src="js/guestbook.js"></script>
+<script src="js/reminders.js"></script>
+<script>
+// Generate hero particles
+(function(){
+  var c = document.getElementById('heroParticles');
+  if (!c) return;
+  for (var i = 0; i < 25; i++) {
+    var p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (4 + Math.random() * 8) + 's';
+    p.style.animationDelay = Math.random() * 6 + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 3) + 'px';
+    c.appendChild(p);
+  }
+})();
+
+// Initialize invitation page when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof InviteSys !== 'undefined') {
+    InviteSys.initInvitePage();
+  } else {
+    document.getElementById('loadingStatus').textContent = 'System loading...';
+    setTimeout(function() {
+      if (typeof InviteSys !== 'undefined') {
+        InviteSys.initInvitePage();
+      }
+    }, 1000);
+  }
+  setTimeout(function() {
+    if (typeof Guestbook !== 'undefined') {
+      Guestbook.renderGuestbookSection('guestbookContainer');
+    }
+  }, 1500);
+});
+
+// Dynamic SEO update
+function updateSEOTags(data) {
+  if (!data) return;
+  var groom = data.groomName || 'Groom';
+  var bride = data.brideName || 'Bride';
+  var title = 'Wedding Invitation: ' + groom + ' & ' + bride;
+  var desc = 'Join us in celebrating the wedding of ' + groom + ' and ' + bride + '!';
+  if (data.weddingDate) desc += ' on ' + new Date(data.weddingDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  if (data.venue) desc += ' at ' + data.venue;
+  var url = window.location.href;
+  var img = data.coverPhoto || data.heroImage || '';
+
+  function setMeta(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.setAttribute('content', val);
+  }
+  setMeta('ogTitle', title);
+  setMeta('ogDesc', desc);
+  setMeta('ogUrl', url);
+  if (img) setMeta('ogImage', img);
+  setMeta('twTitle', title);
+  setMeta('twDesc', desc);
+  if (img) setMeta('twImage', img);
+
+  var titleEl = document.getElementById('pageTitle');
+  if (titleEl) titleEl.textContent = title;
+
+  var canonical = document.getElementById('canonicalLink');
+  if (canonical) canonical.setAttribute('href', url);
+
+  try {
+    var schema = {
+      "@context": "https://schema.org",
+      "@type": "WeddingEvent",
+      "name": title,
+      "description": desc,
+      "startDate": data.weddingDate || '',
+      "location": { "@type": "Place", "name": data.venue || '', "address": data.address || '' },
+      "url": url,
+      "organizer": { "@type": "Person", "name": groom + ' & ' + bride }
+    };
+    var schemaEl = document.getElementById('schemaJson');
+    if (schemaEl) schemaEl.textContent = JSON.stringify(schema, null, 2);
+  } catch (e) {}
+}
+
+// Patch InviteSys.renderInvitePage to call updateSEOTags
+(function() {
+  var orig = InviteSys && InviteSys.renderInvitePage;
+  if (orig) {
+    InviteSys.renderInvitePage = function(data, weddingId) {
+      orig.call(InviteSys, data, weddingId);
+      updateSEOTags(data);
+    };
+  }
+})();
+
+// Export functions for inline use
+function shareViaNative() { if (typeof InviteSys !== 'undefined') InviteSys.shareViaNative(); }
+function copyLink() { if (typeof InviteSys !== 'undefined') InviteSys.copyLink(); }
+</script>
+</body>
+</html>

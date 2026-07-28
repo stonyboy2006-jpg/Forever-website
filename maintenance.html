@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Our wedding website is currently undergoing scheduled maintenance. We will be back shortly with improvements.">
+<meta property="og:title" content="Site Under Maintenance">
+<meta property="og:description" content="Our wedding website is currently undergoing scheduled maintenance. We will be back shortly with improvements.">
+<meta property="og:image" content="https://foreverandalwayswedding.com/icons/icon-512.svg">
+<meta property="og:url" content="https://foreverandalwayswedding.com/maintenance.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Site Under Maintenance">
+<meta name="twitter:description" content="Our wedding website is currently undergoing scheduled maintenance. We will be back shortly with improvements.">
+<link rel="canonical" href="https://foreverandalwayswedding.com/maintenance.html">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0B0F19">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;">
+<title>Under Maintenance — Forever &amp; Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:#0B0F19;color:#E8E0D0;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.bg-orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:0.12;pointer-events:none}
+.bg-orb.gold{width:400px;height:400px;background:#D4AF37;top:-100px;right:-100px}
+.bg-orb.rose{width:300px;height:300px;background:#E8C4C0;bottom:-80px;left:-80px}
+.particles{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+.particle{position:absolute;width:3px;height:3px;background:#D4AF37;border-radius:50%;opacity:0;animation:float 8s ease-in-out infinite}
+@keyframes float{0%{opacity:0;transform:translateY(100vh) scale(0)}10%{opacity:0.6}90%{opacity:0.6}100%{opacity:0;transform:translateY(-20vh) scale(1)}}
+.container{text-align:center;padding:2rem;position:relative;z-index:1;max-width:600px}
+.gear{font-size:3.5rem;color:#D4AF37;margin-bottom:1.5rem;display:inline-block;animation:spin 4s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient(135deg,#D4AF37,#F7E7CE,#D4AF37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:0.8rem}
+p{font-size:1rem;color:#A09888;margin-bottom:1.5rem;line-height:1.7}
+.countdown{display:flex;gap:16px;justify-content:center;margin:2rem 0;flex-wrap:wrap}
+.cd-box{text-align:center;padding:16px 20px;background:rgba(255,255,255,0.03);border:1px solid rgba(212,175,55,0.1);border-radius:14px;min-width:80px}
+.cd-num{font-family:'Playfair Display',serif;font-size:1.8rem;color:#D4AF37;font-weight:700;display:block}
+.cd-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:#A09888;margin-top:2px}
+.contact{margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(212,175,55,0.08)}
+.contact a{color:#D4AF37;text-decoration:none;font-size:0.88rem;margin:0 12px;transition:opacity 0.3s}
+.contact a:hover{opacity:0.7}
+.contact a i{margin-right:6px}
+.owner-link{display:inline-block;margin-top:2rem;padding:10px 24px;border:1px solid rgba(212,175,55,0.2);background:rgba(212,175,55,0.06);color:#D4AF37;font-family:'Poppins',sans-serif;font-size:0.82rem;font-weight:500;border-radius:50px;text-decoration:none;transition:all 0.3s}
+.owner-link:hover{background:rgba(212,175,55,0.12);border-color:rgba(212,175,55,0.4)}
+.footer-brand{margin-top:2.5rem;font-family:'Playfair Display',serif;font-size:1rem;color:#D4AF37;opacity:0.6}
+</style>
+</head>
+<body>
+<div class="bg-orb gold"></div>
+<div class="bg-orb rose"></div>
+<div class="particles" id="particles"></div>
+<div class="container">
+  <div class="gear"><i class="fas fa-cog"></i></div>
+  <h1>We'll Be Right Back</h1>
+  <p>Our wedding website is currently undergoing scheduled maintenance. We're making things even more beautiful for you. Thank you for your patience!</p>
+  <div class="countdown" id="countdown">
+    <div class="cd-box"><span class="cd-num" id="cdDays">00</span><span class="cd-label">Days</span></div>
+    <div class="cd-box"><span class="cd-num" id="cdHours">00</span><span class="cd-label">Hours</span></div>
+    <div class="cd-box"><span class="cd-num" id="cdMins">00</span><span class="cd-label">Minutes</span></div>
+    <div class="cd-box"><span class="cd-num" id="cdSecs">00</span><span class="cd-label">Seconds</span></div>
+  </div>
+  <div class="contact">
+    <a href="mailto:contact@wedding.com"><i class="fas fa-envelope"></i> Contact Us</a>
+    <a href="https://wa.me/" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+  </div>
+  <a href="login.html" class="owner-link"><i class="fas fa-sign-in-alt"></i> Owner Login</a>
+  <div class="footer-brand">Forever <span style="color:#E8C4C0">&#10084;</span> Always</div>
+</div>
+<script>
+(function(){
+  var p=document.getElementById('particles');
+  for(var i=0;i<20;i++){
+    var d=document.createElement('div');d.className='particle';
+    d.style.left=Math.random()*100+'%';
+    d.style.animationDuration=(5+Math.random()*8)+'s';
+    d.style.animationDelay=Math.random()*5+'s';
+    p.appendChild(d);
+  }
+})();
+(function(){
+  var maint=JSON.parse(localStorage.getItem('weddingMaintenance')||'{}');
+  var target=maint.returnTime?new Date(maint.returnTime):null;
+  if(!target||target<=new Date()){
+    var t=new Date();t.setDate(t.getDate()+1);t.setHours(8,0,0,0);target=t;
+  }
+  function update(){
+    var diff=target-new Date();
+    if(diff<=0){
+      document.getElementById('cdDays').textContent='00';
+      document.getElementById('cdHours').textContent='00';
+      document.getElementById('cdMins').textContent='00';
+      document.getElementById('cdSecs').textContent='00';
+      return;
+    }
+    document.getElementById('cdDays').textContent=String(Math.floor(diff/(1000*60*60*24))).padStart(2,'0');
+    document.getElementById('cdHours').textContent=String(Math.floor((diff%(1000*60*60*24))/(1000*60*60))).padStart(2,'0');
+    document.getElementById('cdMins').textContent=String(Math.floor((diff%(1000*60*60))/(1000*60))).padStart(2,'0');
+    document.getElementById('cdSecs').textContent=String(Math.floor((diff%(1000*60))/1000)).padStart(2,'0');
+  }
+  update();setInterval(update,1000);
+  if(maint.message){document.querySelector('p').textContent=maint.message;}
+  if(maint.contactEmail){document.querySelector('a[href^="mailto:"]').href='mailto:'+maint.contactEmail;}
+  if(maint.contactWhatsapp){document.querySelector('a[href^="https://wa.me/"]').href='https://wa.me/'+maint.contactWhatsapp;}
+})();
+</script>
+</body>
+</html>

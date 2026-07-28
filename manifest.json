@@ -1,27 +1,53 @@
 {
-  "name": "Forever & Always Wedding",
-  "short_name": "Wedding",
-  "description": "Join us in celebrating the wedding of our dreams. View details, RSVP, and share the love.",
+  "name": "Forever & Always - Luxury Wedding Platform",
+  "short_name": "Forever & Always",
+  "description": "A premium AI-powered wedding planning and invitation platform. Create, share, and manage your dream wedding website.",
   "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0B0F19",
   "theme_color": "#D4AF37",
   "orientation": "portrait-primary",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["lifestyle", "social", "events"],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Open your wedding dashboard",
+      "url": "/dashboard.html",
+      "icons": [{ "src": "icons/icon-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "RSVP",
+      "short_name": "RSVP",
+      "description": "View RSVP responses",
+      "url": "/rsvp.html",
+      "icons": [{ "src": "icons/icon-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Share",
+      "short_name": "Share",
+      "description": "Share your invitation",
+      "url": "/share.html",
+      "icons": [{ "src": "icons/icon-192.svg", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [],
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230B0F19'/><text x='96' y='120' text-anchor='middle' font-size='100'>💍</text></svg>",
+      "src": "icons/icon-192.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='64' fill='%230B0F19'/><text x='256' y='320' text-anchor='middle' font-size='260'>💍</text></svg>",
+      "src": "icons/icon-512.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ],
-  "categories": ["lifestyle", "social"],
-  "lang": "en",
-  "dir": "ltr"
+  ]
 }

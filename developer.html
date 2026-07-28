@@ -3,15 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="David Leelee Douglas (Stonyboy) — Founder, Lead Developer & Designer. Wedding websites, mobile apps, AI solutions, digital branding.">
-<meta property="og:title" content="David Leelee Douglas — Stonyboy | Developer & Designer">
-<meta property="og:description" content="Founder, Lead Developer & Designer. Specializing in wedding websites, web design, mobile apps, AI solutions, and digital branding.">
+<meta name="description" content="Leelee David Douglas (Stonyboy) — Full Stack Developer, Founder & Software Engineer. Creator of the Luxury Wedding Platform.">
+<meta property="og:title" content="Leelee David Douglas (Stonyboy) — Developer Profile | Luxury Wedding">
+<meta property="og:description" content="Full Stack Developer, Founder & Software Engineer. Creator of the Luxury Wedding Platform.">
 <meta property="og:type" content="profile">
-<title>David Leelee Douglas — Stonyboy | Developer & Designer</title>
+<meta property="og:image" content="https://foreverandalwayswedding.com/icons/icon-512.svg">
+<meta property="og:url" content="https://foreverandalwayswedding.com/developer.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Developer - Leelee David Douglas">
+<meta name="twitter:description" content="Full Stack Developer, Founder &amp; Software Engineer. Creator of the Luxury Wedding Platform.">
+<link rel="canonical" href="https://foreverandalwayswedding.com/developer.html">
+<title>Developer Profile — Luxury Wedding</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; frame-src 'self' https://www.google.com https://maps.google.com; media-src 'self' blob:;">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/sidebar.css">
 <link rel="stylesheet" href="css/developer.css">
 <style>
@@ -24,23 +33,6 @@ a{text-decoration:none;color:inherit}
 img{max-width:100%;height:auto;display:block}
 button{cursor:pointer;font-family:var(--font-sans)}
 .container{max-width:1100px;margin:0 auto;padding:0 24px}
-.nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-height);background:rgba(11,15,25,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(212,175,55,0.06);transition:var(--transition)}
-.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);font-weight:600}
-.nav-links{display:flex;align-items:center;gap:6px;list-style:none}
-.nav-links li a{padding:8px 14px;border-radius:8px;font-family:'Inter',sans-serif;font-size:0.82rem;color:var(--text-light);transition:var(--transition);font-weight:500}
-.nav-links li a:hover,.nav-links li a.active{color:var(--gold);background:rgba(212,175,55,0.06)}
-.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
-.hamburger span{width:26px;height:2px;background:var(--gold);border-radius:2px;transition:var(--transition)}
-.footer{background:var(--dark-soft);border-top:1px solid rgba(212,175,55,0.04);padding:40px 24px;text-align:center}
-.footer .developer{font-family:'Inter',sans-serif;font-size:0.8rem;color:var(--text-muted)}
-.footer .developer .dev-name{color:var(--gold);cursor:pointer;transition:color 0.3s}
-.footer .developer .dev-name:hover{color:var(--gold-light)}
-@media(max-width:768px){.hamburger{display:flex}.nav-links{position:fixed;top:var(--nav-height);left:0;right:0;background:rgba(11,15,25,0.98);backdrop-filter:blur(20px);flex-direction:column;padding:20px;gap:2px;transform:translateY(-120%);opacity:0;transition:var(--transition);pointer-events:none;border-bottom:1px solid rgba(212,175,55,0.06)}.nav-links.open{transform:translateY(0);opacity:1;pointer-events:all}.nav-links li{width:100%}.nav-links li a{display:block;padding:12px 16px;width:100%}}
-.prompt-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;padding:16px 24px;background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(212,175,55,0.02));backdrop-filter:blur(16px);border-top:1px solid rgba(212,175,55,0.12);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-family:'Inter',sans-serif;font-size:0.85rem;color:var(--text-light)}
-.prompt-banner strong{color:var(--gold)}
-.prompt-banner .prompt-close{background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;padding:4px 8px;transition:color 0.3s}
-.prompt-banner .prompt-close:hover{color:var(--gold)}
 </style>
 </head>
 <body>
@@ -54,8 +46,8 @@ button{cursor:pointer;font-family:var(--font-sans)}
     <div class="sidebar-brand">
       <div class="sidebar-brand-icon"><i class="fas fa-ring"></i></div>
       <div class="sidebar-brand-text">
-        <div class="sidebar-brand-name">Forever &amp; Always</div>
-        <div class="sidebar-brand-sub">Wedding Menu</div>
+        <div class="sidebar-brand-name">Luxury Wedding</div>
+        <div class="sidebar-brand-sub">Developer</div>
       </div>
     </div>
     <button class="sidebar-close" aria-label="Close menu"><i class="fas fa-arrow-left"></i></button>
@@ -63,27 +55,11 @@ button{cursor:pointer;font-family:var(--font-sans)}
   <nav class="sidebar-links">
     <div class="sidebar-section-label">Main</div>
     <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i> Home</a>
-    <a href="our-story.html" class="sidebar-link"><i class="fas fa-heart"></i> Our Story</a>
-    <a href="wedding-details.html" class="sidebar-link"><i class="fas fa-info-circle"></i> Wedding Details</a>
-    <a href="wedding-party.html" class="sidebar-link"><i class="fas fa-user-friends"></i> Wedding Party</a>
-    <a href="events.html" class="sidebar-link"><i class="fas fa-calendar-alt"></i> Events</a>
-    <div class="sidebar-section-label">Media</div>
-    <a href="gallery.html" class="sidebar-link"><i class="fas fa-images"></i> Gallery</a>
-    <a href="timeline.html" class="sidebar-link"><i class="fas fa-clock"></i> Timeline</a>
-    <a href="story.html" class="sidebar-link"><i class="fas fa-book-open"></i> Love Story</a>
-    <div class="sidebar-section-label">Guests</div>
-    <a href="rsvp.html" class="sidebar-link"><i class="fas fa-envelope"></i> RSVP</a>
-    <a href="gift-registry.html" class="sidebar-link"><i class="fas fa-gift"></i> Gift Registry</a>
-    <a href="music.html" class="sidebar-link"><i class="fas fa-music"></i> Wedding Music</a>
-    <a href="invitation.html" class="sidebar-link"><i class="fas fa-paper-plane"></i> Invitation</a>
-    <a href="memories.html" class="sidebar-link"><i class="fas fa-camera-retro"></i> Memories</a>
-    <a href="planner.html" class="sidebar-link"><i class="fas fa-clipboard-list"></i> Planner</a>
-    <a href="profile.html" class="sidebar-link"><i class="fas fa-user-circle"></i> My Profile</a>
-    <a href="faq.html" class="sidebar-link"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    <a href="developer.html" class="sidebar-link active"><i class="fas fa-code"></i> Developer Profile</a>
     <div class="sidebar-section-label">More</div>
-    <a href="ai-assistant.html" class="sidebar-link"><i class="fas fa-robot"></i> AI Assistant</a>
     <a href="contact.html" class="sidebar-link"><i class="fas fa-envelope"></i> Contact</a>
-    <a href="developer.html" class="sidebar-link active"><i class="fas fa-code"></i> Developer</a>
+    <a href="about.html" class="sidebar-link"><i class="fas fa-info-circle"></i> About</a>
   </nav>
   <div class="sidebar-footer">
     <div class="sidebar-footer-links" id="authUserMenu">
@@ -103,22 +79,22 @@ button{cursor:pointer;font-family:var(--font-sans)}
   <div class="dev-glow"></div>
   <div class="dev-hero-content dev-reveal">
     <div class="dev-avatar">
-      <img src="https://ui-avatars.com/api/?name=David+Leelee+Douglas&background=D4AF37&color=050B18&size=280&font-size=0.4&bold=true&format=svg" alt="David Leelee Douglas" loading="lazy">
+      <img src="images/developer-profile.jpg" alt="Leelee David Douglas (Stonyboy) — Full Stack Developer & Founder" loading="lazy" decoding="async" width="280" height="280" onerror="this.src='https://ui-avatars.com/api/?name=Leelee+David+Douglas&background=D4AF37&color=050B18&size=280&font-size=0.35&bold=true&format=svg'">
       <div class="crown"><i class="fas fa-crown"></i></div>
     </div>
-    <h1>David Leelee <span class="gold">Douglas</span></h1>
+    <h1>Leelee David <span class="gold">Douglas</span></h1>
     <div class="tagline">Popularly Known As <strong style="color:var(--gold);">Stonyboy</strong></div>
-    <div class="title-role">Founder, Lead Developer &amp; Designer</div>
-    <p class="dev-desc">Crafting exceptional digital experiences with a passion for innovation and elegance. Specializing in wedding websites, full-stack development, AI solutions, and digital branding that leaves a lasting impression.</p>
+    <div class="title-role">Full Stack Developer &bull; Founder &bull; Software Engineer</div>
+    <p class="dev-desc">Passionate developer dedicated to building beautiful, modern and memorable digital experiences. Specializing in wedding platforms and event solutions.</p>
     <div class="dev-hero-buttons">
-      <a href="#contact" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Contact Me</a>
-      <a href="#portfolio" class="btn btn-outline-gold"><i class="fas fa-images"></i> View Portfolio</a>
-      <a href="https://wa.me/2348025092458" target="_blank" class="btn btn-outline-gold"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a href="tel:08157610930" class="btn btn-gold" aria-label="Call developer"><i class="fas fa-phone"></i> Call Developer</a>
+      <a href="https://wa.me/2348025092458" target="_blank" class="btn btn-outline-gold" aria-label="Chat on WhatsApp"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+      <a href="#portfolio" class="btn btn-outline-gold"><i class="fas fa-images"></i> Portfolio</a>
     </div>
   </div>
 </section>
 
-<!-- ===== BIOGRAPHY ===== -->
+<!-- ===== PROFILE INFO ===== -->
 <section class="dev-section" id="about" style="background:var(--dark-soft);">
   <div class="container">
     <div class="dev-section-title dev-reveal">
@@ -127,11 +103,41 @@ button{cursor:pointer;font-family:var(--font-sans)}
       <div class="divider"></div>
     </div>
     <div class="dev-bio-text dev-reveal">
-      <p>I am <strong>David Leelee Douglas</strong>, popularly known as <strong>Stonyboy</strong> — a passionate <strong>Founder, Lead Developer &amp; Designer</strong> dedicated to building world-class digital solutions. With years of experience in the tech industry, I specialize in creating beautiful, functional, and innovative platforms that help businesses and individuals bring their visions to life.</p>
-      <br>
-      <p>My expertise spans <strong>wedding website development, web design, mobile app development, AI solutions, and digital branding</strong>. I believe in the power of technology to transform ideas into reality, and I am committed to delivering excellence in every project I undertake.</p>
-      <br>
-      <p>When I am not coding, I am exploring new technologies, mentoring aspiring developers, and finding creative ways to push the boundaries of what is possible in the digital world. My work is driven by a deep passion for innovation, quality, and user experience.</p>
+      <p>Leelee David Douglas, professionally known as <strong>Stonyboy</strong>, is the creator and lead developer of the <strong>Luxury Wedding Platform</strong>. He specializes in full-stack web development, modern UI/UX design, AI-powered applications, secure backend systems, and scalable cloud solutions. His mission is to build elegant, reliable, and world-class digital experiences.</p>
+    </div>
+
+    <!-- ===== PROFILE CARD ===== -->
+    <div class="dev-profile-card dev-reveal">
+      <div class="dev-profile-info">
+        <div class="dev-profile-item">
+          <i class="fas fa-user"></i>
+          <div><span class="label">Developer</span><span>Leelee David Douglas (Stonyboy)</span></div>
+        </div>
+        <div class="dev-profile-item">
+          <i class="fas fa-id-badge"></i>
+          <div><span class="label">Title</span><span>Full Stack Developer &bull; Founder &bull; Software Engineer</span></div>
+        </div>
+        <div class="dev-profile-item">
+          <i class="fas fa-phone"></i>
+          <div><span class="label">Phone</span><a href="tel:08157610930">08157610930</a></div>
+        </div>
+        <div class="dev-profile-item">
+          <i class="fab fa-whatsapp"></i>
+          <div><span class="label">WhatsApp</span><a href="https://wa.me/2348025092458" target="_blank">08025092458</a></div>
+        </div>
+        <div class="dev-profile-item">
+          <i class="fas fa-envelope"></i>
+          <div><span class="label">Email</span><a href="mailto:stonyboy@example.com">stonyboy@example.com</a></div>
+        </div>
+        <div class="dev-profile-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <div><span class="label">Location</span><span>Nigeria</span></div>
+        </div>
+        <div class="dev-profile-item">
+          <i class="fas fa-calendar"></i>
+          <div><span class="label">Joined</span><span>July 2025</span></div>
+        </div>
+      </div>
     </div>
 
     <div class="dev-skills dev-reveal">
@@ -149,21 +155,39 @@ button{cursor:pointer;font-family:var(--font-sans)}
 
     <div class="dev-stats dev-reveal">
       <div class="dev-stat-card">
-        <div class="num" data-count="50" data-suffix="+">0</div>
-        <div class="lbl">Projects Delivered</div>
+        <div class="icon"><i class="fas fa-code"></i></div>
+        <div class="num" data-count="25" data-suffix="+">0</div>
+        <div class="lbl">Projects Completed</div>
+        <div class="sub">Successful Projects</div>
       </div>
       <div class="dev-stat-card">
-        <div class="num" data-count="35" data-suffix="+">0</div>
+        <div class="icon"><i class="fas fa-heart"></i></div>
+        <div class="num" data-count="100" data-suffix="+">0</div>
         <div class="lbl">Happy Clients</div>
+        <div class="sub">Satisfied Clients</div>
       </div>
       <div class="dev-stat-card">
+        <div class="icon"><i class="fas fa-trophy"></i></div>
         <div class="num" data-count="5" data-suffix="+">0</div>
-        <div class="lbl">Years Experience</div>
+        <div class="lbl">Experience</div>
+        <div class="sub">Years Experience</div>
       </div>
       <div class="dev-stat-card">
-        <div class="num" data-count="24" data-suffix="/7">0</div>
-        <div class="lbl">Support Available</div>
+        <div class="icon"><i class="fas fa-rocket"></i></div>
+        <div class="num" data-text="Web Dev">0</div>
+        <div class="lbl">Specialization</div>
+        <div class="sub">Full Stack Solutions</div>
       </div>
+    </div>
+
+    <!-- ===== SOCIAL LINKS ===== -->
+    <div class="dev-social-links dev-reveal">
+      <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://x.com/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+      <a href="#" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Portfolio Website"><i class="fas fa-globe"></i></a>
     </div>
   </div>
 </section>
@@ -216,27 +240,27 @@ button{cursor:pointer;font-family:var(--font-sans)}
     </div>
     <div class="dev-portfolio-grid dev-reveal">
       <div class="dev-portfolio-item" data-title="Luxury Wedding Platform">
-        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80" alt="Wedding Website Project" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80" alt="Wedding Website Project" loading="lazy" decoding="async">
         <div class="overlay"><h4>Wedding Platform</h4><p>Full-featured wedding website with RSVP, galleries &amp; admin dashboard</p></div>
       </div>
       <div class="dev-portfolio-item" data-title="E-Commerce Solution">
-        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" alt="E-Commerce Project" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" alt="E-Commerce Project" loading="lazy" decoding="async">
         <div class="overlay"><h4>E-Commerce Platform</h4><p>Modern online store with payment integration and inventory management</p></div>
       </div>
       <div class="dev-portfolio-item" data-title="Mobile App UI">
-        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80" alt="Mobile App Project" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80" alt="Mobile App Project" loading="lazy" decoding="async">
         <div class="overlay"><h4>Mobile Application</h4><p>Cross-platform mobile app with real-time features and elegant design</p></div>
       </div>
       <div class="dev-portfolio-item" data-title="Brand Identity">
-        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80" alt="Branding Project" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80" alt="Branding Project" loading="lazy" decoding="async">
         <div class="overlay"><h4>Brand Identity</h4><p>Complete visual identity design including logo, palette, and guidelines</p></div>
       </div>
       <div class="dev-portfolio-item" data-title="AI Chatbot System">
-        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80" alt="AI Project" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80" alt="AI Project" loading="lazy" decoding="async">
         <div class="overlay"><h4>AI Assistant</h4><p>Intelligent chatbot with natural language processing and learning capabilities</p></div>
       </div>
       <div class="dev-portfolio-item" data-title="Dashboard Analytics">
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80" alt="Dashboard Project" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80" alt="Dashboard Project" loading="lazy" decoding="async">
         <div class="overlay"><h4>Analytics Dashboard</h4><p>Data visualization dashboard with real-time metrics and reporting</p></div>
       </div>
     </div>
@@ -254,12 +278,12 @@ button{cursor:pointer;font-family:var(--font-sans)}
     <div class="dev-testimonials dev-reveal">
       <div class="dev-testimonial-card">
         <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-        <div class="text">"Stonyboy delivered an absolutely stunning wedding website for us. The attention to detail and the elegant design exceeded our expectations. Highly recommended!"</div>
+        <div class="text">"Leelee David Douglas delivered an absolutely stunning wedding website for us. The attention to detail and the elegant design exceeded our expectations. Highly recommended!"</div>
         <div class="author">— Sarah &amp; Michael <span>Happy Couple</span></div>
       </div>
       <div class="dev-testimonial-card">
         <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-        <div class="text">"Professional, creative, and incredibly talented. David transformed our business with a beautiful website and branding that truly captures our vision."</div>
+        <div class="text">"Professional, creative, and incredibly talented. Stonyboy transformed our business with a beautiful website and branding that truly captures our vision."</div>
         <div class="author">— James O. <span>Business Owner</span></div>
       </div>
       <div class="dev-testimonial-card">
@@ -281,42 +305,45 @@ button{cursor:pointer;font-family:var(--font-sans)}
     </div>
     <div class="dev-contact-grid dev-reveal">
       <div class="dev-contact-card">
-        <div class="icon"><i class="fab fa-whatsapp"></i></div>
-        <h4>WhatsApp</h4>
-        <p>08025092458</p>
-        <div class="sub">Quickest response</div>
+        <div class="icon"><i class="fas fa-phone"></i></div>
+        <h4>Call Developer</h4>
+        <p><a href="tel:08157610930">08157610930</a></p>
+        <div class="sub">Available 24/7</div>
       </div>
       <div class="dev-contact-card">
-        <div class="icon"><i class="fas fa-phone"></i></div>
-        <h4>Phone Call</h4>
-        <p>07039557981</p>
-        <div class="sub">Available 24/7</div>
+        <div class="icon"><i class="fab fa-whatsapp"></i></div>
+        <h4>Chat on WhatsApp</h4>
+        <p><a href="https://wa.me/2348025092458" target="_blank">08025092458</a></p>
+        <div class="sub">Quickest response</div>
       </div>
       <div class="dev-contact-card">
         <div class="icon"><i class="fas fa-envelope"></i></div>
         <h4>Email</h4>
-        <p>Connect via WhatsApp or Call</p>
+        <p><a href="mailto:stonyboy@example.com">stonyboy@example.com</a></p>
         <div class="sub">I will respond promptly</div>
       </div>
     </div>
     <div class="dev-contact-actions dev-reveal">
+      <a href="tel:08157610930" class="call-btn"><i class="fas fa-phone-alt"></i> Call Developer</a>
       <a href="https://wa.me/2348025092458" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
-      <a href="tel:+2347039557981" class="call-btn"><i class="fas fa-phone-alt"></i> Call Now</a>
-      <a href="https://wa.me/2348025092458?text=Hello%20Stonyboy%2C%20I%20am%20interested%20in%20your%20services." target="_blank" class="email-btn"><i class="fas fa-paper-plane"></i> Send Inquiry</a>
+      <button onclick="DeveloperActions.copyPhone()" class="copy-phone-btn"><i class="fas fa-copy"></i> Copy Phone</button>
+      <button onclick="DeveloperActions.copyWhatsApp()" class="copy-wa-btn"><i class="fab fa-whatsapp"></i> Copy WhatsApp</button>
+      <button onclick="DeveloperActions.copyEmail()" class="copy-email-btn"><i class="fas fa-envelope"></i> Copy Email</button>
+      <button onclick="DeveloperActions.share()" class="share-btn"><i class="fas fa-share-alt"></i> Share Profile</button>
+      <button onclick="DeveloperActions.downloadVCard()" class="vcard-btn"><i class="fas fa-address-card"></i> Download Contact</button>
     </div>
   </div>
 </section>
 
-<!-- ===== BOTTOM PROMPT BANNER ===== -->
-<div class="prompt-banner" id="promptBanner">
-  <span>Built by <strong>David Leelee Douglas (Stonyboy)</strong> — <i class="fab fa-whatsapp" style="color:var(--gold);"></i> 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> 07039557981</span>
-  <button class="prompt-close" onclick="this.parentElement.remove()">&times;</button>
-</div>
-
 <!-- ===== FOOTER ===== -->
 <footer class="footer">
-  <div class="developer">Designed &amp; Developed by <span class="dev-name" onclick="DeveloperPopup.show()">David Leelee Douglas / Stonyboy</span></div>
-  <div style="color:var(--text-muted);font-size:0.75rem;margin-top:6px;">&copy; 2026 Stonyboy Technologies. All Rights Reserved.</div>
+  <div class="developer">Developed with <i class="fas fa-heart" style="color:var(--gold);"></i> by <span class="dev-name" onclick="DeveloperPopup.show()">Leelee David Douglas (Stonyboy)</span></div>
+  <div class="footer-contact">
+    <span><i class="fas fa-phone" style="color:var(--gold);"></i> 08157610930</span>
+    <span style="margin:0 8px">|</span>
+    <span><i class="fab fa-whatsapp" style="color:var(--gold);"></i> 08025092458</span>
+  </div>
+  <div style="color:var(--text-muted);font-size:0.75rem;margin-top:6px;">&copy; 2026 Luxury Wedding. All Rights Reserved.</div>
 </footer>
 
 <script src="js/developer.js"></script>
@@ -326,7 +353,7 @@ button{cursor:pointer;font-family:var(--font-sans)}
 (function(){
   var sb = document.getElementById('sidebarToggle');
   if (sb) sb.addEventListener('click', function() {
-    var sidebar = document.getElementById('sidebar');
+    var sidebar = document.getElementById('sidebarNav');
     if (sidebar) sidebar.classList.toggle('open');
   });
 })();
@@ -334,6 +361,7 @@ button{cursor:pointer;font-family:var(--font-sans)}
 </div><!-- /.page-wrapper -->
 
 <script src="js/auth.js"></script>
+<script src="js/auth-guard.js"></script>
 <script src="js/sidebar.js"></script>
 </body>
 </html>

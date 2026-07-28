@@ -1,0 +1,10 @@
+/* Customizer Page Styles */
+.customizer-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.customizer-controls{max-height:calc(100vh - 120px);overflow-y:auto;padding-right:12px;scrollbar-width:thin;scrollbar-color:#D4AF37 transparent}
+.customizer-controls::-webkit-scrollbar{width:6px}
+.customizer-controls::-webkit-scrollbar-thumb{background:#D4AF37;border-radius:3px}
+.customizer-preview{position:sticky;top:100px}
+@media(max-width:960px){
+  .customizer-layout{grid-template-columns:1fr}
+  .customizer-preview{position:relative;top:auto}
+}

@@ -1,6 +1,6 @@
 /**
- * Wedding Notification System
- * Glassmorphism toast notifications with slide-down animation
+ * Wedding Notification System — Luxury Toast Notifications
+ * Premium glassmorphism toasts with title, description, icon, auto-dismiss, manual close
  */
 (function() {
   'use strict';
@@ -10,8 +10,10 @@
   function ensureContainer() {
     if (container && document.body.contains(container)) return container;
     container = document.createElement('div');
-    container.id = 'weddingNotifications';
-    container.style.cssText = 'position:fixed;top:20px;right:20px;z-index:30000;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:400px;width:calc(100% - 40px);';
+    container.className = 'ds-toast-container';
+    container.setAttribute('role', 'status');
+    container.setAttribute('aria-live', 'polite');
+    container.setAttribute('aria-label', 'Notifications');
     document.body.appendChild(container);
     return container;
   }
@@ -23,72 +25,114 @@
     info: 'fa-info-circle'
   };
 
-  var colors = {
-    success: { border: 'rgba(34,197,94,0.3)', bg: 'rgba(34,197,94,0.08)', icon: '#22c55e' },
-    error: { border: 'rgba(239,68,68,0.3)', bg: 'rgba(239,68,68,0.08)', icon: '#ef4444' },
-    warning: { border: 'rgba(245,158,11,0.3)', bg: 'rgba(245,158,11,0.08)', icon: '#f59e0b' },
-    info: { border: 'rgba(212,175,55,0.3)', bg: 'rgba(212,175,55,0.08)', icon: '#D4AF37' }
+  var titles = {
+    success: 'Success',
+    error: 'Error',
+    warning: 'Warning',
+    info: 'Notice'
   };
 
-  window.showNotification = function(message, type, duration) {
+  /**
+   * Show a luxury toast notification
+   * @param {string} message - Description text (or title if no title param)
+   * @param {string} type - success|error|warning|info
+   * @param {number} duration - Auto-dismiss in ms (default 4000, 0 = no auto-dismiss)
+   * @param {object} opts - { title: string, description: string, dismissible: boolean }
+   */
+  window.showNotification = function(message, type, duration, opts) {
     type = type || 'info';
-    duration = duration || 4000;
+    duration = duration !== undefined ? duration : 4000;
+    opts = opts || {};
 
     var c = ensureContainer();
-    var style = colors[type] || colors.info;
+    var title = opts.title || titles[type] || 'Notice';
+    var description = opts.description || message || '';
+    var dismissible = opts.dismissible !== false;
 
     var toast = document.createElement('div');
-    toast.style.cssText = 'pointer-events:auto;display:flex;align-items:center;gap:12px;padding:14px 20px;border-radius:14px;background:rgba(11,15,25,0.92);border:1px solid ' + style.border + ';backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 0 1px rgba(212,175,55,0.04);transform:translateX(120%);opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);font-family:Inter,sans-serif;';
+    toast.className = 'ds-toast ' + type;
+    toast.setAttribute('role', 'alert');
+    toast.style.position = 'relative';
 
-    toast.innerHTML = '<div style="width:32px;height:32px;border-radius:50%;background:' + style.bg + ';border:1px solid ' + style.border + ';display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas ' + icons[type] + '" style="color:' + style.icon + ';font-size:0.85rem;"></i></div>' +
-      '<div style="flex:1;"><div style="color:#E8E0D0;font-size:0.88rem;font-weight:500;line-height:1.4;">' + message + '</div></div>' +
-      '<button onclick="this.parentElement.remove()" style="background:none;border:none;color:#A09888;font-size:1rem;cursor:pointer;padding:4px;flex-shrink:0;line-height:1;"><i class="fas fa-times"></i></button>';
+    var iconHtml = '<div class="ds-toast-icon"><i class="fas ' + (icons[type] || icons.info) + '"></i></div>';
+
+    var closeBtn = dismissible
+      ? '<button class="ds-toast-close" aria-label="Dismiss notification"><i class="fas fa-times"></i></button>'
+      : '';
+
+    toast.innerHTML = iconHtml +
+      '<div class="ds-toast-body">' +
+        '<div class="ds-toast-title">' + escHtml(title) + '</div>' +
+        '<div class="ds-toast-desc">' + escHtml(description) + '</div>' +
+      '</div>' +
+      closeBtn;
+
+    if (duration > 0) {
+      var progress = document.createElement('div');
+      progress.className = 'ds-toast-progress';
+      progress.style.width = '100%';
+      progress.style.transition = 'width ' + duration + 'ms linear';
+      toast.appendChild(progress);
+      setTimeout(function() { progress.style.width = '0%'; }, 50);
+    }
 
     c.appendChild(toast);
 
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {
-        toast.style.transform = 'translateX(0)';
-        toast.style.opacity = '1';
+        toast.classList.add('show');
       });
     });
 
-    setTimeout(function() {
-      toast.style.transform = 'translateX(120%)';
-      toast.style.opacity = '0';
+    function dismiss() {
+      toast.classList.remove('show');
       setTimeout(function() {
         if (toast.parentElement) toast.remove();
-      }, 400);
-    }, duration);
+      }, 450);
+    }
 
-    return toast;
+    var closeBtnEl = toast.querySelector('.ds-toast-close');
+    if (closeBtnEl) {
+      closeBtnEl.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dismiss();
+      });
+    }
+
+    if (duration > 0) {
+      toast.addEventListener('mouseenter', function() {
+        if (progress) progress.style.transitionDuration = '0s';
+      });
+      toast.addEventListener('mouseleave', function() {
+        if (progress) {
+          var remaining = parseFloat(getComputedStyle(progress).width) / toast.offsetWidth * duration;
+          progress.style.transitionDuration = remaining + 'ms';
+          progress.style.width = '0%';
+        }
+      });
+      setTimeout(dismiss, duration);
+    }
+
+    return { el: toast, dismiss: dismiss };
   };
 
-  // Also override global showNotification from global.js if it exists
-  // The showNotification defined here will be the canonical one
+  function escHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
 
   // ===== NOTIFICATION BADGE =====
   function ensureNotifBadge() {
-    var existing = document.querySelector('.notif-badge');
-    if (existing) return;
-    var badge = document.createElement('span');
-    badge.className = 'notif-badge';
-    badge.style.cssText = 'position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:50px;background:var(--error);color:#fff;font-size:0.65rem;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 4px;font-family:Poppins,sans-serif;pointer-events:none;';
-    // Add to all notification bell icons in nav
-    var bells = document.querySelectorAll('.sidebar-link[href*="notifications"], .notif-icon');
+    var bells = document.querySelectorAll('.sidebar-link[href*="notifications"], .ds-nav-bell, .notif-icon');
     bells.forEach(function(bell) {
-      if (!bell.querySelector('.notif-badge')) {
-        var wrapper = bell.style.position ? bell : bell;
-        wrapper.style.position = 'relative';
-        wrapper.appendChild(badge.cloneNode(true));
-      }
+      if (bell.querySelector('.ds-notif-dot, .notif-badge')) return;
+      bell.style.position = 'relative';
+      var dot = document.createElement('span');
+      dot.className = 'ds-notif-dot';
+      bell.appendChild(dot);
     });
   }
 
-  // Update badge count on load
-  setTimeout(function() {
-    if (typeof updateNotifBadge === 'function') updateNotifBadge();
-    ensureNotifBadge();
-  }, 500);
+  setTimeout(ensureNotifBadge, 500);
 
 })();

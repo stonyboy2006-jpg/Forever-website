@@ -1,398 +1,329 @@
-let adminUser = null;
-let unsubscribeGuests = null;
-let unsubscribeMessages = null;
-let eventsData = [];
-let galleryData = [];
+/**
+ * Super Admin Panel Module
+ * System-wide management, user overview, and administrative tools
+ */
+(function(){
+  'use strict';
+  var W=window.__WEDDING_ADMIN=window.__WEDDING_ADMIN||{};
+  if(W.initialized)return;
+  W.initialized=true;
 
-document.addEventListener('DOMContentLoaded', function() {
-  var loginPage = document.getElementById('loginPage');
-  var dashboard = document.getElementById('dashboard');
-  if (loginPage) loginPage.style.display = 'none';
-  if (dashboard) dashboard.classList.add('active');
-  adminUser = { email: 'admin' };
-  initDashboard();
-});
+  var ADMIN_KEY='weddingSuperAdmin';
+  var ADMIN_HASH_KEY='weddingAdminHash';
 
-function initDashboard() {
-  loadWeddingDetails();
-  loadGallery();
-  loadEvents();
-  loadSocial();
-  setupRealtimeListeners();
-  document.querySelectorAll('.tab').forEach(t => {
-    t.addEventListener('click', function() {
-      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-      document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
-      this.classList.add('active');
-      document.getElementById(this.dataset.tab).classList.add('active');
-    });
-  });
-  setupGalleryUpload();
-}
+  function getAdminConfig(){
+    try{return JSON.parse(localStorage.getItem(ADMIN_KEY)||'{}');}catch(e){return{};}
+  }
+  function saveAdminConfig(c){localStorage.setItem(ADMIN_KEY,JSON.stringify(c));}
 
-function setupRealtimeListeners() {
-  if (unsubscribeGuests) unsubscribeGuests();
-  if (unsubscribeMessages) unsubscribeMessages();
+  async function hashPassword(password){
+    var encoder=new TextEncoder();
+    var data=encoder.encode(password+'wedding-salt-2024');
+    var hashBuffer=await crypto.subtle.digest('SHA-256',data);
+    var hashArray=Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+  }
 
-  unsubscribeGuests = fbOnSnapshot('guests', (guests) => {
-    updateStats(guests || []);
-    renderRSVP(guests || []);
-    renderRecentRSVPs(guests || []);
-  });
-
-  unsubscribeMessages = fbOnSnapshot('messages', (messages) => {
-    renderMessages(messages || []);
-  });
-}
-
-function updateStats(guests) {
-  const total = guests.length;
-  const confirmed = guests.filter(g => g.attendanceStatus === 'yes').length;
-  const declined = guests.filter(g => g.attendanceStatus === 'no').length;
-  document.getElementById('statTotal').textContent = total;
-  document.getElementById('statConfirmed').textContent = confirmed;
-  document.getElementById('statDeclined').textContent = declined;
-  document.getElementById('statMessages').textContent = '...';
-  document.getElementById('overviewText').innerHTML =
-    `<strong>${total}</strong> total RSVPs · <strong>${confirmed}</strong> confirmed · <strong>${declined}</strong> declined`;
-  fbGetCollection('messages').then(msgs => {
-    if (msgs && msgs.length !== undefined) {
-      document.getElementById('statMessages').textContent = msgs.length;
-    }
-  });
-}
-
-function loadWeddingDetails() {
-  fbGetDoc('weddingInfo', 'main').then(d => {
-    if (!d) return;
-    document.getElementById('agGroom').value = d.groomName || '';
-    document.getElementById('agBride').value = d.brideName || '';
-    document.getElementById('agDate').value = d.weddingDate || '';
-    document.getElementById('agTime').value = d.weddingTime || '';
-    document.getElementById('agMotto').value = d.motto || '';
-    document.getElementById('agDressCode').value = d.dressCode || '';
-    document.getElementById('agColor').value = d.themeColor || '#C9A84C';
-    document.getElementById('agCountry').value = d.country || '';
-    document.getElementById('agState').value = d.state || '';
-    document.getElementById('agCity').value = d.city || '';
-    document.getElementById('agVenue').value = d.venue || '';
-    document.getElementById('agAddress').value = d.address || '';
-    document.getElementById('agGroomPhoto').value = d.groomPhoto || '';
-    document.getElementById('agBridePhoto').value = d.bridePhoto || '';
-    document.getElementById('agCoverPhoto').value = d.coverPhoto || '';
-    document.getElementById('agMusic').value = d.musicUrl || '';
-    document.getElementById('agStory').value = d.weddingStory || '';
-  });
-}
-
-function saveWeddingDetails() {
-  const data = {
-    groomName: document.getElementById('agGroom').value.trim(),
-    brideName: document.getElementById('agBride').value.trim(),
-    weddingDate: document.getElementById('agDate').value,
-    weddingTime: document.getElementById('agTime').value,
-    motto: document.getElementById('agMotto').value.trim(),
-    dressCode: document.getElementById('agDressCode').value.trim(),
-    themeColor: document.getElementById('agColor').value,
-    country: document.getElementById('agCountry').value.trim(),
-    state: document.getElementById('agState').value.trim(),
-    city: document.getElementById('agCity').value.trim(),
-    venue: document.getElementById('agVenue').value.trim(),
-    address: document.getElementById('agAddress').value.trim(),
-    groomPhoto: document.getElementById('agGroomPhoto').value.trim(),
-    bridePhoto: document.getElementById('agBridePhoto').value.trim(),
-    coverPhoto: document.getElementById('agCoverPhoto').value.trim(),
-    musicUrl: document.getElementById('agMusic').value.trim(),
-    weddingStory: document.getElementById('agStory').value.trim()
+  W.setAdminPassword=async function(newPassword){
+    if(!newPassword||newPassword.length<8)return{success:false,error:'Password must be at least 8 characters'};
+    var hash=await hashPassword(newPassword);
+    localStorage.setItem(ADMIN_HASH_KEY,hash);
+    return{success:true};
   };
-  fbSetDoc('weddingInfo', 'main', data).then(() => {
-    showSaved('savedDetails');
-  });
-}
 
-function setupGalleryUpload() {
-  const area = document.getElementById('galleryDrop');
-  const input = document.getElementById('galleryFile');
-  area.addEventListener('click', () => input.click());
-  input.addEventListener('change', (e) => {
-    for (const file of e.target.files) {
-      fbUploadFile('gallery/' + Date.now() + '_' + file.name, file).then(url => {
-        galleryData.push({ imageUrl: url, uploadDate: new Date().toISOString(), createdAt: new Date().toISOString() });
-        renderGalleryPreview();
-      });
+  W.authenticate=async function(password){
+    var storedHash=localStorage.getItem(ADMIN_HASH_KEY);
+    if(!storedHash){
+      var defaultHash=await hashPassword('WeddingAdmin2026!');
+      if(await hashPassword(password)===defaultHash){
+        localStorage.setItem(ADMIN_HASH_KEY,defaultHash);
+      }else{
+        if(window.ErrorLogger)window.ErrorLogger.logAuthFailure('Failed super admin login attempt');
+        return false;
+      }
+    }else{
+      var passwordHash=await hashPassword(password);
+      if(passwordHash!==storedHash){
+        if(window.ErrorLogger)window.ErrorLogger.logAuthFailure('Failed super admin login attempt');
+        return false;
+      }
     }
-    e.target.value = '';
-  });
-  area.addEventListener('dragover', e => { e.preventDefault(); area.style.borderColor = 'var(--gold)'; });
-  area.addEventListener('dragleave', () => { area.style.borderColor = '#ddd'; });
-  area.addEventListener('drop', e => {
-    e.preventDefault(); area.style.borderColor = '#ddd';
-    for (const file of e.dataTransfer.files) {
-      if (!file.type.startsWith('image/')) continue;
-      fbUploadFile('gallery/' + Date.now() + '_' + file.name, file).then(url => {
-        galleryData.push({ imageUrl: url, uploadDate: new Date().toISOString(), createdAt: new Date().toISOString() });
-        renderGalleryPreview();
-      });
+    var config=getAdminConfig();
+    config.authenticated=true;
+    config.authTime=new Date().toISOString();
+    saveAdminConfig(config);
+    if(window.AuditLog)window.AuditLog.record('admin_auth','Super admin authenticated','admin');
+    return true;
+  };
+
+  W.isAuthenticated=function(){
+    var config=getAdminConfig();
+    if(!config.authenticated)return false;
+    if(config.authTime){
+      var elapsed=Date.now()-new Date(config.authTime).getTime();
+      if(elapsed>30*60*1000){config.authenticated=false;saveAdminConfig(config);return false;}
     }
-  });
-}
+    return true;
+  };
 
-function loadGallery() {
-  fbGetCollection('gallery').then(items => {
-    galleryData = items || [];
-    renderGalleryPreview();
-  });
-}
+  W.logout=function(){
+    var config=getAdminConfig();
+    config.authenticated=false;
+    saveAdminConfig(config);
+  };
 
-function renderGalleryPreview() {
-  const container = document.getElementById('galleryPreview');
-  if (!galleryData.length) {
-    container.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i>No photos yet</div>';
-    return;
+  W.getSystemOverview=function(){
+    var overview={
+      localStorage:getStorageOverview(),
+      users:getUserOverview(),
+      system:getSystemInfo(),
+      features:getFeatureStatus(),
+      security:getSecurityOverview(),
+      performance:getPerformanceOverview()
+    };
+    return overview;
+  };
+
+  function getStorageOverview(){
+    var total=0;var items={};
+    try{
+      for(var i=0;i<localStorage.length;i++){
+        var k=localStorage.key(i);
+        var v=localStorage.getItem(k);
+        if(k&&v){total+=k.length+v.length;items[k]=v.length;}
+      }
+    }catch(e){}
+    return{
+      totalBytes:total*2,
+      totalFormatted:formatSize(total*2),
+      itemCount:localStorage.length,
+      largestItems:Object.entries(items).sort(function(a,b){return b[1]-a[1];}).slice(0,10).map(function(e){return{name:e[0],size:formatSize(e[1]*2)};})
+    };
   }
-  container.innerHTML = galleryData.map((item, i) =>
-    `<div class="preview-item" draggable="true" data-idx="${i}">
-      <img src="${item.imageUrl || item.url}" alt="Photo ${i+1}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E'">
-      <button class="remove-btn" onclick="deleteGalleryItem(${i})">&times;</button>
-      <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
-    </div>`
-  ).join('');
-}
 
-function addGalleryUrl() {
-  const url = document.getElementById('galleryUrlInput').value.trim();
-  if (!url) return;
-  galleryData.push({ imageUrl: url, uploadDate: new Date().toISOString(), createdAt: new Date().toISOString() });
-  document.getElementById('galleryUrlInput').value = '';
-  renderGalleryPreview();
-}
-
-function deleteGalleryItem(index) {
-  const item = galleryData[index];
-  galleryData.splice(index, 1);
-  renderGalleryPreview();
-  if (item.id) {
-    fbDeleteDoc('gallery', item.id);
-  } else {
-    saveGalleryToFirebase();
+  function getUserOverview(){
+    var session=null;
+    try{session=JSON.parse(localStorage.getItem('weddingAuthSession')||'null');}catch(e){}
+    var guests=[];
+    try{guests=JSON.parse(localStorage.getItem('weddingGuests')||'[]');}catch(e){}
+    return{
+      owner:session?{name:session.name,email:session.email,role:session.role,setupComplete:session.setupComplete}:null,
+      guestCount:guests.length,
+      rsvps:guests.filter(function(g){return g.rsvpStatus==='attending';}).length,
+      declined:guests.filter(function(g){return g.rsvpStatus==='declined';}).length
+    };
   }
-}
 
-function saveGallery() {
-  saveGalleryToFirebase().then(() => showSaved('savedGallery'));
-}
-
-async function saveGalleryToFirebase() {
-  for (const item of galleryData) {
-    if (!item.id) {
-      await fbAddDoc('gallery', item);
-    } else {
-      await fbSetDoc('gallery', item.id, item);
-    }
+  function getSystemInfo(){
+    return{
+      platform:navigator.platform,
+      userAgent:navigator.userAgent,
+      cores:navigator.hardwareConcurrency||0,
+      memory:navigator.deviceMemory||'unknown',
+      language:navigator.language,
+      cookieEnabled:navigator.cookieEnabled,
+      serviceWorker:'serviceWorker' in navigator,
+      offlineSupport:!!navigator.onLine,
+      screenResolution:screen.width+'x'+screen.height,
+      colorDepth:screen.colorDepth,
+      timezone:Intl.DateTimeFormat().resolvedOptions().timeZone
+    };
   }
-  loadGallery();
-}
 
-function loadEvents() {
-  fbGetCollection('events').then(items => {
-    eventsData = items && items.length ? items : [
-      { eventName: 'Wedding Ceremony', eventDate: '', eventTime: '', eventVenue: '', description: '' },
-      { eventName: 'Reception', eventDate: '', eventTime: '', eventVenue: '', description: '' }
+  function getFeatureStatus(){
+    var features=[
+      {name:'Firebase Integration',enabled:typeof firebase!=='undefined'&&firebase.initializeApp,note:typeof firebase!=='undefined'?'Configured':'Placeholder only'},
+      {name:'Service Worker',enabled:'serviceWorker' in navigator,note:navigator.serviceWorker?.controller?'Active':'Not active'},
+      {name:'Push Notifications',enabled:'Notification' in window,note:'Notification' in window?Notification.permission:'Not supported'},
+      {name:'Offline Storage',enabled:typeof localStorage!=='undefined',note:typeof localStorage!=='undefined'?'Available':'Unavailable'},
+      {name:'Camera Access',enabled:!!navigator.mediaDevices,note:!!navigator.mediaDevices?'Supported':'Not supported'},
+      {name:'Geolocation',enabled:'geolocation' in navigator,note:'geolocation' in navigator?'Available':'Unavailable'},
+      {name:'Clipboard API',enabled:!!navigator.clipboard,note:!!navigator.clipboard?'Supported':'Not supported'},
+      {name:'Web Share API',enabled:!!navigator.share,note:!!navigator.share?'Supported':'Not supported'}
     ];
-    renderEvents();
-  });
-}
-
-function renderEvents() {
-  const container = document.getElementById('eventsContainer');
-  container.innerHTML = eventsData.map((ev, i) => `
-    <div class="event-card-admin">
-      <button class="btn danger small remove-event" onclick="removeEvent(${i})"><i class="fas fa-times"></i></button>
-      <h4>Event ${i+1}</h4>
-      <div class="form-row">
-        <div class="form-group"><label>Name</label><input type="text" class="ev-name" value="${escAttr(ev.eventName||'')}"></div>
-        <div class="form-group"><label>Date</label><input type="date" class="ev-date" value="${ev.eventDate||''}"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Time</label><input type="time" class="ev-time" value="${ev.eventTime||''}"></div>
-        <div class="form-group"><label>Venue</label><input type="text" class="ev-venue" value="${escAttr(ev.eventVenue||'')}"></div>
-      </div>
-      <div class="form-group"><label>Description</label><input type="text" class="ev-desc" value="${escAttr(ev.description||'')}"></div>
-    </div>
-  `).join('');
-}
-
-function addEvent() {
-  eventsData.push({ eventName: '', eventDate: '', eventTime: '', eventVenue: '', description: '', createdAt: new Date().toISOString() });
-  renderEvents();
-}
-
-function removeEvent(index) {
-  const ev = eventsData[index];
-  eventsData.splice(index, 1);
-  renderEvents();
-  if (ev.id) fbDeleteDoc('events', ev.id);
-}
-
-async function saveEvents() {
-  const cards = document.querySelectorAll('#eventsContainer .event-card-admin');
-  cards.forEach((card, i) => {
-    if (eventsData[i]) {
-      eventsData[i].eventName = card.querySelector('.ev-name').value;
-      eventsData[i].eventDate = card.querySelector('.ev-date').value;
-      eventsData[i].eventTime = card.querySelector('.ev-time').value;
-      eventsData[i].eventVenue = card.querySelector('.ev-venue').value;
-      eventsData[i].eventDescription = card.querySelector('.ev-desc').value;
-    }
-  });
-  for (const ev of eventsData) {
-    if (ev.id) {
-      await fbSetDoc('events', ev.id, ev);
-    } else {
-      const res = await fbAddDoc('events', ev);
-      ev.id = res.id;
-    }
+    return features;
   }
-  showSaved('savedEvents');
-}
 
-function renderRSVP(guests) {
-  if (!guests) return;
-  const search = (document.getElementById('rsvpSearch').value || '').toLowerCase();
-  let filtered = guests;
-  if (search) {
-    filtered = guests.filter(g =>
-      (g.fullName || '').toLowerCase().includes(search) ||
-      (g.email || '').toLowerCase().includes(search)
-    );
+  function getSecurityOverview(){
+    var errors=window.ErrorLogger?window.ErrorLogger.getStats():{total:0};
+    var audit=window.AuditLog?window.AuditLog.getStats():{total:0};
+    var maint=window.WeddingMaintenance?window.WeddingMaintenance.isEnabled():false;
+    return{
+      totalErrors:errors.total,
+      authFailures:errors.byType?errors.byType.auth_failure||0:0,
+      totalAuditEntries:audit.total,
+      maintenanceMode:maint,
+      cspEnabled:!!document.querySelector('meta[http-equiv="Content-Security-Policy"]'),
+      https:location.protocol==='https:'||location.hostname==='localhost'
+    };
   }
-  document.getElementById('rsvpCount').textContent = `(${filtered.length} shown of ${guests.length})`;
-  const tbody = document.getElementById('rsvpBody');
-  if (!filtered.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#999;">No responses</td></tr>';
-    return;
+
+  function getPerformanceOverview(){
+    var perf=window.performance||{};
+    var timing=perf.timing||{};
+    return{
+      loadTime:timing.loadEventEnd-timing.navigationStart||0,
+      domReady:timing.domContentLoadedEventEnd-timing.navigationStart||0,
+      resources:perf.getEntries?perf.getEntries().length:0
+    };
   }
-  tbody.innerHTML = filtered.map(g => `
-    <tr>
-      <td><strong>${escHtml(g.fullName||'')}</strong></td>
-      <td>${escHtml(g.email||'-')}</td>
-      <td>${escHtml(g.phone||'-')}</td>
-      <td>${g.guestCount||1}</td>
-      <td>${g.mealPreference||'-'}</td>
-      <td style="color:${g.attendanceStatus==='yes'?'#27ae60':'#e74c3c'};font-weight:600;">${g.attendanceStatus==='yes'?'Yes':'No'}</td>
-      <td style="font-size:0.8rem;color:#999;">${g.createdAt?new Date(g.createdAt).toLocaleDateString():'-'}</td>
-    </tr>
-  `).join('');
-}
 
-function renderRecentRSVPs(guests) {
-  const container = document.getElementById('recentRSVPs');
-  const recent = (guests || []).slice(0, 5);
-  if (!recent.length) { container.innerHTML = '<p style="color:var(--text-light);">No RSVPs yet</p>'; return; }
-  container.innerHTML = recent.map(g => `
-    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;">
-      <span><strong>${escHtml(g.fullName||'')}</strong> <span style="color:var(--text-light);font-size:0.8rem;">(${g.guestCount||1} guest${g.guestCount>1?'s':''})</span></span>
-      <span style="color:${g.attendanceStatus==='yes'?'#27ae60':'#e74c3c'};font-weight:600;">${g.attendanceStatus==='yes'?'Yes':'No'}</span>
-    </div>
-  `).join('');
-}
-
-function exportCSV() {
-  let guests = [];
-  fbGetCollection('guests').then(list => {
-    guests = list || [];
-    if (!guests.length) { alert('No data to export'); return; }
-    let csv = 'Name,Email,Phone,Guests,Meal,Attending,Date\n';
-    guests.forEach(g => {
-      csv += `"${g.fullName||''}","${g.email||''}","${g.phone||''}",${g.guestCount||1},"${g.mealPreference||''}","${g.attendanceStatus||''}","${g.createdAt||''}"\n`;
-    });
-    const blob = new Blob([csv], {type:'text/csv'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'rsvp-list.csv'; a.click();
-    URL.revokeObjectURL(url);
-  });
-}
-
-function printRSVPs() {
-  fbGetCollection('guests').then(list => {
-    const guests = list || [];
-    if (!guests.length) { alert('No data to print'); return; }
-    const w = window.open('','_blank');
-    w.document.write(`<html><head><title>RSVP List</title><style>body{font-family:Arial,sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;}th,td{padding:8px 12px;border:1px solid #ddd;text-align:left;}th{background:#C9A84C;color:#fff;}h1{color:#C9A84C;}</style></head><body><h1>RSVP List</h1><table><tr><th>Name</th><th>Email</th><th>Phone</th><th>Guests</th><th>Meal</th><th>Attending</th></tr>`);
-    guests.forEach(g => { w.document.write(`<tr><td>${escHtml(g.fullName||'')}</td><td>${escHtml(g.email||'-')}</td><td>${escHtml(g.phone||'-')}</td><td>${g.guestCount||1}</td><td>${g.mealPreference||'-'}</td><td>${g.attendanceStatus==='yes'?'Yes':'No'}</td></tr>`); });
-    w.document.write('</table></body></html>');
-    w.document.close();
-    w.print();
-  });
-}
-
-function renderMessages(messages) {
-  const container = document.getElementById('messagesContainer');
-  if (!messages || !messages.length) {
-    container.innerHTML = '<div class="empty-state"><i class="fas fa-comment"></i>No messages yet</div>';
-    return;
-  }
-  container.innerHTML = messages.slice().reverse().map(m =>
-    `<div class="msg-item">
-      <div class="msg-name">${escHtml(m.guestName||'Anonymous')}</div>
-      <div class="msg-date">${m.createdAt?new Date(m.createdAt).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}):''}</div>
-      <div class="msg-text">${escHtml(m.message||'')}</div>
-      ${m.id ? `<button class="btn danger small" onclick="deleteMessage('${m.id}')" style="margin-top:8px;"><i class="fas fa-trash"></i> Delete</button>` : ''}
-    </div>`
-  ).join('');
-}
-
-function deleteMessage(id) {
-  if (!confirm('Delete this message?')) return;
-  fbDeleteDoc('messages', id);
-}
-
-function deleteAllMessages() {
-  if (!confirm('Delete ALL messages? This cannot be undone.')) return;
-  fbGetCollection('messages').then(msgs => {
-    (msgs || []).forEach(m => {
-      if (m.id) fbDeleteDoc('messages', m.id);
-    });
-  });
-}
-
-function loadSocial() {
-  fbGetDoc('socialLinks', 'main').then(d => {
-    if (!d) return;
-    document.getElementById('asWhatsapp').value = d.whatsapp || '';
-    document.getElementById('asFacebook').value = d.facebook || '';
-    document.getElementById('asInstagram').value = d.instagram || '';
-    document.getElementById('asTwitter').value = d.twitter || '';
-    document.getElementById('asTelegram').value = d.telegram || '';
-    document.getElementById('asYoutube').value = d.youtube || '';
-    document.getElementById('asTiktok').value = d.tiktok || '';
-    document.getElementById('asMessenger').value = d.messenger || '';
-  });
-}
-
-function saveSocial() {
-  const data = {
-    whatsapp: document.getElementById('asWhatsapp').value.trim(),
-    facebook: document.getElementById('asFacebook').value.trim(),
-    instagram: document.getElementById('asInstagram').value.trim(),
-    twitter: document.getElementById('asTwitter').value.trim(),
-    telegram: document.getElementById('asTelegram').value.trim(),
-    youtube: document.getElementById('asYoutube').value.trim(),
-    tiktok: document.getElementById('asTiktok').value.trim(),
-    messenger: document.getElementById('asMessenger').value.trim()
+  W.runHealthCheck=function(){
+    var issues=[];
+    var wd={};try{wd=JSON.parse(localStorage.getItem('weddingData')||'{}');}catch(e){}
+    if(!wd.groomName&&!wd.brideName)issues.push('No wedding couple data found');
+    if(!wd.weddingDate)issues.push('No wedding date set');
+    if(!wd.venue)issues.push('No venue specified');
+    var users=[];try{users=JSON.parse(localStorage.getItem('weddingAuthUsers')||'[]');}catch(e){}
+    if(!users.length)issues.push('No user accounts found');
+    try{
+      var guests=JSON.parse(localStorage.getItem('weddingGuests')||'[]');
+      if(guests.length)issues.push(guests.length+' guest(s) in list');
+    }catch(e){}
+    try{
+      var errs=JSON.parse(localStorage.getItem('weddingErrorLog')||'[]');
+      if(errs.length>10)issues.push(errs.length+' logged errors (review needed)');
+    }catch(e){}
+    return issues.length?issues:['All systems healthy'];
   };
-  fbSetDoc('socialLinks', 'main', data).then(() => showSaved('savedSocial'));
-}
 
-function showSaved(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3000);
-}
+  W.clearAppCache=function(){
+    var keys=['weddingData','weddingAuthSession','weddingAuthUsers','weddingGuests','weddingGallery',
+      'weddingPalette','weddingNotifications','weddingActivity','_last_save_time',
+      'weddingErrorLog','weddingAuditLog','weddingMaintenance','weddingBackups',
+      'weddingCustomizer','weddingReminders','weddingMedia','weddingSuperAdmin'];
+    var cleared=0;
+    keys.forEach(function(k){
+      try{if(localStorage.getItem(k)!==null){localStorage.removeItem(k);cleared++;}}catch(e){}
+    });
+    if(window.AuditLog)window.AuditLog.record('cache_clear','Cleared '+cleared+' app cache keys','admin');
+    return cleared;
+  };
 
-function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-function escAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+  W.scanBrokenLinks=function(pages,callback){
+    var results={checked:0,broken:0,links:[]};
+    var toCheck=pages||['index.html','our-story.html','wedding-details.html','wedding-party.html',
+      'events.html','gallery.html','timeline.html','rsvp.html','gift-registry.html',
+      'faq.html','contact.html','planner.html','privacy.html','terms.html',
+      'about.html','login.html','signup.html','profile.html','dashboard.html',
+      'setup.html','invitation.html','ai-assistant.html','settings.html',
+      'customize.html','reminders.html','media.html'];
+    var idx=0;
+    function checkNext(){
+      if(idx>=toCheck.length){if(callback)callback(results);return;}
+      var page=toCheck[idx++];
+      var xhr=new XMLHttpRequest();
+      xhr.open('HEAD',page,true);
+      xhr.timeout=5000;
+      xhr.onload=function(){
+        results.checked++;
+        if(xhr.status>=400){results.broken++;results.links.push({page:page,status:xhr.status});}
+        checkNext();
+      };
+      xhr.onerror=function(){results.checked++;results.broken++;results.links.push({page:page,status:0});checkNext();};
+      xhr.ontimeout=function(){results.checked++;results.broken++;results.links.push({page:page,status:0});checkNext();};
+      xhr.send();
+    }
+    checkNext();
+    return results;
+  };
 
-document.addEventListener('DOMContentLoaded', () => {});
+  W.renderAdminPanel=function(containerId){
+    var el=document.getElementById(containerId);if(!el)return;
+    if(!W.isAuthenticated()){
+      el.innerHTML='\n'+
+        '<div style="max-width:400px;margin:60px auto;text-align:center">\n'+
+        '  <div class="glass-card" style="padding:40px;border-radius:16px;border:1px solid rgba(212,175,55,0.08)">\n'+
+        '    <i class="fas fa-user-shield" style="font-size:2.5rem;color:#D4AF37;margin-bottom:16px"></i>\n'+
+        '    <h2 style="font-family:Playfair Display,serif;color:#E8E0D0;margin-bottom:8px">Super Admin</h2>\n'+
+        '    <p style="color:#A09888;font-size:0.85rem;margin-bottom:20px">Enter admin credentials to access the panel</p>\n'+
+        '    <input id="adminPassInput" type="password" placeholder="Admin password" style="width:100%;padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(212,175,55,0.08);border-radius:10px;color:#E8E0D0;font-size:0.9rem;margin-bottom:12px">\n'+
+        '    <button onclick="WeddingAdmin.handleLogin()" style="width:100%;padding:12px;background:linear-gradient(135deg,#D4AF37,#B8860B);border:none;border-radius:10px;color:#0B0F19;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif"><i class="fas fa-lock" style="margin-right:6px"></i>Authenticate</button>\n'+
+        '  </div>\n'+
+        '</div>\n';
+      return;
+    }
+    var overview=W.getSystemOverview();
+    el.innerHTML='\n'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">\n'+
+      '  <h2 style="font-family:Playfair Display,serif;color:#D4AF37"><i class="fas fa-user-shield" style="margin-right:8px"></i>Super Admin Dashboard</h2>\n'+
+      '  <button onclick="WeddingAdmin.logout();WeddingAdmin.renderAdminPanel(\'adminRoot\')" style="padding:8px 16px;background:rgba(244,67,54,0.1);border:1px solid rgba(244,67,54,0.2);border-radius:8px;color:#F44336;cursor:pointer;font-size:0.85rem"><i class="fas fa-sign-out-alt" style="margin-right:4px"></i>Logout</button>\n'+
+      '</div>\n'+
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">\n'+
+      adminStatCard('Storage Used',overview.localStorage.totalFormatted,'fa-database','#FF9800')+
+      adminStatCard('Guests',overview.users.guestCount,'fa-users','#4CAF50')+
+      adminStatCard('Errors',overview.security.totalErrors,'fa-exclamation-triangle','#F44336')+
+      adminStatCard('RSVPs',overview.users.rsvps,'fa-check-circle','#2196F3')+
+      adminStatCard('Audit Entries',overview.security.totalAuditEntries,'fa-history','#9C27B0')+
+      adminStatCard('Load Time',overview.performance.loadTime+'ms','fa-bolt','#00BCD4')+
+      '</div>\n'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">\n'+
+      '  <div class="glass-card" style="padding:20px;border-radius:14px;border:1px solid rgba(212,175,55,0.08)">\n'+
+      '    <h3 style="color:#D4AF37;font-size:0.9rem;margin-bottom:12px"><i class="fas fa-user" style="margin-right:6px"></i>Owner Account</h3>\n'+
+      '    '+(overview.users.owner?'<p style="color:#E8E0D0;font-size:0.85rem">'+escapeHTML(overview.users.owner.name)+'</p><p style="color:#A09888;font-size:0.8rem">'+escapeHTML(overview.users.owner.email)+'</p><p style="color:#666;font-size:0.75rem">Setup: '+(overview.users.owner.setupComplete?'Complete':'Pending')+'</p>':'<p style="color:#666;font-size:0.85rem">No owner account found</p>')+
+      '  </div>\n'+
+      '  <div class="glass-card" style="padding:20px;border-radius:14px;border:1px solid rgba(212,175,55,0.08)">\n'+
+      '    <h3 style="color:#D4AF37;font-size:0.9rem;margin-bottom:12px"><i class="fas fa-shield-alt" style="margin-right:6px"></i>Security</h3>\n'+
+      '    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.8rem">\n'+
+      '      <span style="color:#666">HTTPS:</span><span style="color:'+(overview.security.https?'#4CAF50':'#F44336')+'">'+overview.security.https+'</span>\n'+
+      '      <span style="color:#666">CSP:</span><span style="color:'+(overview.security.cspEnabled?'#4CAF50':'#F44336')+'">'+overview.security.cspEnabled+'</span>\n'+
+      '      <span style="color:#666">Auth Failures:</span><span style="color:#FF9800">'+overview.security.authFailures+'</span>\n'+
+      '      <span style="color:#666">Maintenance:</span><span style="color:'+(overview.security.maintenanceMode?'#F44336':'#4CAF50')+'">'+overview.security.maintenanceMode+'</span>\n'+
+      '    </div>\n'+
+      '  </div>\n'+
+      '</div>\n'+
+      '  <div class="glass-card" style="padding:20px;border-radius:14px;border:1px solid rgba(212,175,55,0.08);margin-bottom:24px">\n'+
+      '    <h3 style="color:#D4AF37;font-size:0.9rem;margin-bottom:12px"><i class="fas fa-puzzle-piece" style="margin-right:6px"></i>Feature Status</h3>\n'+
+      '    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">\n'+
+      overview.features.map(function(f){
+        return '<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px">'+
+          '<i class="fas '+(f.enabled?'fa-check-circle':'fa-times-circle')+'" style="color:'+(f.enabled?'#4CAF50':'#F44336')+'"></i>'+
+          '<div><span style="color:#E8E0D0;font-size:0.82rem">'+f.name+'</span><span style="color:#666;font-size:0.72rem;margin-left:6px">'+f.note+'</span></div></div>';
+      }).join('')+
+      '    </div>\n'+
+      '  </div>\n'+
+      '  <div class="glass-card" style="padding:20px;border-radius:14px;border:1px solid rgba(212,175,55,0.08)">\n'+
+      '    <h3 style="color:#D4AF37;font-size:0.9rem;margin-bottom:12px"><i class="fas fa-database" style="margin-right:6px"></i>Storage Breakdown</h3>\n'+
+      '    <div style="margin-bottom:12px">\n'+
+      '      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:#A09888;font-size:0.8rem">Used</span><span style="color:#E8E0D0;font-size:0.8rem">'+overview.localStorage.totalFormatted+'</span></div>\n'+
+      '      <div style="width:100%;height:8px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden"><div style="width:'+Math.min(overview.localStorage.totalBytes/(5*1024*1024)*100,100)+'%;height:100%;background:linear-gradient(90deg,#D4AF37,#E8C4C0);border-radius:4px"></div></div>\n'+
+      '    </div>\n'+
+      '    <p style="color:#666;font-size:0.75rem">'+overview.localStorage.itemCount+' items in localStorage</p>\n'+
+      '  </div>\n'+
+      '  <div class="glass-card" style="padding:20px;border-radius:14px;border:1px solid rgba(212,175,55,0.08);margin-bottom:24px">\n'+
+      '    <h3 style="color:#D4AF37;font-size:0.9rem;margin-bottom:12px"><i class="fas fa-tools" style="margin-right:6px"></i>Admin Tools</h3>\n'+
+      '    <div style="display:flex;flex-wrap:wrap;gap:10px">\n'+
+      '      <button onclick="WeddingAdmin.runHealthCheck();alert(\'Health check complete. Check console.\')" style="padding:10px 18px;background:rgba(76,175,80,0.1);border:1px solid rgba(76,175,80,0.2);border-radius:8px;color:#4CAF50;cursor:pointer;font-size:0.82rem"><i class="fas fa-heartbeat" style="margin-right:6px"></i>Health Check</button>\n'+
+      '      <button onclick="if(confirm(\'Clear all app cache? This will remove all stored wedding data.\')){var c=WeddingAdmin.clearAppCache();alert(\'Cleared \'+c+\' cache keys.\');WeddingAdmin.renderAdminPanel(\'adminRoot\')}" style="padding:10px 18px;background:rgba(255,152,0,0.1);border:1px solid rgba(255,152,0,0.2);border-radius:8px;color:#FF9800;cursor:pointer;font-size:0.82rem"><i class="fas fa-eraser" style="margin-right:6px"></i>Clear Cache</button>\n'+
+      '      <button onclick="WeddingAdmin.scanBrokenLinks(null,function(r){var m=\'Scanned \'+r.checked+\' pages: \'+r.broken+\' broken.\';if(r.broken){m+=\'\\nBroken:\';r.links.forEach(function(l){m+=\'\\n- \'+l.page+\' (status \'+l.status+\')\';});}alert(m);})" style="padding:10px 18px;background:rgba(244,67,54,0.1);border:1px solid rgba(244,67,54,0.2);border-radius:8px;color:#F44336;cursor:pointer;font-size:0.82rem"><i class="fas fa-link" style="margin-right:6px"></i>Scan Links</button>\n'+
+      '    </div>\n'+
+      '  </div>\n';
+  };
+
+  function adminStatCard(label,value,icon,color){
+    return '<div style="padding:16px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(212,175,55,0.06);text-align:center">'+
+      '<i class="fas '+icon+'" style="color:'+color+';font-size:1.1rem;margin-bottom:6px"></i>'+
+      '<div style="font-size:1.3rem;color:#E8E0D0;font-weight:600">'+value+'</div>'+
+      '<div style="font-size:0.7rem;color:#A09888">'+label+'</div></div>';
+  }
+
+  W.handleLogin=function(){
+    var pass=document.getElementById('adminPassInput').value;
+    W.authenticate(pass).then(function(ok){
+      if(ok){
+        W.renderAdminPanel('adminRoot');
+        if(typeof notify==='function')notify('Admin authenticated','success');
+      }else{
+        if(typeof notify==='function')notify('Invalid admin password','error');
+      }
+    });
+  };
+
+  function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function formatSize(bytes){
+    if(bytes===0)return'0 B';var u=['B','KB','MB','GB'];var i=Math.floor(Math.log(bytes)/Math.log(1024));
+    return Math.round(bytes/Math.pow(1024,i)*10)/10+' '+u[i];
+  }
+
+  window.WeddingAdmin=W;
+})();

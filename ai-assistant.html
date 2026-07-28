@@ -4,15 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
 <meta name="theme-color" content="#0B0F19">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; frame-src 'self' https://www.google.com https://maps.google.com; media-src 'self' blob:;">
+<meta name="description" content="Meet our AI Wedding Assistant your smart planning companion for organizing every detail of the perfect wedding day.">
+<meta property="og:title" content="AI Wedding Assistant - Smart Planning">
+<meta property="og:description" content="Meet our AI Wedding Assistant your smart planning companion for organizing every detail of the perfect wedding day.">
+<meta property="og:image" content="https://foreverandalwayswedding.com/icons/icon-512.svg">
+<meta property="og:url" content="https://foreverandalwayswedding.com/ai-assistant.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Wedding Assistant - Smart Planning">
+<meta name="twitter:description" content="Meet our AI Wedding Assistant your smart planning companion for organizing every detail of the perfect wedding day.">
+<link rel="canonical" href="https://foreverandalwayswedding.com/ai-assistant.html">
 <title id="pageTitle">AI Concierge - Forever &amp; Always</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/ai-concierge.css">
 <style>
@@ -22,6 +35,7 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--text);line-
 </style>
 </head>
 <body>
+<a href="#main" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999;background:#D4AF37;color:#0B0F19;padding:12px 24px;font-weight:600;text-decoration:none;border-radius:0 0 8px 0">Skip to content</a>
 <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation menu">
   <i class="fas fa-bars icon-menu"></i><i class="fas fa-times icon-close"></i>
 </button>
@@ -71,7 +85,7 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--text);line-
   </div>
 </aside>
 <div class="page-wrapper">
-<div class="ai-concierge-page">
+<div class="ai-concierge-page" id="main" role="main">
   <!-- Header -->
   <header class="ai-header">
     <a href="index.html" class="back-btn" aria-label="Back to Home"><i class="fas fa-arrow-left"></i> Back to Home</a>
@@ -290,7 +304,6 @@ function loadHistory() {
 <script src="js/notifications.js"></script>
 
 <script src="js/global.js"></script>
-<script src="js/nav.js"></script>
 
 <!-- ===== FOOTER ===== -->
 <footer class="footer">
@@ -319,17 +332,18 @@ function loadHistory() {
       <h4>Contact</h4>
       <div class="footer-divider"></div>
       <p><i class="fab fa-whatsapp" style="color:var(--gold);margin-right:6px;"></i> 08025092458</p>
-      <p><i class="fas fa-phone" style="color:var(--gold);margin-right:6px;"></i> 07039557981</p>
+      <p><i class="fas fa-phone" style="color:var(--gold);margin-right:6px;"></i> 08157610930</p>
     </div>
   </div>
   <div class="developer">Designed &amp; Developed by <span class="dev-name">David Leelee Douglas / Stonyboy</span></div>
-  <div class="dev-contact" style="color:var(--text-light);font-size:0.8rem;margin-top:4px;"><i class="fab fa-whatsapp" style="color:var(--gold);"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> Contact: 07039557981</div>
+  <div class="dev-contact" style="color:var(--text-light);font-size:0.8rem;margin-top:4px;"><i class="fab fa-whatsapp" style="color:var(--gold);"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> Contact: 08157610930</div>
   <div class="copyright" style="color:var(--text-light);font-size:0.8rem;opacity:0.6;margin-top:8px;">&copy; 2026 Forever &amp; Always. All rights reserved.</div>
 </footer>
 <script src="js/website-title.js"></script>
 <script src="js/floating-panel.js"></script>
 </div><!-- /.page-wrapper -->
 <script src="js/auth.js"></script>
+<script src="js/auth-guard.js"></script>
 <script src="js/sidebar.js"></script>
 </body>
 </html>

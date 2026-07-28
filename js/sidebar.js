@@ -174,11 +174,11 @@ function applyGuestRestrictions(){
     if(s){var sess=JSON.parse(s);isLoggedIn=!!(sess&&sess.userId&&sess.expiresAt&&Date.now()<sess.expiresAt);}
   }catch(e){}
   if(!isLoggedIn){
-    var adminPages=['planner.html','profile.html','dashboard.html','setup.html'];
+    var privatePages=['planner.html','profile.html','dashboard.html','setup.html','settings.html','customize.html','developer.html','memories.html','invitation.html','share.html','preview.html','analytics.html','admin.html','guests.html','reports.html','invitation-center.html','ai-assistant.html'];
     if(sidebar){
       sidebar.querySelectorAll('.sidebar-link').forEach(function(link){
         var href=link.getAttribute('href');
-        if(adminPages.indexOf(href)!==-1){link.style.display='none';}
+        if(privatePages.indexOf(href)!==-1){link.style.display='none';}
       });
     }
     var footerLinks=document.getElementById('authUserMenu');

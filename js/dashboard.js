@@ -33,7 +33,7 @@ function notify(msg,type){
   var t=document.createElement('div');
   t.className='dash-toast '+(type||'info');
   var icons={success:'fa-check-circle',error:'fa-times-circle',warning:'fa-exclamation-triangle',info:'fa-info-circle'};
-  t.innerHTML='<div class="toast-icon"><i class="fas '+(icons[type]||icons.info)+'"></i></div><div class="toast-msg">'+msg+'</div><button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
+  t.innerHTML='<div class="toast-icon"><i class="fas '+(icons[type]||icons.info)+'"></i></div><div class="toast-msg">'+escapeHtml(msg)+'</div><button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
   c.appendChild(t);
   requestAnimationFrame(function(){requestAnimationFrame(function(){t.classList.add('show');});});
   setTimeout(function(){t.classList.remove('show');setTimeout(function(){if(t.parentElement)t.remove();},400);},4000);
@@ -53,6 +53,9 @@ function countdown(dateStr){
   if(days===1)return'1 day left';
   return days+' days left';
 }
+
+function sanitizeCSV(v){var s=String(v||'');if(/^[=+\-@\t\r]/.test(s))s="'"+s;return s;}
+function escapeCsvField(v){return '"'+sanitizeCSV(v).replace(/"/g,'""')+'"';}
 
 // ===== NAVIGATION =====
 D.navigate=function(section){
@@ -91,25 +94,22 @@ D.init=function(){
   var welcomeAvatar=document.getElementById('welcomeAvatar');
 
   if(userPhoto){
-    avatar.innerHTML='<img src="'+userPhoto+'" style="width:100%;height:100%;border-radius:50%;object-fit:cover">';
-    avatar.style.background='var(--gold)';
-    welcomeAvatar.innerHTML='<img src="'+userPhoto+'" style="width:100%;height:100%;border-radius:50%;object-fit:cover">';
-    welcomeAvatar.style.background='var(--gold)';
+    if(avatar){avatar.innerHTML='<img src="'+escapeHtml(userPhoto)+'" style="width:100%;height:100%;border-radius:50%;object-fit:cover">';avatar.style.background='var(--gold)';}
+    if(welcomeAvatar){welcomeAvatar.innerHTML='<img src="'+escapeHtml(userPhoto)+'" style="width:100%;height:100%;border-radius:50%;object-fit:cover">';welcomeAvatar.style.background='var(--gold)';}
   }else{
-    avatar.textContent=initials;
-    welcomeAvatar.textContent=initials;
+    if(avatar)avatar.textContent=initials;
+    if(welcomeAvatar)welcomeAvatar.textContent=initials;
   }
-  document.getElementById('dashUserName').textContent=userName;
-  document.getElementById('dashUserEmail').textContent=userEmail;
+  if(document.getElementById('dashUserName'))document.getElementById('dashUserName').textContent=userName;
+  if(document.getElementById('dashUserEmail'))document.getElementById('dashUserEmail').textContent=userEmail;
   document.getElementById('welcomeName').textContent='Welcome back, '+userName.split(' ')[0]+'!';
   document.getElementById('countdownText').textContent=countdown(data.weddingDate);
 
   // Stats
   var guests=data.guests||[];
-  var rsvps=data.guests||[];
-  var accepted=rsvps.filter(function(g){return g.rsvp==='accepted';}).length;
-  var declined=rsvps.filter(function(g){return g.rsvp==='declined';}).length;
-  var pending=rsvps.filter(function(g){return g.rsvp!=='accepted'&&g.rsvp!=='declined';}).length;
+  var accepted=guests.filter(function(g){return g.rsvp==='accepted';}).length;
+  var declined=guests.filter(function(g){return g.rsvp==='declined';}).length;
+  var pending=guests.filter(function(g){return g.rsvp!=='accepted'&&g.rsvp!=='declined';}).length;
   document.getElementById('statGuests').textContent=guests.length;
   document.getElementById('statAccepted').textContent=accepted;
   document.getElementById('statDeclined').textContent=declined;
@@ -154,6 +154,9 @@ D.init=function(){
   // Publish/Save
   document.getElementById('btnPublish').addEventListener('click',function(){D.publish();});
   document.getElementById('btnSaveDraft').addEventListener('click',function(){D.saveDraft();});
+
+  // Start real-time RSVP listener
+  D.startRealtimeListener();
 
   // Show Unpublish if already published
   var d=getData();if(d.isPublished){var up=document.getElementById('btnUnpublish');if(up)up.style.display='inline-flex';}
@@ -399,8 +402,8 @@ D.renderGuests=function(){
   tbody.innerHTML=filtered.length?filtered.map(function(g,i){
     var ri=guests.indexOf(g);
     var rsvpColors={accepted:'var(--success)',declined:'var(--error)',pending:'var(--warning)'};
-    return '<tr><td><strong>'+g.name+'</strong></td><td>'+(g.email||'-')+'</td><td>'+(g.phone||'-')+'</td><td>'+(g.group||'-')+'</td>'+
-      '<td><span style="color:'+(rsvpColors[g.rsvp]||'var(--text-light)')+';font-weight:600;text-transform:capitalize">'+(g.rsvp||'pending')+'</span></td>'+
+    return '<tr><td><strong>'+escapeHtml(g.name)+'</strong></td><td>'+escapeHtml(g.email||'-')+'</td><td>'+escapeHtml(g.phone||'-')+'</td><td>'+escapeHtml(g.group||'-')+'</td>'+
+      '<td><span style="color:'+(rsvpColors[g.rsvp]||'var(--text-light)')+';font-weight:600;text-transform:capitalize">'+escapeHtml(g.rsvp||'pending')+'</span></td>'+
       '<td>'+(g.plusOne?'Yes':'No')+'</td>'+
       '<td class="actions"><button onclick="DashApp.editGuest('+ri+')"><i class="fas fa-pen"></i></button><button class="del" onclick="DashApp.removeGuest('+ri+')"><i class="fas fa-trash"></i></button></td></tr>';
   }).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--text-light);padding:30px">No guests found</td></tr>';
@@ -440,10 +443,10 @@ D.saveNewGuest=function(){
 D.editGuest=function(i){
   var d=getData();var g=d.guests[i];
   D.openModal('Edit Guest',
-    '<div class="dash-form-group"><label class="dash-form-label">Name *</label><input class="dash-input" id="mGuestName" value="'+g.name+'"></div>'+
-    '<div class="dash-form-row"><div class="dash-form-group"><label class="dash-form-label">Email</label><input class="dash-input" id="mGuestEmail" value="'+(g.email||'')+'"></div>'+
-    '<div class="dash-form-group"><label class="dash-form-label">Phone</label><input class="dash-input" id="mGuestPhone" value="'+(g.phone||'')+'"></div></div>'+
-    '<div class="dash-form-row"><div class="dash-form-group"><label class="dash-form-label">Group</label><input class="dash-input" id="mGuestGroup" value="'+(g.group||'')+'"></div>'+
+    '<div class="dash-form-group"><label class="dash-form-label">Name *</label><input class="dash-input" id="mGuestName" value="'+escapeHtml(g.name)+'"></div>'+
+    '<div class="dash-form-row"><div class="dash-form-group"><label class="dash-form-label">Email</label><input class="dash-input" id="mGuestEmail" value="'+escapeHtml(g.email||'')+'"></div>'+
+    '<div class="dash-form-group"><label class="dash-form-label">Phone</label><input class="dash-input" id="mGuestPhone" value="'+escapeHtml(g.phone||'')+'"></div></div>'+
+    '<div class="dash-form-row"><div class="dash-form-group"><label class="dash-form-label">Group</label><input class="dash-input" id="mGuestGroup" value="'+escapeHtml(g.group||'')+'"></div>'+
     '<div class="dash-form-group"><label class="dash-form-label">RSVP</label><select class="dash-select" id="mGuestRSVP"><option value="pending"'+(g.rsvp==='pending'?' selected':'')+'>Pending</option><option value="accepted"'+(g.rsvp==='accepted'?' selected':'')+'>Accepted</option><option value="declined"'+(g.rsvp==='declined'?' selected':'')+'>Declined</option></select></div></div>'+
     '<div class="dash-form-group"><label class="dash-form-label" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="mGuestPlusOne"'+(g.plusOne?' checked':'')+'> Include +1</label></div>',
     [{text:'Cancel',class:'dash-btn dash-btn-ghost',action:'DashApp.closeModal()'},{text:'Save',class:'dash-btn dash-btn-gold',action:'DashApp.saveEditGuest('+i+')'}]
@@ -483,7 +486,7 @@ D.exportGuests=function(fmt){
   var d=getData();var guests=d.guests||[];
   if(fmt==='csv'){
     var csv='Name,Email,Phone,Group,RSVP,Plus One\n';
-    guests.forEach(function(g){csv+='"'+g.name+'","'+(g.email||'')+'","'+(g.phone||'')+'","'+(g.group||'')+'","'+(g.rsvp||'pending')+'","'+(g.plusOne?'Yes':'No')+'"\n';});
+    guests.forEach(function(g){csv+=escapeCsvField(g.name)+','+escapeCsvField(g.email)+','+escapeCsvField(g.phone)+','+escapeCsvField(g.group)+','+escapeCsvField(g.rsvp||'pending')+','+escapeCsvField(g.plusOne?'Yes':'No')+'\n';});
     D.downloadFile(csv,'guests.csv','text/csv');
   }else if(fmt==='pdf'){
     D.generatePDF(guests);
@@ -541,7 +544,7 @@ D.editRSVPGuest=function(i){
   );
 };
 D.saveEditRSVP=function(i){
-  var guests=getData().guests||[];
+  var d=getData();var guests=d.guests||[];
   guests[i].name=document.getElementById('modalRsvpName').value.trim();
   guests[i].email=document.getElementById('modalRsvpEmail').value.trim();
   guests[i].phone=document.getElementById('modalRsvpPhone').value.trim();
@@ -563,7 +566,7 @@ D.exportRSVP=function(fmt){
   var transportLabels={'need-ride':'Needs ride','can-car':'Carpool','shuttle':'Shuttle'};
   if(fmt==='csv'){
     var csv='Name,Email,Phone,Status,Guests,Meal,Dietary,Transport,Message,Date\n';
-    guests.forEach(function(g){csv+='"'+(g.name||g.fullName||'')+'","'+(g.email||'')+'","'+(g.phone||'')+'","'+(g.rsvp||'pending')+'","'+(g.guestCount||1)+'","'+(mealLabels[g.mealPreference]||'')+'","'+(g.dietary||'')+'","'+(transportLabels[g.transport]||'')+'","'+(g.message||'')+'","'+(g.rsvpDate||'')+'"\n';});
+    guests.forEach(function(g){csv+=escapeCsvField(g.name||g.fullName)+','+escapeCsvField(g.email)+','+escapeCsvField(g.phone)+','+escapeCsvField(g.rsvp||'pending')+','+escapeCsvField(g.guestCount||1)+','+escapeCsvField(mealLabels[g.mealPreference]||'')+','+escapeCsvField(g.dietary)+','+escapeCsvField(transportLabels[g.transport]||'')+','+escapeCsvField(g.message)+','+escapeCsvField(g.rsvpDate)+'\n';});
     D.downloadFile(csv,'rsvp-report.csv','text/csv');
   }else if(fmt==='pdf'){
     D.generatePDF(guests);
@@ -681,7 +684,18 @@ D.deleteAccount=function(){
 };
 D.confirmDeleteAccount=function(){
   if(document.getElementById('deleteConfirm').value!=='DELETE'){notify('Type DELETE to confirm','error');return;}
-  localStorage.clear();
+  localStorage.removeItem(DB_KEY);
+  localStorage.removeItem('weddingActivity');
+  localStorage.removeItem('weddingNotifications');
+  localStorage.removeItem('weddingShareAnalytics');
+  localStorage.removeItem('weddingShareHistory');
+  localStorage.removeItem('weddingAnalytics');
+  localStorage.removeItem('weddingAuthUsers');
+  localStorage.removeItem('weddingAuthSession');
+  localStorage.removeItem('weddingSidebarState');
+  localStorage.removeItem('wedding_sidebar_state');
+  localStorage.removeItem('weddingPalette');
+  localStorage.removeItem('weddingSuperAdmin');
   window.location.href='index.html';
   notify('Account deleted','info');
 };
@@ -689,7 +703,17 @@ D.confirmDeleteAccount=function(){
 // ===== PUBLISH / SAVE =====
 D.publish=function(){
   var d=getData();
-  // Validate required fields
+  if(typeof PublishEngine!=='undefined'){
+    var result=PublishEngine.publish();
+    if(result&&result.success){
+      D.renderWebsiteStatus();
+      D.renderWeddingProgress();
+      D.logActivity('Published website');
+      localStorage.setItem('_publish_success','1');
+      window.location.href='index.html';
+    }
+    return;
+  }
   var missing=[];
   if(!d.groomName)missing.push('Groom Name');
   if(!d.brideName)missing.push('Bride Name');
@@ -697,13 +721,9 @@ D.publish=function(){
   if(!d.weddingTime)missing.push('Wedding Time');
   if(!d.venue)missing.push('Venue');
   if(!d.address)missing.push('Address');
-  // Check at least one contact method
   var hasContact=(d.socialLinks&&(d.socialLinks.whatsapp||d.socialLinks.facebook||d.socialLinks.instagram||d.socialLinks.twitter||d.socialLinks.telegram))||d.phone||d.email||d.whatsapp;
   if(!hasContact)missing.push('At least one contact method');
-  if(missing.length){
-    notify('Please complete: '+missing.join(', '),'error');
-    return;
-  }
+  if(missing.length){notify('Please complete: '+missing.join(', '),'error');return;}
   d.isPublished=true;
   d.publishedAt=d.publishedAt||Date.now();
   d.updatedAt=Date.now();
@@ -711,13 +731,13 @@ D.publish=function(){
   D.renderWebsiteStatus();
   D.renderWeddingProgress();
   D.logActivity('Published website');
-  // Redirect to homepage with success message
   localStorage.setItem('_publish_success','1');
   window.location.href='index.html';
 };
 D.unpublish=function(){
-  var d=getData();d.isPublished=false;d.updatedAt=Date.now();
-  saveData(d);
+  var d=getData();
+  if(typeof PublishEngine!=='undefined')PublishEngine.unpublish();
+  else{d.isPublished=false;d.updatedAt=Date.now();saveData(d);}
   D.renderWebsiteStatus();
   D.renderWeddingProgress();
   notify('Website unpublished','info');
@@ -857,7 +877,6 @@ D.openModal=function(title,bodyHTML,buttons){
   document.getElementById('dashModal').classList.add('show');
 };
 D.closeModal=function(){document.getElementById('dashModal').classList.remove('show');};
-document.getElementById('dashModal').addEventListener('click',function(e){if(e.target===this)D.closeModal();});
 
 // ===== ACTIVITY LOG =====
 D.logActivity=function(msg){
@@ -907,14 +926,21 @@ D.renderWebsiteStatus=function(){
   var shareRow=document.getElementById('websiteShareRow');
   if(!badge)return;
   if(d.isPublished){
-    badge.textContent='\u{1F7E2} Published';
-    badge.style.background='rgba(34,197,94,0.1)';badge.style.color='var(--success)';
+    badge.innerHTML='<span class="status-dot-live"></span> Live';
+    badge.style.background='rgba(34,197,94,0.12)';badge.style.color='#22c55e';badge.style.border='1px solid rgba(34,197,94,0.25)';
     var publishDate=d.publishedAt?formatDate(d.publishedAt):'';
     var updateDate=d.updatedAt?formatDate(d.updatedAt):'';
-    if(text)text.innerHTML='Your website is live and visible to guests'+(publishDate?' \u2022 Published '+publishDate:'')+(updateDate?' \u2022 Updated '+updateDate:'');
+    var inviteUrl=d.inviteUrl||(typeof PublishEngine!=='undefined'?PublishEngine.getInviteUrl(d):'');
+    var statusHTML='<div style="display:flex;flex-direction:column;gap:6px">';
+    statusHTML+='<span style="color:#22c55e;font-size:0.82rem;font-weight:600"><i class="fas fa-check-circle" style="margin-right:4px"></i>Published Successfully</span>';
+    if(publishDate)statusHTML+='<span style="color:var(--text-light);font-size:0.78rem">Published: '+publishDate+'</span>';
+    if(updateDate)statusHTML+='<span style="color:var(--text-light);font-size:0.78rem">Last Updated: '+updateDate+'</span>';
+    if(inviteUrl)statusHTML+='<span style="color:var(--text-light);font-size:0.78rem;word-break:break-all">Public URL: <a href="'+inviteUrl+'" target="_blank" style="color:var(--gold);text-decoration:none">'+inviteUrl+'</a></span>';
+    statusHTML+='</div>';
+    if(text)text.innerHTML=statusHTML;
     if(btn){btn.innerHTML='<i class="fas fa-eye-slash"></i> Unpublish';btn.onclick=function(){DashApp.unpublish();};}
     if(shareRow){
-      var url=window.location.origin+window.location.pathname.replace(/dashboard\.html.*/,'index.html');
+      var url=typeof PublishEngine!=='undefined'?PublishEngine.getInviteUrl(d):(window.location.origin+window.location.pathname.replace(/dashboard\.html.*/,'index.html'));
       shareRow.style.display='flex';
       shareRow.innerHTML='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%">'
         +'<span style="color:var(--text-light);font-size:0.82rem;margin-right:4px">Share:</span>'
@@ -927,9 +953,9 @@ D.renderWebsiteStatus=function(){
         +'</div>';
     }
   }else{
-    badge.textContent='Draft';
-    badge.style.background='rgba(245,158,11,0.1)';badge.style.color='var(--warning)';
-    if(text)text.textContent='Your website is in draft mode';
+    badge.innerHTML='<span class="status-dot-draft"></span> Draft';
+    badge.style.background='rgba(245,158,11,0.12)';badge.style.color='#f59e0b';badge.style.border='1px solid rgba(245,158,11,0.25)';
+    if(text)text.textContent='Your website is in draft mode. Publish to make it live for guests.';
     if(btn){btn.innerHTML='<i class="fas fa-rocket"></i> Publish Website';btn.onclick=function(){DashApp.publish();};}
     if(shareRow){shareRow.style.display='none';shareRow.innerHTML='';}
   }
@@ -1007,7 +1033,7 @@ D.renderNotifications=function(){
     var colors={rsvp:'var(--success)',guest:'var(--info)',system:'var(--gold)',reminder:'var(--warning)',setup:'var(--gold)'};
     var icon=icons[n.type]||'fa-info-circle';
     var color=colors[n.type]||'var(--gold)';
-    return '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;margin-bottom:4px;cursor:pointer;transition:all 0.2s;background:'+(n.read?'transparent':'rgba(212,175,55,0.04)')+'" onclick="DashApp.markNotifRead(\''+n.id+'\')" onmouseover="this.style.background=\'rgba(212,175,55,0.06)\'" onmouseout="this.style.background=\''+(n.read?'transparent':'rgba(212,175,55,0.04)')+'\'"><div style="width:32px;height:32px;border-radius:8px;background:rgba(212,175,55,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas '+icon+'" style="color:'+color+';font-size:0.8rem"></i></div><div style="flex:1;min-width:0"><div style="font-size:0.85rem;color:var(--text);font-weight:'+(n.read?'400':'500')+'">'+n.title+'</div>'+(n.message?'<div style="font-size:0.75rem;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+n.message+'</div>':'')+'</div><div style="font-size:0.72rem;color:var(--text-light);white-space:nowrap">'+text+'</div>'+(n.read?'':'<div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>')+'</div>';
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;margin-bottom:4px;cursor:pointer;transition:all 0.2s;background:'+(n.read?'transparent':'rgba(212,175,55,0.04)')+'" onclick="DashApp.markNotifRead(\''+n.id+'\')" onmouseover="this.style.background=\'rgba(212,175,55,0.06)\'" onmouseout="this.style.background=\''+(n.read?'transparent':'rgba(212,175,55,0.04)')+'\'"><div style="width:32px;height:32px;border-radius:8px;background:rgba(212,175,55,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas '+icon+'" style="color:'+color+';font-size:0.8rem"></i></div><div style="flex:1;min-width:0"><div style="font-size:0.85rem;color:var(--text);font-weight:'+(n.read?'400':'500')+'">'+escapeHtml(n.title)+'</div>'+(n.message?'<div style="font-size:0.75rem;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(n.message)+'</div>':'')+'</div><div style="font-size:0.72rem;color:var(--text-light);white-space:nowrap">'+text+'</div>'+(n.read?'':'<div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>')+'</div>';
   }).join('');
 };
 D.markNotifRead=function(id){
@@ -1018,6 +1044,46 @@ D.markAllNotifsRead=function(){
   if(typeof markAllRead==='function')markAllRead();
   D.renderNotifications();
   notify('All notifications marked as read','success');
+};
+
+// ===== REAL-TIME FIREBASE LISTENER =====
+D.startRealtimeListener=function(){
+  if(typeof fbGetCollection !== 'function') return;
+  var pollInterval = setInterval(function(){
+    fbGetCollection('guests').then(function(guests){
+      if(!guests || !guests.length) return;
+      var d = getData();
+      if(!d.guests) d.guests = [];
+      var localNames = d.guests.map(function(g){return g.email || g.guestName || g.name;});
+      var changed = false;
+      guests.forEach(function(g){
+        var key = g.email || g.guestName || g.name;
+        if(!key) return;
+        if(localNames.indexOf(key) === -1){
+          d.guests.push({
+            id: g.id || 'fb_' + Date.now(),
+            name: g.guestName || g.name || '',
+            email: g.email || '',
+            phone: g.phone || '',
+            rsvp: g.status || g.rsvp || 'pending',
+            guestCount: parseInt(g.guestCount) || 1,
+            message: g.message || '',
+            mealPreference: g.mealPreference || '',
+            transport: g.transport || '',
+            rsvpDate: g.createdAt || new Date().toISOString()
+          });
+          changed = true;
+        }
+      });
+      if(changed){
+        saveData(d);
+        D.loadRSVP();
+        D.loadGuests();
+        D.renderWeddingProgress();
+      }
+    }).catch(function(){});
+  }, 15000);
+  window._rsvpPollInterval = pollInterval;
 };
 
 // ===== HELPERS =====
@@ -1331,6 +1397,8 @@ window.MemMgr=MemMgr;
 document.addEventListener('DOMContentLoaded',function(){
   D.init();
   D.renderActivity();
+  var modal=document.getElementById('dashModal');
+  if(modal)modal.addEventListener('click',function(e){if(e.target===this)D.closeModal();});
   if(window.InvDash)InvDash.init();
   if(window.MemMgr)MemMgr.init();
 });

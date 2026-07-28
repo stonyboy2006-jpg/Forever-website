@@ -6,7 +6,15 @@ const COLLECTIONS = {
   events: 'events',
   guests: 'guests',
   messages: 'messages',
-  socialLinks: 'socialLinks'
+  socialLinks: 'socialLinks',
+  users: 'users',
+  rsvps: 'rsvps',
+  gifts: 'gifts',
+  analytics: 'analytics',
+  notifications: 'notifications',
+  invitations: 'invitations',
+  shareHistory: 'shareHistory',
+  backups: 'backups'
 };
 
 let fb = { app: null, db: null, storage: null, ready: false, initPromise: null };
@@ -210,6 +218,287 @@ async function fbSeedDefaults() {
     coverPhoto: '', musicUrl: ''
   };
   await fbSetDoc('weddingInfo', 'main', defaults);
+}
+
+/* ===== FIREBASE AUTH ===== */
+let fbAuth = null;
+
+function getAuth() {
+  if (!fbAuth && typeof firebase !== 'undefined' && firebase.auth) {
+    fbAuth = firebase.auth();
+  }
+  return fbAuth;
+}
+
+async function fbSignUp(email, password, displayName) {
+  await initFirebase();
+  if (!fb.ready) return { ok: false, error: 'Firebase not configured', local: true };
+  try {
+    const auth = getAuth();
+    if (!auth) return { ok: false, error: 'Auth not available' };
+    const cred = await auth.createUserWithEmailAndPassword(email, password);
+    if (displayName) await cred.user.updateProfile({ displayName });
+    await cred.user.sendEmailVerification().catch(() => {});
+    return { ok: true, user: { uid: cred.user.uid, email: cred.user.email, displayName: cred.user.displayName } };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+async function fbLogIn(email, password) {
+  await initFirebase();
+  if (!fb.ready) return { ok: false, error: 'Firebase not configured', local: true };
+  try {
+    const auth = getAuth();
+    if (!auth) return { ok: false, error: 'Auth not available' };
+    const cred = await auth.signInWithEmailAndPassword(email, password);
+    return { ok: true, user: { uid: cred.user.uid, email: cred.user.email, displayName: cred.user.displayName } };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+async function fbLogInWithGoogle() {
+  await initFirebase();
+  if (!fb.ready) return { ok: false, error: 'Firebase not configured' };
+  try {
+    const auth = getAuth();
+    if (!auth) return { ok: false, error: 'Auth not available' };
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('profile');
+    provider.addScope('email');
+    const cred = await auth.signInWithPopup(provider);
+    return { ok: true, user: { uid: cred.user.uid, email: cred.user.email, displayName: cred.user.displayName, photoURL: cred.user.photoURL } };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+async function fbLogInWithApple() {
+  await initFirebase();
+  if (!fb.ready) return { ok: false, error: 'Firebase not configured' };
+  try {
+    const auth = getAuth();
+    if (!auth) return { ok: false, error: 'Auth not available' };
+    const provider = new firebase.auth.OAuthProvider('apple.com');
+    provider.addScope('email');
+    provider.addScope('name');
+    const cred = await auth.signInWithPopup(provider);
+    return { ok: true, user: { uid: cred.user.uid, email: cred.user.email, displayName: cred.user.displayName } };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+async function fbResetPassword(email) {
+  await initFirebase();
+  if (!fb.ready) return { ok: false, error: 'Firebase not configured' };
+  try {
+    const auth = getAuth();
+    if (!auth) return { ok: false, error: 'Auth not available' };
+    await auth.sendPasswordResetEmail(email);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+function fbLogOut() {
+  const auth = getAuth();
+  if (auth) return auth.signOut();
+  return Promise.resolve();
+}
+
+function fbGetCurrentUser() {
+  const auth = getAuth();
+  if (!auth) return null;
+  return auth.currentUser;
+}
+
+function fbOnAuthStateChanged(callback) {
+  const auth = getAuth();
+  if (!auth) { callback(null); return () => {}; }
+  return auth.onAuthStateChanged(callback);
+}
+
+/* ===== MULTI-TENANT: wedding-scoped queries ===== */
+function fbGetWeddingPath(weddingId) {
+  return 'weddings/' + weddingId;
+}
+
+async function fbGetWeddingData(weddingId) {
+  const path = fbGetWeddingPath(weddingId);
+  return await fbGetDoc(path, 'info');
+}
+
+async function fbSetWeddingData(weddingId, data) {
+  const path = fbGetWeddingPath(weddingId);
+  return await fbSetDoc(path, 'info', data);
+}
+
+async function fbGetWeddingGuests(weddingId) {
+  const path = fbGetWeddingPath(weddingId) + '/guests';
+  return await fbGetCollection(path);
+}
+
+async function fbAddWeddingGuest(weddingId, guest) {
+  const path = fbGetWeddingPath(weddingId) + '/guests';
+  return await fbAddDoc(path, guest);
+}
+
+async function fbUpdateWeddingGuest(weddingId, guestId, data) {
+  const path = fbGetWeddingPath(weddingId) + '/guests';
+  return await fbUpdateDoc(path, guestId, data);
+}
+
+async function fbDeleteWeddingGuest(weddingId, guestId) {
+  const path = fbGetWeddingPath(weddingId) + '/guests';
+  return await fbDeleteDoc(path, guestId);
+}
+
+async function fbGetWeddingGallery(weddingId) {
+  const path = fbGetWeddingPath(weddingId) + '/gallery';
+  return await fbGetCollection(path);
+}
+
+async function fbAddWeddingMedia(weddingId, media) {
+  const path = fbGetWeddingPath(weddingId) + '/gallery';
+  return await fbAddDoc(path, media);
+}
+
+async function fbDeleteWeddingMedia(weddingId, mediaId) {
+  const path = fbGetWeddingPath(weddingId) + '/gallery';
+  return await fbDeleteDoc(path, mediaId);
+}
+
+function fbOnWeddingSnapshot(weddingId, callback) {
+  const path = fbGetWeddingPath(weddingId);
+  return fbOnSnapshot(path, callback, 'info');
+}
+
+function fbOnWeddingGuestsSnapshot(weddingId, callback) {
+  const path = fbGetWeddingPath(weddingId) + '/guests';
+  return fbOnSnapshot(path, callback);
+}
+
+/* ===== INVITATION URL GENERATION ===== */
+function fbGenerateWeddingSlug(groomName, brideName) {
+  const groom = (groomName || 'groom').toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
+  const bride = (brideName || 'bride').toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
+  const suffix = Date.now().toString(36).substring(4, 8);
+  return groom + '-and-' + bride + '-wedding-' + suffix;
+}
+
+function fbGenerateWeddingId() {
+  return 'w_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function fbGetInviteUrl(weddingId) {
+  return window.location.origin + '/invite/' + weddingId;
+}
+
+/* ===== RSVP MANAGEMENT ===== */
+async function fbSubmitRSVP(weddingId, rsvpData) {
+  const path = fbGetWeddingPath(weddingId) + '/rsvps';
+  const payload = { ...rsvpData, timestamp: new Date().toISOString(), status: rsvpData.status || 'pending' };
+  return await fbAddDoc(path, payload);
+}
+
+async function fbGetWeddingRSVPs(weddingId) {
+  const path = fbGetWeddingPath(weddingId) + '/rsvps';
+  return await fbGetCollection(path);
+}
+
+async function fbUpdateRSVP(weddingId, rsvpId, data) {
+  const path = fbGetWeddingPath(weddingId) + '/rsvps';
+  return await fbUpdateDoc(path, rsvpId, data);
+}
+
+async function fbGetRSVPStats(weddingId) {
+  const rsvps = await fbGetWeddingRSVPs(weddingId);
+  const accepted = rsvps.filter(r => r.status === 'accepted' || r.status === 'attending').length;
+  const declined = rsvps.filter(r => r.status === 'declined').length;
+  const pending = rsvps.filter(r => r.status === 'pending').length;
+  const totalGuests = rsvps.reduce((sum, r) => sum + (parseInt(r.guestCount) || 1), 0);
+  return { total: rsvps.length, accepted, declined, pending, totalGuests };
+}
+
+/* ===== ANALYTICS ===== */
+async function fbTrackEvent(weddingId, eventType, eventData) {
+  const path = fbGetWeddingPath(weddingId) + '/analytics';
+  return await fbAddDoc(path, { eventType, ...eventData, timestamp: new Date().toISOString() });
+}
+
+async function fbGetAnalytics(weddingId) {
+  const path = fbGetWeddingPath(weddingId) + '/analytics';
+  const events = await fbGetCollection(path);
+  const shares = events.filter(e => e.eventType === 'share');
+  const opens = events.filter(e => e.eventType === 'page_open');
+  const rsvpEvents = events.filter(e => e.eventType === 'rsvp');
+  return {
+    totalShares: shares.length,
+    totalOpens: opens.length,
+    totalRSVPs: rsvpEvents.length,
+    byPlatform: shares.reduce((acc, s) => { acc[s.platform] = (acc[s.platform] || 0) + 1; return acc; }, {}),
+    events
+  };
+}
+
+/* ===== NOTIFICATIONS ===== */
+async function fbAddNotification(weddingId, notification) {
+  const path = fbGetWeddingPath(weddingId) + '/notifications';
+  return await fbAddDoc(path, { ...notification, read: false, timestamp: new Date().toISOString() });
+}
+
+async function fbGetNotifications(weddingId) {
+  const path = fbGetWeddingPath(weddingId) + '/notifications';
+  return await fbGetCollection(path);
+}
+
+async function fbMarkNotificationRead(weddingId, notifId) {
+  const path = fbGetWeddingPath(weddingId) + '/notifications';
+  return await fbUpdateDoc(path, notifId, { read: true });
+}
+
+/* ===== GIFTS ===== */
+async function fbAddGift(weddingId, gift) {
+  const path = fbGetWeddingPath(weddingId) + '/gifts';
+  return await fbAddDoc(path, gift);
+}
+
+async function fbGetWeddingGifts(weddingId) {
+  const path = fbGetWeddingPath(weddingId) + '/gifts';
+  return await fbGetCollection(path);
+}
+
+/* ===== INVITATION MANAGEMENT ===== */
+async function fbCreateInvitation(weddingId, data) {
+  const path = fbGetWeddingPath(weddingId) + '/invitations';
+  return await fbAddDoc(path, { ...data, slug: data.slug || fbGenerateWeddingSlug(data.groomName, data.brideName) });
+}
+
+async function fbGetInvitationBySlug(slug) {
+  await initFirebase();
+  if (!fb.ready) return null;
+  try {
+    const snap = await fb.db.collectionGroup('invitations').where('slug', '==', slug).limit(1).get();
+    return snap.docs.length ? { id: snap.docs[0].id, ...snap.docs[0].data() } : null;
+  } catch { return null; }
+}
+
+/* ===== BACKUPS ===== */
+async function fbCreateBackup(weddingId) {
+  const data = await fbGetWeddingData(weddingId);
+  const guests = await fbGetWeddingGuests(weddingId);
+  const gallery = await fbGetWeddingGallery(weddingId);
+  const backup = { weddingData: data, guests, gallery, timestamp: new Date().toISOString() };
+  const path = fbGetWeddingPath(weddingId) + '/backups';
+  return await fbAddDoc(path, backup);
+}
+
+async function fbGetBackups(weddingId) {
+  const path = fbGetWeddingPath(weddingId) + '/backups';
+  return await fbGetCollection(path);
 }
 
 initFirebase();

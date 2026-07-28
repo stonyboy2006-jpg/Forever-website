@@ -1,5 +1,16 @@
 (function() {
   var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  var isInvitePage = (currentPage === 'invite.html' || window.location.pathname.indexOf('/invite/') === 0);
+  var isPublicPage = isInvitePage || ['index.html', 'our-story.html', 'wedding-details.html', 'wedding-party.html', 'events.html', 'gallery.html', 'timeline.html', 'story.html', 'rsvp.html', 'gift-registry.html', 'music.html', 'faq.html', 'contact.html', 'about.html', '404.html', '403.html'].indexOf(currentPage) !== -1;
+
+  function isGuest() {
+    try {
+      var s = localStorage.getItem('weddingAuthSession');
+      if (!s) return true;
+      var sess = JSON.parse(s);
+      return !(sess && sess.userId && sess.expiresAt && Date.now() < sess.expiresAt);
+    } catch (e) { return true; }
+  }
 
   // ===== LUXURY BACK NAVIGATION =====
   window.luxuryBack = function() {
@@ -17,6 +28,7 @@
   // ===== DEVELOPER POPUP =====
   window.DeveloperPopup = {
     show: function() {
+      if (isGuest() && isInvitePage) return;
       var existing = document.getElementById('devPopupOverlay');
       if (existing) { existing.remove(); return; }
       var overlay = document.createElement('div');
@@ -58,7 +70,7 @@
           '<div style="font-family:\'Inter\',sans-serif;font-size:0.72rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Contact</div>' +
           '<div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">' +
             '<a href="https://wa.me/2348025092458" target="_blank" style="color:#D4AF37;font-family:\'Inter\',sans-serif;font-size:0.82rem;text-decoration:none;transition:color 0.3s;"><i class="fab fa-whatsapp"></i> 08025092458</a>' +
-            '<a href="tel:+2347039557981" style="color:#D4AF37;font-family:\'Inter\',sans-serif;font-size:0.82rem;text-decoration:none;transition:color 0.3s;"><i class="fas fa-phone"></i> 07039557981</a>' +
+            '<a href="tel:08157610930" style="color:#D4AF37;font-family:\'Inter\',sans-serif;font-size:0.82rem;text-decoration:none;transition:color 0.3s;"><i class="fas fa-phone"></i> 08157610930</a>' +
           '</div>' +
         '</div>' +
         '<a href="developer.html" style="display:inline-block;margin-top:16px;padding:10px 24px;border-radius:50px;background:transparent;border:1px solid rgba(212,175,55,0.2);color:#D4AF37;font-family:\'Inter\',sans-serif;font-size:0.78rem;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.background=\'rgba(212,175,55,0.06)\';this.style.borderColor=\'rgba(212,175,55,0.4)\'" onmouseout="this.style.background=\'transparent\';this.style.borderColor=\'rgba(212,175,55,0.2)\'"><i class="fas fa-user"></i> Full Developer Profile</a>';
@@ -96,24 +108,26 @@
     }, 5000);
   };
 
-  // ===== DEVELOPER CREDIT (footer injection) =====
-  var skipCreditPages = [];
-  var dp = document.createElement('div');
-  dp.style.cssText = 'width:100%;text-align:center;padding:24px 20px;border-top:1px solid rgba(212,175,55,0.04);background:var(--dark,#050B18);position:relative;z-index:1;';
-  dp.innerHTML = '<div style="font-family:Inter,sans-serif;font-size:0.8rem;color:rgba(255,255,255,0.3);line-height:1.8;">Designed &amp; Developed By <span style="color:var(--gold,#D4AF37);font-weight:500;cursor:pointer;" onclick="DeveloperPopup.show()">David Leelee Douglas</span><br>Popularly Known As: <span style="color:var(--gold,#D4AF37);">Stonyboy</span><br><i class="fab fa-whatsapp" style="color:var(--gold,#D4AF37);margin-right:4px;"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold,#D4AF37);margin-right:4px;"></i> Contact: 07039557981</div>';
-  dp.setAttribute('data-dev-credit','1');
-  if (skipCreditPages.indexOf(currentPage) === -1 && !document.querySelector('[data-dev-credit]')) {
-    var insertAfter = document.querySelector('footer') || document.body.lastElementChild;
-    if (insertAfter && insertAfter !== dp) {
-      if (insertAfter.nextSibling) insertAfter.parentNode.insertBefore(dp, insertAfter.nextSibling);
-      else document.body.appendChild(dp);
-    } else {
-      document.body.appendChild(dp);
+  // ===== DEVELOPER CREDIT (skip on invite/public pages) =====
+  if (!isInvitePage) {
+    var skipCreditPages = [];
+    var dp = document.createElement('div');
+    dp.style.cssText = 'width:100%;text-align:center;padding:24px 20px;border-top:1px solid rgba(212,175,55,0.04);background:var(--dark,#050B18);position:relative;z-index:1;';
+    dp.innerHTML = '<div style="font-family:Inter,sans-serif;font-size:0.8rem;color:rgba(255,255,255,0.3);line-height:1.8;">Developed with <i class="fas fa-heart" style="color:var(--gold,#D4AF37);"></i> by <span style="color:var(--gold,#D4AF37);font-weight:500;cursor:pointer;" onclick="DeveloperPopup.show()">Leelee David Douglas (Stonyboy)</span><br><i class="fas fa-phone" style="color:var(--gold,#D4AF37);margin-right:4px;"></i> Call: 08157610930 | <i class="fab fa-whatsapp" style="color:var(--gold,#D4AF37);margin-right:4px;"></i> WhatsApp: 08025092458</div>';
+    dp.setAttribute('data-dev-credit','1');
+    if (skipCreditPages.indexOf(currentPage) === -1 && !document.querySelector('[data-dev-credit]')) {
+      var insertAfter = document.querySelector('footer') || document.body.lastElementChild;
+      if (insertAfter && insertAfter !== dp) {
+        if (insertAfter.nextSibling) insertAfter.parentNode.insertBefore(dp, insertAfter.nextSibling);
+        else document.body.appendChild(dp);
+      } else {
+        document.body.appendChild(dp);
+      }
     }
   }
 
   // ===== ADMIN CREDIT (setup/preview) =====
-  if (currentPage === 'setup.html' || currentPage === 'preview.html') {
+  if ((currentPage === 'setup.html' || currentPage === 'preview.html') && !isGuest()) {
     if (!document.querySelector('[data-admin-credit]')) {
       var ac = document.createElement('div');
       ac.setAttribute('data-admin-credit','1');
@@ -131,7 +145,7 @@
 
   // ===== BACK BUTTON =====
   var noBackPages = ['index.html'];
-  if (noBackPages.indexOf(currentPage) === -1 && !document.querySelector('.back-btn') && !document.querySelector('.btn-back') && !document.querySelector('.inner-back-btn')) {
+  if (!isInvitePage && noBackPages.indexOf(currentPage) === -1 && !document.querySelector('.back-btn') && !document.querySelector('.btn-back') && !document.querySelector('.inner-back-btn')) {
     var bb = document.createElement('button');
     bb.className = 'luxury-close';
     bb.innerHTML = '<i class="fas fa-arrow-left"></i>';

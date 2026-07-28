@@ -3,10 +3,23 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
 <meta name="theme-color" content="#0B0F19">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; frame-src 'self' https://www.google.com https://maps.google.com; media-src 'self' blob:;">
+<meta name="description" content="Get in touch with us for any wedding-related questions or inquiries. We would love to hear from you.">
+<meta property="og:title" content="Contact Us - Get in Touch">
+<meta property="og:description" content="Get in touch with us for any wedding-related questions or inquiries. We would love to hear from you.">
+<meta property="og:image" content="https://foreverandalwayswedding.com/icons/icon-512.svg">
+<meta property="og:url" content="https://foreverandalwayswedding.com/contact.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contact Us - Get in Touch">
+<meta name="twitter:description" content="Get in touch with us for any wedding-related questions or inquiries. We would love to hear from you.">
+<link rel="canonical" href="https://foreverandalwayswedding.com/contact.html">
 <title id="pageTitle">Contact - Forever &amp; Always</title>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/style.css">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -136,7 +149,7 @@ load();
   <div class="ai-widget-qs" id="aiWidgetQs"></div>
   <div class="ai-widget-input-area">
     <input class="ai-widget-input" id="aiWidgetInput" placeholder="Ask a question..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendWidgetMsg();}">
-    <button class="ai-widget-send" onclick="sendWidgetMsg()"><i class="fas fa-paper-plane"></i></button>
+    <button class="ai-widget-send" onclick="sendWidgetMsg()" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
   </div>
 </div>
 <script src="js/ai-concierge.js"></script>
@@ -154,7 +167,6 @@ function sendWidgetMsg(){var i=document.getElementById('aiWidgetInput'),t=i.valu
 function addWidgetMsg(text,role){var c=document.getElementById('aiWidgetMessages'),msg=document.createElement('div');msg.className='ai-widget-msg '+role;msg.innerHTML='<div class="bubble">'+text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')+'</div>';c.appendChild(msg);c.scrollTop=c.scrollHeight;}
 function showWidgetTyping(show){document.getElementById('aiWidgetTyping').classList.toggle('show',show)}
 </script>
-<script src="js/nav.js"></script>
 
 <!-- ===== FOOTER ===== -->
 <footer class="footer">
@@ -183,11 +195,11 @@ function showWidgetTyping(show){document.getElementById('aiWidgetTyping').classL
       <h4>Contact</h4>
       <div class="footer-divider"></div>
       <p><i class="fab fa-whatsapp" style="color:var(--gold);margin-right:6px;"></i> 08025092458</p>
-      <p><i class="fas fa-phone" style="color:var(--gold);margin-right:6px;"></i> 07039557981</p>
+      <p><i class="fas fa-phone" style="color:var(--gold);margin-right:6px;"></i> 08157610930</p>
     </div>
   </div>
   <div class="developer">Designed &amp; Developed by <span class="dev-name">David Leelee Douglas / Stonyboy</span></div>
-  <div class="dev-contact" style="color:var(--text-light);font-size:0.8rem;margin-top:4px;"><i class="fab fa-whatsapp" style="color:var(--gold);"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> Contact: 07039557981</div>
+  <div class="dev-contact" style="color:var(--text-light);font-size:0.8rem;margin-top:4px;"><i class="fab fa-whatsapp" style="color:var(--gold);"></i> WhatsApp: 08025092458 | <i class="fas fa-phone" style="color:var(--gold);"></i> Contact: 08157610930</div>
   <div class="copyright" style="color:var(--text-light);font-size:0.8rem;opacity:0.6;margin-top:8px;">&copy; 2026 Forever &amp; Always. All rights reserved.</div>
 </footer>
 <script src="js/global.js"></script>
@@ -197,6 +209,7 @@ function showWidgetTyping(show){document.getElementById('aiWidgetTyping').classL
 </div><!-- /.page-wrapper -->
 
 <script src="js/auth.js"></script>
+<script src="js/auth-guard.js"></script>
 <script src="js/sidebar.js"></script>
 </body>
 </html>

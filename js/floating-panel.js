@@ -116,7 +116,14 @@
         window.location.href = 'gallery.html';
         break;
       case 'whatsapp':
-        window.open('https://wa.me/2348025092458?text=Hello!%20I%20visited%20your%20wedding%20website', '_blank');
+        var wd=JSON.parse(localStorage.getItem('weddingData')||'{}');
+        var whatsapp=(wd.socialLinks&&wd.socialLinks.whatsapp)||'';
+        if(whatsapp){
+          var num=whatsapp.replace(/[^0-9]/g,'');
+          window.open('https://wa.me/'+num+'?text=Hello!%20I%20visited%20your%20wedding%20website', '_blank');
+        }else{
+          navigator.clipboard.writeText('I visited your wedding website!').then(function(){alert('Contact info copied to clipboard!');});
+        }
         break;
       case 'backToTop':
         window.scrollTo({ top: 0, behavior: 'smooth' });
